@@ -2,7 +2,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../../config/theme/app_colors.dart';
+import '../../../../config/theme/app_page_transitions.dart';
+import '../../../../shared/widgets/animated_card_tap.dart';
+import '../../../../shared/widgets/app_background.dart';
 import '../../../../shared/widgets/floating_bottom_nav_bar.dart';
+import '../../../../shared/widgets/staggered_list_fade_item.dart';
 import '../managers/favorites_manager.dart';
 import 'azkar_categories_page.dart';
 import 'single_dhikr_page.dart';
@@ -93,9 +97,6 @@ class _CategoryListPageState extends State<CategoryListPage> {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final bgColor = isDark ? const Color(0xFF161A15) : const Color(0xFFF8F4EC);
-    final gradientColors = isDark
-        ? const [Color(0xFF1D221C), Color(0xFF161A15), Color(0xFF111410)]
-        : const [Color(0xFFFAF7F0), Color(0xFFF8F4EC), Color(0xFFEFE9DC)];
 
     return Directionality(
       textDirection: TextDirection.rtl,
@@ -103,39 +104,8 @@ class _CategoryListPageState extends State<CategoryListPage> {
         backgroundColor: bgColor,
         body: Stack(
           children: [
-            // 1. Background Texture & Soft Radial Gradient
-            Positioned.fill(
-              child: Container(
-                decoration: BoxDecoration(
-                  color: bgColor,
-                  gradient: RadialGradient(
-                    center: const Alignment(-0.6, -0.6),
-                    radius: 1.3,
-                    colors: gradientColors,
-                  ),
-                ),
-              ),
-            ),
-
-            // 2. Corner Background Ornaments (Gold Arches & Olive Branches)
-            Positioned.fill(
-              child: Opacity(
-                opacity: 0.35,
-                child: Image.asset(
-                  'assets/images/gold.png',
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-            Positioned.fill(
-              child: Opacity(
-                opacity: 0.45,
-                child: Image.asset(
-                  'assets/images/olivebranches.png',
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
+            // Fullscreen Fixed Viewport Background & Ornaments
+            const AppBackground(),
 
             // 3. Main Content Scrollable List
             SafeArea(
@@ -285,21 +255,21 @@ class _CategoryListPageState extends State<CategoryListPage> {
             ? item['count'] as int
             : (int.tryParse(item['count']?.toString() ?? '') ?? 1);
 
-        return InkWell(
-          onTap: () {
-            // Open SingleDhikrPage starting at selected Dhikr index
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => SingleDhikrPage(
-                  categoryTitle: widget.categoryTitle,
-                  dhikrList: _dhikrItems,
-                  initialIndex: index,
+        return StaggeredListFadeItem(
+          index: index,
+          child: AnimatedCardTap(
+            onTap: () {
+              Navigator.of(context).push(
+                AppPageRoute.create(
+                  SingleDhikrPage(
+                    categoryTitle: widget.categoryTitle,
+                    dhikrList: _dhikrItems,
+                    initialIndex: index,
+                  ),
                 ),
-              ),
-            );
-          },
-          borderRadius: BorderRadius.circular(22),
-          child: Container(
+              );
+            },
+            child: Container(
             padding: const EdgeInsets.all(18),
             decoration: BoxDecoration(
               color: isDark ? const Color(0xFF262D24) : const Color(0xFFFFFDF9),
@@ -450,7 +420,8 @@ class _CategoryListPageState extends State<CategoryListPage> {
               ],
             ),
           ),
-        );
+        ),
+      );
       },
     );
   }

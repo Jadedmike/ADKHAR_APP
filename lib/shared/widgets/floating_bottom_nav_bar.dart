@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../config/theme/app_page_transitions.dart';
 import '../../features/adhkar/presentation/pages/azkar_categories_page.dart';
 import '../../features/adhkar/presentation/pages/duas_page.dart';
 import '../../features/adhkar/presentation/pages/favorites_page.dart';
@@ -53,36 +54,6 @@ class FloatingBottomNavBar extends StatelessWidget {
           final isSelected = index == selectedIndex;
           final item = navItems[index];
 
-          if (isSelected) {
-            return Container(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-              decoration: BoxDecoration(
-                color: selectedPillColor,
-                borderRadius: BorderRadius.circular(24),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    item['icon'] as IconData,
-                    color: selectedTextColor,
-                    size: 20,
-                  ),
-                  const SizedBox(width: 4),
-                  Text(
-                    item['label'] as String,
-                    style: TextStyle(
-                      fontFamily: 'Fustat',
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                      color: selectedTextColor,
-                    ),
-                  ),
-                ],
-              ),
-            );
-          }
-
           return InkWell(
             onTap: () {
               if (index == selectedIndex) return;
@@ -107,36 +78,45 @@ class FloatingBottomNavBar extends StatelessWidget {
                 default:
                   return;
               }
-              Navigator.of(context).pushReplacement(
-                PageRouteBuilder(
-                  pageBuilder: (context, anim1, anim2) => targetPage,
-                  transitionDuration: Duration.zero,
-                ),
-              );
+              Navigator.of(context).pushReplacement(AppPageRoute.create(targetPage));
             },
-            borderRadius: BorderRadius.circular(20),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    item['icon'] as IconData,
-                    color: unselectedTextColor,
-                    size: 20,
-                  ),
-                  const SizedBox(width: 2),
-                  Text(
-                    item['label'] as String,
-                    style: TextStyle(
-                      fontFamily: 'Fustat',
-                      fontSize: 10,
-                      fontWeight: FontWeight.w500,
-                      color: unselectedTextColor,
+            borderRadius: BorderRadius.circular(24),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 220),
+              curve: Curves.easeOutCubic,
+              padding: isSelected
+                  ? const EdgeInsets.symmetric(horizontal: 14, vertical: 8)
+                  : const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+              decoration: BoxDecoration(
+                color: isSelected ? selectedPillColor : Colors.transparent,
+                borderRadius: BorderRadius.circular(24),
+              ),
+              child: AnimatedScale(
+                scale: isSelected ? 1.05 : 1.0,
+                duration: const Duration(milliseconds: 220),
+                curve: Curves.easeOutCubic,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      item['icon'] as IconData,
+                      color: isSelected ? selectedTextColor : unselectedTextColor,
+                      size: 20,
                     ),
-                  ),
-                ],
+                    if (isSelected) ...[
+                      const SizedBox(width: 4),
+                      Text(
+                        item['label'] as String,
+                        style: TextStyle(
+                          fontFamily: 'Fustat',
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                          color: selectedTextColor,
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
               ),
             ),
           );

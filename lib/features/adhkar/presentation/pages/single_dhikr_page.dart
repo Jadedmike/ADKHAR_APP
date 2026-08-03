@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 import '../../../../config/theme/app_colors.dart';
 import '../../../../core/utils/dhikr_copy_helper.dart';
 import '../../../../core/utils/dhikr_share_helper.dart';
+import '../../../../shared/widgets/app_background.dart';
 import '../../../../shared/widgets/floating_bottom_nav_bar.dart';
 import '../managers/favorites_manager.dart';
 import '../managers/settings_manager.dart';
@@ -12,12 +15,16 @@ class SingleDhikrPage extends StatefulWidget {
   final String categoryTitle;
   final List<Map<String, dynamic>>? dhikrList;
   final int initialIndex;
+  final double initialScrollOffset;
+  final String? jsonAssetPath;
 
   const SingleDhikrPage({
     super.key,
     this.categoryTitle = 'أذكار الصباح',
     this.dhikrList,
     this.initialIndex = 0,
+    this.initialScrollOffset = 0.0,
+    this.jsonAssetPath,
   });
 
   @override
@@ -30,6 +37,7 @@ class _SingleDhikrPageState extends State<SingleDhikrPage>
   int _counter = 0;
   bool _isCompleted = false;
   bool _isSectionCompleted = false;
+  late final ScrollController _scrollController;
 
   // Default fallback Dhikr dataset if none passed
   final List<Map<String, dynamic>> _defaultDhikrList = [
@@ -75,20 +83,81 @@ class _SingleDhikrPageState extends State<SingleDhikrPage>
   @override
   void initState() {
     super.initState();
+    _scrollController = ScrollController();
     _currentIndex = widget.initialIndex;
     if (_currentIndex >= _activeList.length) {
       _currentIndex = 0;
     }
+    _applyWakelock(SettingsManager.keepScreenOn.value);
+    SettingsManager.keepScreenOn.addListener(_onKeepScreenOnChanged);
+
+    if (widget.initialScrollOffset > 0) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (_scrollController.hasClients) {
+          _scrollController.jumpTo(widget.initialScrollOffset);
+        }
+      });
+    }
+
+    _scrollController.addListener(_saveCurrentPosition);
+    _saveCurrentPosition();
   }
 
+  void _saveCurrentPosition() {
+    SettingsManager.saveLastReadingPosition(
+      categoryTitle: widget.categoryTitle,
+      jsonAssetPath: widget.jsonAssetPath,
+      index: _currentIndex,
+      scrollOffset: _scrollController.hasClients ? _scrollController.offset : widget.initialScrollOffset,
+    );
+  }
+
+  void _onKeepScreenOnChanged() {
+    _applyWakelock(SettingsManager.keepScreenOn.value);
+  }
+
+  Future<void> _applyWakelock(bool keepOn) async {
+    try {
+      if (keepOn) {
+        await WakelockPlus.enable();
+      } else {
+        await WakelockPlus.disable();
+      }
+    } catch (_) {}
+  }
+
+  @override
+  void dispose() {
+    _saveCurrentPosition();
+    _scrollController.removeListener(_saveCurrentPosition);
+    _scrollController.dispose();
+    SettingsManager.keepScreenOn.removeListener(_onKeepScreenOnChanged);
+    _applyWakelock(false);
+    super.dispose();
+  }
+
+  bool _isCounterPulsing = false;
+
   void _incrementCounter() {
+    if (SettingsManager.vibrationOption.value) {
+      HapticFeedback.lightImpact();
+    }
     final currentDhikr = _activeList[_currentIndex];
     final int target = (currentDhikr['count'] ?? currentDhikr['requiredCount'] ?? 1) as int;
 
     setState(() {
       _counter++;
+      _isCounterPulsing = true;
       if (_counter >= target) {
         _isCompleted = true;
+      }
+    });
+
+    Future.delayed(const Duration(milliseconds: 120), () {
+      if (mounted) {
+        setState(() {
+          _isCounterPulsing = false;
+        });
       }
     });
   }
@@ -111,6 +180,17 @@ class _SingleDhikrPageState extends State<SingleDhikrPage>
       } else {
         // Reached the end of the section
         _isSectionCompleted = true;
+      }
+    });
+  }
+
+  void _previousDhikr() {
+    setState(() {
+      if (_currentIndex > 0) {
+        _currentIndex--;
+        _counter = 0;
+        _isCompleted = false;
+        _isSectionCompleted = false;
       }
     });
   }
@@ -303,9 +383,6 @@ class _SingleDhikrPageState extends State<SingleDhikrPage>
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     final bgColor = isDark ? const Color(0xFF161A15) : const Color(0xFFF8F4EC);
-    final gradientColors = isDark
-        ? const [Color(0xFF1D221C), Color(0xFF161A15), Color(0xFF111410)]
-        : const [Color(0xFFFAF7F0), Color(0xFFF8F4EC), Color(0xFFEFE9DC)];
 
     return Directionality(
       textDirection: TextDirection.rtl,
@@ -313,39 +390,8 @@ class _SingleDhikrPageState extends State<SingleDhikrPage>
         backgroundColor: bgColor,
         body: Stack(
           children: [
-            // 1. Background Paper Texture Gradient
-            Positioned.fill(
-              child: Container(
-                decoration: BoxDecoration(
-                  color: bgColor,
-                  gradient: RadialGradient(
-                    center: const Alignment(-0.6, -0.6),
-                    radius: 1.3,
-                    colors: gradientColors,
-                  ),
-                ),
-              ),
-            ),
-
-            // 2. Corner Background Ornaments (Gold Arches & Olive Branches)
-            Positioned.fill(
-              child: Opacity(
-                opacity: 0.32,
-                child: Image.asset(
-                  'assets/images/gold.png',
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-            Positioned.fill(
-              child: Opacity(
-                opacity: 0.42,
-                child: Image.asset(
-                  'assets/images/olivebranches.png',
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
+            // Fullscreen Fixed Viewport Background & Ornaments
+            const AppBackground(),
 
             // 3. Main Full-Screen Layout Canvas
             SafeArea(
@@ -353,6 +399,7 @@ class _SingleDhikrPageState extends State<SingleDhikrPage>
               child: LayoutBuilder(
                 builder: (context, constraints) {
                   return SingleChildScrollView(
+                    controller: _scrollController,
                     physics: const BouncingScrollPhysics(),
                     child: ConstrainedBox(
                       constraints: BoxConstraints(
@@ -746,18 +793,22 @@ class _SingleDhikrPageState extends State<SingleDhikrPage>
 
                           const SizedBox(width: 32),
 
-                          // Count Display
-                          AnimatedDefaultTextStyle(
-                            duration: const Duration(milliseconds: 200),
-                            style: TextStyle(
-                              fontFamily: 'Fustat',
-                              fontSize: 36,
-                              fontWeight: FontWeight.bold,
-                              color: _isCompleted
-                                  ? (isDark ? const Color(0xFFC9A15B) : const Color(0xFFC5A059))
-                                  : (isDark ? const Color(0xFFF6F1E7) : AppColors.primaryLight),
+                          AnimatedScale(
+                            scale: _isCounterPulsing ? 1.08 : 1.0,
+                            duration: const Duration(milliseconds: 120),
+                            curve: Curves.easeOutCubic,
+                            child: AnimatedDefaultTextStyle(
+                              duration: const Duration(milliseconds: 200),
+                              style: TextStyle(
+                                fontFamily: 'Fustat',
+                                fontSize: 36,
+                                fontWeight: FontWeight.bold,
+                                color: _isCompleted
+                                    ? (isDark ? const Color(0xFFC9A15B) : const Color(0xFFC5A059))
+                                    : (isDark ? const Color(0xFFF6F1E7) : AppColors.primaryLight),
+                              ),
+                              child: Text('$_counter'),
                             ),
-                            child: Text('$_counter'),
                           ),
 
                           const SizedBox(width: 32),
@@ -793,52 +844,116 @@ class _SingleDhikrPageState extends State<SingleDhikrPage>
 
                     const SizedBox(height: 24),
 
-                    // 4. Large Next Button ("التالي")
-                    SizedBox(
-                      width: double.infinity,
-                      height: 52,
-                      child: ElevatedButton(
-                        onPressed: _nextDhikr,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: isDark ? const Color(0xFF2E362C) : const Color(0xFF4E5B4E),
-                          foregroundColor: isDark ? const Color(0xFFC9A15B) : Colors.white,
-                          elevation: 4,
-                          shadowColor: const Color(0x334E5B4E),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(26),
+                    // 4. Navigation Buttons (السابق / التالي)
+                    Row(
+                      children: [
+                        if (_currentIndex > 0) ...[
+                          Expanded(
+                            flex: 1,
+                            child: SizedBox(
+                              height: 52,
+                              child: OutlinedButton(
+                                onPressed: _previousDhikr,
+                                style: OutlinedButton.styleFrom(
+                                  side: BorderSide(
+                                    color: isDark
+                                        ? const Color(0xFF353E32)
+                                        : const Color(0xFFEADFCF),
+                                    width: 1.4,
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(26),
+                                  ),
+                                ),
+                                child: Text(
+                                  'السابق',
+                                  style: TextStyle(
+                                    fontFamily: 'Fustat',
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                    color: isDark
+                                        ? const Color(0xFFD8CEBE)
+                                        : const Color(0xFF4E5B4E),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                        ],
+                        Expanded(
+                          flex: 2,
+                          child: SizedBox(
+                            height: 52,
+                            child: ElevatedButton(
+                              onPressed: _nextDhikr,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: isDark
+                                    ? const Color(0xFF2E362C)
+                                    : const Color(0xFF4E5B4E),
+                                foregroundColor: isDark
+                                    ? const Color(0xFFC9A15B)
+                                    : Colors.white,
+                                elevation: 4,
+                                shadowColor: const Color(0x334E5B4E),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(26),
+                                ),
+                              ),
+                              child: Text(
+                                'التالي',
+                                style: TextStyle(
+                                  fontFamily: 'Fustat',
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: isDark
+                                      ? const Color(0xFFC9A15B)
+                                      : Colors.white,
+                                ),
+                              ),
+                            ),
                           ),
                         ),
-                        child: Text(
-                          'التالي',
-                          style: TextStyle(
-                            fontFamily: 'Fustat',
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: isDark ? const Color(0xFFC9A15B) : Colors.white,
-                          ),
-                        ),
-                      ),
+                      ],
                     ),
 
-                    const SizedBox(height: 18),
-
                     // 5. Source Chip
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                      decoration: BoxDecoration(
-                        color: isDark ? const Color(0xFF1F241D) : const Color(0xFFF7F2E8),
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: isDark ? const Color(0xFF353E32) : const Color(0xFFEADFCF), width: 1),
-                      ),
-                      child: Text(
-                        currentDhikr['source'] as String? ?? 'حصن المسلم',
-                        style: TextStyle(
-                          fontFamily: 'Fustat',
-                          fontSize: 11.5,
-                          fontWeight: FontWeight.w600,
-                          color: isDark ? const Color(0xFFD8CEBE) : const Color(0xFF707973),
-                        ),
-                      ),
+                    ValueListenableBuilder<bool>(
+                      valueListenable: SettingsManager.showSource,
+                      builder: (context, showSource, child) {
+                        if (!showSource) return const SizedBox.shrink();
+                        final String sourceText =
+                            (currentDhikr['source'] ?? currentDhikr['reference']) as String? ?? 'حصن المسلم';
+                        if (sourceText.trim().isEmpty) {
+                          return const SizedBox.shrink();
+                        }
+                        return Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const SizedBox(height: 18),
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                              decoration: BoxDecoration(
+                                color: isDark ? const Color(0xFF1F241D) : const Color(0xFFF7F2E8),
+                                borderRadius: BorderRadius.circular(16),
+                                border: Border.all(
+                                  color: isDark ? const Color(0xFF353E32) : const Color(0xFFEADFCF),
+                                  width: 1,
+                                ),
+                              ),
+                              child: Text(
+                                sourceText,
+                                style: TextStyle(
+                                  fontFamily: 'Fustat',
+                                  fontSize: 11.5,
+                                  fontWeight: FontWeight.w600,
+                                  color: isDark ? const Color(0xFFD8CEBE) : const Color(0xFF707973),
+                                ),
+                              ),
+                            ),
+                          ],
+                        );
+                      },
                     ),
                   ],
                 ),

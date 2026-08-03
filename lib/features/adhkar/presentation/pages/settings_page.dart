@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'about_page.dart';
+import 'contact_us_page.dart';
+import 'privacy_policy_page.dart';
 import '../../../../config/theme/app_colors.dart';
+import '../../../../config/theme/app_page_transitions.dart';
+import '../../../../shared/widgets/app_background.dart';
 import '../../../../shared/widgets/floating_bottom_nav_bar.dart';
 import '../managers/settings_manager.dart';
 
@@ -15,24 +22,10 @@ class _SettingsPageState extends State<SettingsPage> {
   // General Settings State
   String _selectedLanguage = 'العربية';
 
-  // Reading Settings State
-  bool _keepScreenOn = true;
-  bool _showTranslation = true;
-  bool _showSource = true;
-  bool _rememberLastPosition = true;
-
-  // Notification Settings State
-  bool _morningReminder = true;
-  bool _eveningReminder = true;
-  bool _dailyReminder = true;
-
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final bgColor = isDark ? const Color(0xFF161A15) : const Color(0xFFF8F4EC);
-    final gradientColors = isDark
-        ? const [Color(0xFF1D221C), Color(0xFF161A15), Color(0xFF111410)]
-        : const [Color(0xFFFAF7F0), Color(0xFFF8F4EC), Color(0xFFEFE9DC)];
 
     return Directionality(
       textDirection: TextDirection.rtl,
@@ -40,39 +33,8 @@ class _SettingsPageState extends State<SettingsPage> {
         backgroundColor: bgColor,
         body: Stack(
           children: [
-            // 1. Background Texture & Soft Radial Gradient
-            Positioned.fill(
-              child: Container(
-                decoration: BoxDecoration(
-                  color: bgColor,
-                  gradient: RadialGradient(
-                    center: const Alignment(-0.6, -0.6),
-                    radius: 1.3,
-                    colors: gradientColors,
-                  ),
-                ),
-              ),
-            ),
-
-            // 2. Corner Background Ornaments
-            Positioned.fill(
-              child: Opacity(
-                opacity: 0.32,
-                child: Image.asset(
-                  'assets/images/gold.png',
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-            Positioned.fill(
-              child: Opacity(
-                opacity: 0.42,
-                child: Image.asset(
-                  'assets/images/olivebranches.png',
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
+            // Fullscreen Fixed Viewport Background & Ornaments
+            const AppBackground(),
 
             // 3. Main Scrollable Settings Canvas
             SafeArea(
@@ -102,7 +64,9 @@ class _SettingsPageState extends State<SettingsPage> {
                                 fontFamily: 'Fustat',
                                 fontSize: 28,
                                 fontWeight: FontWeight.bold,
-                                color: isDark ? const Color(0xFFF6F1E7) : AppColors.primaryLight,
+                                color: isDark
+                                    ? const Color(0xFFF6F1E7)
+                                    : AppColors.primaryLight,
                               ),
                             ),
                             const SizedBox(height: 4),
@@ -112,7 +76,9 @@ class _SettingsPageState extends State<SettingsPage> {
                                 fontFamily: 'Fustat',
                                 fontSize: 13.5,
                                 fontWeight: FontWeight.w500,
-                                color: isDark ? const Color(0xFFD8CEBE) : const Color(0xFF707973),
+                                color: isDark
+                                    ? const Color(0xFFD8CEBE)
+                                    : const Color(0xFF707973),
                               ),
                             ),
 
@@ -126,40 +92,71 @@ class _SettingsPageState extends State<SettingsPage> {
                                   icon: Icons.language_rounded,
                                   title: 'اللغة',
                                   value: _selectedLanguage,
-                                  options: const ['العربية', 'English', 'Türkçe'],
+                                  options: const [
+                                    'العربية',
+                                    'English',
+                                    'Türkçe',
+                                  ],
                                   onChanged: (val) {
-                                    if (val != null) setState(() => _selectedLanguage = val);
+                                    if (val != null) {
+                                      setState(() => _selectedLanguage = val);
+                                    }
                                   },
                                 ),
-                                Divider(height: 22, color: isDark ? const Color(0xFF353E32) : const Color(0xFFF3ECE0)),
+                                Divider(
+                                  height: 22,
+                                  color: isDark
+                                      ? const Color(0xFF353E32)
+                                      : const Color(0xFFF3ECE0),
+                                ),
                                 ValueListenableBuilder<String>(
-                                  valueListenable: SettingsManager.themeModeOption,
+                                  valueListenable:
+                                      SettingsManager.themeModeOption,
                                   builder: (context, currentThemeOpt, child) {
                                     return _buildDropdownTile(
                                       icon: Icons.palette_outlined,
                                       title: 'المظهر',
                                       value: currentThemeOpt,
-                                      options: const ['فاتح', 'داكن', 'تكيّف حسب النظام'],
+                                      options: const [
+                                        'فاتح',
+                                        'داكن',
+                                        'تكيّف حسب النظام',
+                                      ],
                                       onChanged: (val) {
                                         if (val != null) {
-                                          SettingsManager.setThemeModeOption(val);
+                                          SettingsManager.setThemeModeOption(
+                                            val,
+                                          );
                                         }
                                       },
                                     );
                                   },
                                 ),
-                                Divider(height: 22, color: isDark ? const Color(0xFF353E32) : const Color(0xFFF3ECE0)),
+                                Divider(
+                                  height: 22,
+                                  color: isDark
+                                      ? const Color(0xFF353E32)
+                                      : const Color(0xFFF3ECE0),
+                                ),
                                 ValueListenableBuilder<String>(
-                                  valueListenable: SettingsManager.fontSizeOption,
+                                  valueListenable:
+                                      SettingsManager.fontSizeOption,
                                   builder: (context, currentFontSize, child) {
                                     return _buildDropdownTile(
                                       icon: Icons.format_size_rounded,
                                       title: 'حجم الخط',
                                       value: currentFontSize,
-                                      options: const ['صغير', 'متوسط', 'كبير', 'كبير جداً'],
+                                      options: const [
+                                        'صغير',
+                                        'متوسط',
+                                        'كبير',
+                                        'كبير جداً',
+                                      ],
                                       onChanged: (val) {
                                         if (val != null) {
-                                          SettingsManager.setFontSizeOption(val);
+                                          SettingsManager.setFontSizeOption(
+                                            val,
+                                          );
                                         }
                                       },
                                     );
@@ -174,27 +171,60 @@ class _SettingsPageState extends State<SettingsPage> {
                             _buildSectionGroup(
                               title: 'القراءة',
                               children: [
-                                _buildSwitchTile(
-                                  icon: Icons.phone_android_rounded,
-                                  title: 'إبقاء الشاشة مفعلة أثناء القراءة',
-                                  value: _keepScreenOn,
-                                  onChanged: (val) => setState(() => _keepScreenOn = val),
+                                ValueListenableBuilder<bool>(
+                                  valueListenable: SettingsManager.keepScreenOn,
+                                  builder: (context, keepScreenOn, child) {
+                                    return _buildSwitchTile(
+                                      icon: Icons.phone_android_rounded,
+                                      title: 'إبقاء الشاشة مفعلة أثناء القراءة',
+                                      value: keepScreenOn,
+                                      onChanged: (val) =>
+                                          SettingsManager.setKeepScreenOn(val),
+                                    );
+                                  },
                                 ),
-                                Divider(height: 22, color: isDark ? const Color(0xFF353E32) : const Color(0xFFF3ECE0)),
-                                _buildSwitchTile(
-                                  icon: Icons.translate_rounded,
-                                  title: 'إظهار الترجمة (إن وجدت)',
-                                  value: _showTranslation,
-                                  onChanged: (val) => setState(() => _showTranslation = val),
+                                Divider(
+                                  height: 22,
+                                  color: isDark
+                                      ? const Color(0xFF353E32)
+                                      : const Color(0xFFF3ECE0),
                                 ),
-                                Divider(height: 22, color: isDark ? const Color(0xFF353E32) : const Color(0xFFF3ECE0)),
-                                _buildSwitchTile(
-                                  icon: Icons.menu_book_rounded,
-                                  title: 'إظهار المصدر والترخريج',
-                                  value: _showSource,
-                                  onChanged: (val) => setState(() => _showSource = val),
+                                ValueListenableBuilder<bool>(
+                                  valueListenable: SettingsManager.showTranslation,
+                                  builder: (context, showTranslation, child) {
+                                    return _buildSwitchTile(
+                                      icon: Icons.translate_rounded,
+                                      title: 'إظهار الترجمة (إن وجدت)',
+                                      value: showTranslation,
+                                      onChanged: (val) =>
+                                          SettingsManager.setShowTranslation(val),
+                                    );
+                                  },
                                 ),
-                                Divider(height: 22, color: isDark ? const Color(0xFF353E32) : const Color(0xFFF3ECE0)),
+                                Divider(
+                                  height: 22,
+                                  color: isDark
+                                      ? const Color(0xFF353E32)
+                                      : const Color(0xFFF3ECE0),
+                                ),
+                                ValueListenableBuilder<bool>(
+                                  valueListenable: SettingsManager.showSource,
+                                  builder: (context, showSource, child) {
+                                    return _buildSwitchTile(
+                                      icon: Icons.menu_book_rounded,
+                                      title: 'إظهار المصدر والترخريج',
+                                      value: showSource,
+                                      onChanged: (val) =>
+                                          SettingsManager.setShowSource(val),
+                                    );
+                                  },
+                                ),
+                                Divider(
+                                  height: 22,
+                                  color: isDark
+                                      ? const Color(0xFF353E32)
+                                      : const Color(0xFFF3ECE0),
+                                ),
                                 ValueListenableBuilder<bool>(
                                   valueListenable: SettingsManager.copySource,
                                   builder: (context, copySource, child) {
@@ -202,26 +232,50 @@ class _SettingsPageState extends State<SettingsPage> {
                                       icon: Icons.copy_rounded,
                                       title: 'نسخ المصدر عند نسخ الذكر',
                                       value: copySource,
-                                      onChanged: (val) => SettingsManager.setCopySource(val),
+                                      onChanged: (val) =>
+                                          SettingsManager.setCopySource(val),
                                     );
                                   },
                                 ),
-                                Divider(height: 22, color: isDark ? const Color(0xFF353E32) : const Color(0xFFF3ECE0)),
-                                _buildSwitchTile(
-                                  icon: Icons.bookmark_added_outlined,
-                                  title: 'تذكر آخر موضع قراءة',
-                                  value: _rememberLastPosition,
-                                  onChanged: (val) => setState(() => _rememberLastPosition = val),
+                                Divider(
+                                  height: 22,
+                                  color: isDark
+                                      ? const Color(0xFF353E32)
+                                      : const Color(0xFFF3ECE0),
                                 ),
-                                Divider(height: 22, color: isDark ? const Color(0xFF353E32) : const Color(0xFFF3ECE0)),
                                 ValueListenableBuilder<bool>(
-                                  valueListenable: SettingsManager.vibrationOption,
+                                  valueListenable:
+                                      SettingsManager.rememberLastPosition,
+                                  builder: (context, rememberLast, child) {
+                                    return _buildSwitchTile(
+                                      icon: Icons.bookmark_added_outlined,
+                                      title: 'تذكر آخر موضع قراءة',
+                                      value: rememberLast,
+                                      onChanged: (val) =>
+                                          SettingsManager.setRememberLastPosition(
+                                        val,
+                                      ),
+                                    );
+                                  },
+                                ),
+                                Divider(
+                                  height: 22,
+                                  color: isDark
+                                      ? const Color(0xFF353E32)
+                                      : const Color(0xFFF3ECE0),
+                                ),
+                                ValueListenableBuilder<bool>(
+                                  valueListenable:
+                                      SettingsManager.vibrationOption,
                                   builder: (context, vibration, child) {
                                     return _buildSwitchTile(
                                       icon: Icons.vibration_rounded,
                                       title: 'تفعيل الاهتزاز عند التسبيح',
                                       value: vibration,
-                                      onChanged: (val) => SettingsManager.setVibrationOption(val),
+                                      onChanged: (val) =>
+                                          SettingsManager.setVibrationOption(
+                                            val,
+                                          ),
                                     );
                                   },
                                 ),
@@ -234,25 +288,53 @@ class _SettingsPageState extends State<SettingsPage> {
                             _buildSectionGroup(
                               title: 'التنبيهات',
                               children: [
-                                _buildSwitchTile(
-                                  icon: Icons.wb_sunny_outlined,
-                                  title: 'تنبيه أذكار الصباح',
-                                  value: _morningReminder,
-                                  onChanged: (val) => setState(() => _morningReminder = val),
+                                ValueListenableBuilder<bool>(
+                                  valueListenable: SettingsManager.morningReminder,
+                                  builder: (context, morning, child) {
+                                    return _buildSwitchTile(
+                                      icon: Icons.wb_sunny_outlined,
+                                      title: 'تنبيه أذكار الصباح',
+                                      value: morning,
+                                      onChanged: (val) =>
+                                          SettingsManager.setMorningReminder(val),
+                                    );
+                                  },
                                 ),
-                                Divider(height: 22, color: isDark ? const Color(0xFF353E32) : const Color(0xFFF3ECE0)),
-                                _buildSwitchTile(
-                                  icon: Icons.nights_stay_outlined,
-                                  title: 'تنبيه أذكار المساء',
-                                  value: _eveningReminder,
-                                  onChanged: (val) => setState(() => _eveningReminder = val),
+                                Divider(
+                                  height: 22,
+                                  color: isDark
+                                      ? const Color(0xFF353E32)
+                                      : const Color(0xFFF3ECE0),
                                 ),
-                                Divider(height: 22, color: isDark ? const Color(0xFF353E32) : const Color(0xFFF3ECE0)),
-                                _buildSwitchTile(
-                                  icon: Icons.access_alarm_rounded,
-                                  title: 'التذكير اليومي للأدعية',
-                                  value: _dailyReminder,
-                                  onChanged: (val) => setState(() => _dailyReminder = val),
+                                ValueListenableBuilder<bool>(
+                                  valueListenable: SettingsManager.eveningReminder,
+                                  builder: (context, evening, child) {
+                                    return _buildSwitchTile(
+                                      icon: Icons.nights_stay_outlined,
+                                      title: 'تنبيه أذكار المساء',
+                                      value: evening,
+                                      onChanged: (val) =>
+                                          SettingsManager.setEveningReminder(val),
+                                    );
+                                  },
+                                ),
+                                Divider(
+                                  height: 22,
+                                  color: isDark
+                                      ? const Color(0xFF353E32)
+                                      : const Color(0xFFF3ECE0),
+                                ),
+                                ValueListenableBuilder<bool>(
+                                  valueListenable: SettingsManager.dailyReminder,
+                                  builder: (context, daily, child) {
+                                    return _buildSwitchTile(
+                                      icon: Icons.access_alarm_rounded,
+                                      title: 'التذكير اليومي للأدعية',
+                                      value: daily,
+                                      onChanged: (val) =>
+                                          SettingsManager.setDailyReminder(val),
+                                    );
+                                  },
                                 ),
                               ],
                             ),
@@ -266,31 +348,104 @@ class _SettingsPageState extends State<SettingsPage> {
                                 _buildActionTile(
                                   icon: Icons.info_outline_rounded,
                                   title: 'عن التطبيق',
-                                  onTap: () {},
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                      AppPageRoute.create(const AboutPage()),
+                                    );
+                                  },
                                 ),
-                                Divider(height: 22, color: isDark ? const Color(0xFF353E32) : const Color(0xFFF3ECE0)),
+                                Divider(
+                                  height: 22,
+                                  color: isDark
+                                      ? const Color(0xFF353E32)
+                                      : const Color(0xFFF3ECE0),
+                                ),
                                 _buildActionTile(
                                   icon: Icons.privacy_tip_outlined,
                                   title: 'سياسة الخصوصية',
-                                  onTap: () {},
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                      AppPageRoute.create(const PrivacyPolicyPage()),
+                                    );
+                                  },
                                 ),
-                                Divider(height: 22, color: isDark ? const Color(0xFF353E32) : const Color(0xFFF3ECE0)),
+                                Divider(
+                                  height: 22,
+                                  color: isDark
+                                      ? const Color(0xFF353E32)
+                                      : const Color(0xFFF3ECE0),
+                                ),
                                 _buildActionTile(
                                   icon: Icons.mail_outline_rounded,
                                   title: 'تواصل معنا',
-                                  onTap: () {},
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                      AppPageRoute.create(const ContactUsPage()),
+                                    );
+                                  },
                                 ),
-                                Divider(height: 22, color: isDark ? const Color(0xFF353E32) : const Color(0xFFF3ECE0)),
+                                Divider(
+                                  height: 22,
+                                  color: isDark
+                                      ? const Color(0xFF353E32)
+                                      : const Color(0xFFF3ECE0),
+                                ),
                                 _buildActionTile(
                                   icon: Icons.star_border_rounded,
                                   title: 'تقييم التطبيق',
-                                  onTap: () {},
+                                  onTap: () async {
+                                    const String appPackageName = '';
+                                    if (appPackageName.isNotEmpty) {
+                                      final Uri playStoreUri = Uri.parse(
+                                          'market://details?id=$appPackageName');
+                                      final Uri webPlayStoreUri = Uri.parse(
+                                          'https://play.google.com/store/apps/details?id=$appPackageName');
+                                      try {
+                                        if (await canLaunchUrl(playStoreUri)) {
+                                          await launchUrl(playStoreUri,
+                                              mode: LaunchMode.externalApplication);
+                                        } else {
+                                          await launchUrl(webPlayStoreUri,
+                                              mode: LaunchMode.externalApplication);
+                                        }
+                                        return;
+                                      } catch (_) {}
+                                    }
+
+                                    if (context.mounted) {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                          content: Text(
+                                            'سيصبح التقييم متاحًا بعد نشر التطبيق.',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(fontFamily: 'Fustat'),
+                                          ),
+                                          duration: Duration(seconds: 3),
+                                        ),
+                                      );
+                                    }
+                                  },
                                 ),
-                                Divider(height: 22, color: isDark ? const Color(0xFF353E32) : const Color(0xFFF3ECE0)),
+                                Divider(
+                                  height: 22,
+                                  color: isDark
+                                      ? const Color(0xFF353E32)
+                                      : const Color(0xFFF3ECE0),
+                                ),
                                 _buildActionTile(
                                   icon: Icons.share_outlined,
                                   title: 'مشاركة التطبيق',
-                                  onTap: () {},
+                                  onTap: () async {
+                                    const String appLink =
+                                        'سيتم إضافة رابط التطبيق بعد نشره.';
+                                    final String shareText =
+                                        'جرّب تطبيق "مع الرسول ﷺ من الصباح إلى المساء"\n\n'
+                                        'تطبيق مجاني للأذكار والأدعية اليومية بتصميم بسيط وأنيق.\n\n'
+                                        '$appLink';
+                                    try {
+                                      await Share.share(shareText);
+                                    } catch (_) {}
+                                  },
                                 ),
                               ],
                             ),
@@ -352,18 +507,21 @@ class _SettingsPageState extends State<SettingsPage> {
           decoration: BoxDecoration(
             color: isDark ? const Color(0xFF262D24) : const Color(0xFFFFFDF9),
             borderRadius: BorderRadius.circular(22),
-            border: Border.all(color: isDark ? const Color(0xFF353E32) : const Color(0xFFF3ECE0), width: 1.2),
+            border: Border.all(
+              color: isDark ? const Color(0xFF353E32) : const Color(0xFFF3ECE0),
+              width: 1.2,
+            ),
             boxShadow: [
               BoxShadow(
-                color: isDark ? const Color(0x20000000) : const Color(0x0A000000),
+                color: isDark
+                    ? const Color(0x20000000)
+                    : const Color(0x0A000000),
                 blurRadius: 12,
                 offset: const Offset(0, 4),
               ),
             ],
           ),
-          child: Column(
-            children: children,
-          ),
+          child: Column(children: children),
         ),
       ],
     );
@@ -387,11 +545,24 @@ class _SettingsPageState extends State<SettingsPage> {
                 width: 38,
                 height: 38,
                 decoration: BoxDecoration(
-                  color: isDark ? const Color(0xFF1F241D) : const Color(0xFFF7F2E8),
+                  color: isDark
+                      ? const Color(0xFF1F241D)
+                      : const Color(0xFFF7F2E8),
                   shape: BoxShape.circle,
-                  border: Border.all(color: isDark ? const Color(0xFF353E32) : const Color(0xFFEADFCF), width: 1),
+                  border: Border.all(
+                    color: isDark
+                        ? const Color(0xFF353E32)
+                        : const Color(0xFFEADFCF),
+                    width: 1,
+                  ),
                 ),
-                child: Icon(icon, size: 20, color: isDark ? const Color(0xFFC9A15B) : const Color(0xFF4E5B4E)),
+                child: Icon(
+                  icon,
+                  size: 20,
+                  color: isDark
+                      ? const Color(0xFFC9A15B)
+                      : const Color(0xFF4E5B4E),
+                ),
               ),
               const SizedBox(width: 12),
               Expanded(
@@ -401,7 +572,9 @@ class _SettingsPageState extends State<SettingsPage> {
                     fontFamily: 'Fustat',
                     fontSize: 14.5,
                     fontWeight: FontWeight.bold,
-                    color: isDark ? const Color(0xFFF6F1E7) : const Color(0xFF1E281F),
+                    color: isDark
+                        ? const Color(0xFFF6F1E7)
+                        : const Color(0xFF1E281F),
                   ),
                 ),
               ),
@@ -410,7 +583,9 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
         Switch(
           value: value,
-          activeColor: isDark ? const Color(0xFFC9A15B) : const Color(0xFF4E5B4E),
+          activeThumbColor: isDark
+              ? const Color(0xFFC9A15B)
+              : const Color(0xFF4E5B4E),
           onChanged: onChanged,
         ),
       ],
@@ -435,11 +610,24 @@ class _SettingsPageState extends State<SettingsPage> {
               width: 38,
               height: 38,
               decoration: BoxDecoration(
-                color: isDark ? const Color(0xFF1F241D) : const Color(0xFFF7F2E8),
+                color: isDark
+                    ? const Color(0xFF1F241D)
+                    : const Color(0xFFF7F2E8),
                 shape: BoxShape.circle,
-                border: Border.all(color: isDark ? const Color(0xFF353E32) : const Color(0xFFEADFCF), width: 1),
+                border: Border.all(
+                  color: isDark
+                      ? const Color(0xFF353E32)
+                      : const Color(0xFFEADFCF),
+                  width: 1,
+                ),
               ),
-              child: Icon(icon, size: 20, color: isDark ? const Color(0xFFC9A15B) : const Color(0xFF4E5B4E)),
+              child: Icon(
+                icon,
+                size: 20,
+                color: isDark
+                    ? const Color(0xFFC9A15B)
+                    : const Color(0xFF4E5B4E),
+              ),
             ),
             const SizedBox(width: 12),
             Text(
@@ -448,7 +636,9 @@ class _SettingsPageState extends State<SettingsPage> {
                 fontFamily: 'Fustat',
                 fontSize: 14.5,
                 fontWeight: FontWeight.bold,
-                color: isDark ? const Color(0xFFF6F1E7) : const Color(0xFF1E281F),
+                color: isDark
+                    ? const Color(0xFFF6F1E7)
+                    : const Color(0xFF1E281F),
               ),
             ),
           ],
@@ -458,18 +648,31 @@ class _SettingsPageState extends State<SettingsPage> {
           decoration: BoxDecoration(
             color: isDark ? const Color(0xFF1F241D) : const Color(0xFFF7F2E8),
             borderRadius: BorderRadius.circular(14),
-            border: Border.all(color: isDark ? const Color(0xFF353E32) : const Color(0xFFEADFCF), width: 1),
+            border: Border.all(
+              color: isDark ? const Color(0xFF353E32) : const Color(0xFFEADFCF),
+              width: 1,
+            ),
           ),
           child: DropdownButtonHideUnderline(
             child: DropdownButton<String>(
               value: value,
-              dropdownColor: isDark ? const Color(0xFF1F241D) : const Color(0xFFFFFDF9),
-              icon: Icon(Icons.keyboard_arrow_down_rounded, size: 18, color: isDark ? const Color(0xFFC9A15B) : const Color(0xFF4E5B4E)),
+              dropdownColor: isDark
+                  ? const Color(0xFF1F241D)
+                  : const Color(0xFFFFFDF9),
+              icon: Icon(
+                Icons.keyboard_arrow_down_rounded,
+                size: 18,
+                color: isDark
+                    ? const Color(0xFFC9A15B)
+                    : const Color(0xFF4E5B4E),
+              ),
               style: TextStyle(
                 fontFamily: 'Fustat',
                 fontSize: 12.5,
                 fontWeight: FontWeight.bold,
-                color: isDark ? const Color(0xFFC9A15B) : const Color(0xFF4E5B4E),
+                color: isDark
+                    ? const Color(0xFFC9A15B)
+                    : const Color(0xFF4E5B4E),
               ),
               onChanged: onChanged,
               items: options.map((opt) {
@@ -479,7 +682,9 @@ class _SettingsPageState extends State<SettingsPage> {
                     opt,
                     style: TextStyle(
                       fontFamily: 'Fustat',
-                      color: isDark ? const Color(0xFFF6F1E7) : const Color(0xFF1E281F),
+                      color: isDark
+                          ? const Color(0xFFF6F1E7)
+                          : const Color(0xFF1E281F),
                     ),
                   ),
                 );
@@ -510,11 +715,24 @@ class _SettingsPageState extends State<SettingsPage> {
                 width: 38,
                 height: 38,
                 decoration: BoxDecoration(
-                  color: isDark ? const Color(0xFF1F241D) : const Color(0xFFF7F2E8),
+                  color: isDark
+                      ? const Color(0xFF1F241D)
+                      : const Color(0xFFF7F2E8),
                   shape: BoxShape.circle,
-                  border: Border.all(color: isDark ? const Color(0xFF353E32) : const Color(0xFFEADFCF), width: 1),
+                  border: Border.all(
+                    color: isDark
+                        ? const Color(0xFF353E32)
+                        : const Color(0xFFEADFCF),
+                    width: 1,
+                  ),
                 ),
-                child: Icon(icon, size: 20, color: isDark ? const Color(0xFFC9A15B) : const Color(0xFF4E5B4E)),
+                child: Icon(
+                  icon,
+                  size: 20,
+                  color: isDark
+                      ? const Color(0xFFC9A15B)
+                      : const Color(0xFF4E5B4E),
+                ),
               ),
               const SizedBox(width: 12),
               Text(
@@ -523,7 +741,9 @@ class _SettingsPageState extends State<SettingsPage> {
                   fontFamily: 'Fustat',
                   fontSize: 14.5,
                   fontWeight: FontWeight.bold,
-                  color: isDark ? const Color(0xFFF6F1E7) : const Color(0xFF1E281F),
+                  color: isDark
+                      ? const Color(0xFFF6F1E7)
+                      : const Color(0xFF1E281F),
                 ),
               ),
             ],
@@ -547,7 +767,10 @@ class _SettingsPageState extends State<SettingsPage> {
       decoration: BoxDecoration(
         color: isDark ? const Color(0xFF262D24) : const Color(0xFFFFFDF9),
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: isDark ? const Color(0xFF353E32) : const Color(0xFFEADFCF), width: 1.4),
+        border: Border.all(
+          color: isDark ? const Color(0xFF353E32) : const Color(0xFFEADFCF),
+          width: 1.4,
+        ),
         boxShadow: [
           BoxShadow(
             color: isDark ? const Color(0x20000000) : const Color(0x10000000),
@@ -571,7 +794,7 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
           const SizedBox(height: 10),
           Text(
-            'نسأل الله أن يجعل هذا العمل صدقةً جاريةً عن روح المرحوم والد سلمى الحيحي، وأن يتقبله صدقةً عن سلمى الحيحي، وأن ينفع به كل من قرأ ذكرًا أو دعا بدعاء.',
+            'نسأل الله أن يجعل هذا العمل صدقةً جاريةً عن روح المرحوم والد سلمى الحيحي الحسن الحيحي ، وأن يتقبله صدقةً عن سلمى الحيحي، وأن ينفع به كل من قرأ ذكرًا أو دعا بدعاء.',
             textAlign: TextAlign.center,
             style: TextStyle(
               fontFamily: 'Fustat',
@@ -595,7 +818,10 @@ class _SettingsPageState extends State<SettingsPage> {
       decoration: BoxDecoration(
         color: isDark ? const Color(0xFF262D24) : const Color(0xFFFFFDF9),
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: isDark ? const Color(0xFF353E32) : const Color(0xFFEADFCF), width: 1.4),
+        border: Border.all(
+          color: isDark ? const Color(0xFF353E32) : const Color(0xFFEADFCF),
+          width: 1.4,
+        ),
         boxShadow: [
           BoxShadow(
             color: isDark ? const Color(0x20000000) : const Color(0x10000000),
@@ -629,7 +855,9 @@ class _SettingsPageState extends State<SettingsPage> {
                 children: [
                   Icon(
                     Icons.volunteer_activism_rounded,
-                    color: isDark ? const Color(0xFFC9A15B) : const Color(0xFFC5A059),
+                    color: isDark
+                        ? const Color(0xFFC9A15B)
+                        : const Color(0xFFC5A059),
                     size: 24,
                   ),
                   const SizedBox(width: 8),
@@ -639,7 +867,9 @@ class _SettingsPageState extends State<SettingsPage> {
                       fontFamily: 'Fustat',
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: isDark ? const Color(0xFFF6F1E7) : AppColors.primaryLight,
+                      color: isDark
+                          ? const Color(0xFFF6F1E7)
+                          : AppColors.primaryLight,
                     ),
                   ),
                 ],
@@ -654,7 +884,9 @@ class _SettingsPageState extends State<SettingsPage> {
                   fontFamily: 'Fustat',
                   fontSize: 13.5,
                   fontWeight: FontWeight.w600,
-                  color: isDark ? const Color(0xFFD8CEBE) : const Color(0xFF707973),
+                  color: isDark
+                      ? const Color(0xFFD8CEBE)
+                      : const Color(0xFF707973),
                   height: 1.6,
                 ),
               ),
@@ -668,8 +900,12 @@ class _SettingsPageState extends State<SettingsPage> {
                 child: ElevatedButton.icon(
                   onPressed: () {},
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: isDark ? const Color(0xFFC9A15B) : const Color(0xFF4E5B4E),
-                    foregroundColor: isDark ? const Color(0xFF161A15) : Colors.white,
+                    backgroundColor: isDark
+                        ? const Color(0xFFC9A15B)
+                        : const Color(0xFF4E5B4E),
+                    foregroundColor: isDark
+                        ? const Color(0xFF161A15)
+                        : Colors.white,
                     elevation: 0,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(24),

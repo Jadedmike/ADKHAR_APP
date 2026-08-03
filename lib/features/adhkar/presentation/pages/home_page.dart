@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import '../../../../config/theme/app_colors.dart';
+import '../../../../config/theme/app_page_transitions.dart';
 import '../../../../core/utils/dhikr_copy_helper.dart';
 import '../../../../core/utils/dhikr_share_helper.dart';
+import '../../../../shared/widgets/animated_card_tap.dart';
+import '../../../../shared/widgets/app_background.dart';
 import '../../../../shared/widgets/floating_bottom_nav_bar.dart';
 import '../managers/favorites_manager.dart';
 import 'global_search_page.dart';
@@ -25,9 +28,6 @@ class _HomePageState extends State<HomePage> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     final bgColor = isDark ? const Color(0xFF161A15) : const Color(0xFFF7F2E8);
-    final gradientColors = isDark
-        ? const [Color(0xFF1D221C), Color(0xFF161A15), Color(0xFF111410)]
-        : const [Color(0xFFFAF7F0), Color(0xFFF7F2E8), Color(0xFFEFE9DC)];
 
     return Directionality(
       textDirection: TextDirection.rtl,
@@ -35,39 +35,8 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: bgColor,
         body: Stack(
           children: [
-            // 1. Background Texture & Soft Radial Gradient
-            Positioned.fill(
-              child: Container(
-                decoration: BoxDecoration(
-                  color: bgColor,
-                  gradient: RadialGradient(
-                    center: const Alignment(-0.6, -0.6),
-                    radius: 1.3,
-                    colors: gradientColors,
-                  ),
-                ),
-              ),
-            ),
-
-            // 2. Corner Background Ornaments (Gold Arches & Olive Branches)
-            Positioned.fill(
-              child: Opacity(
-                opacity: 0.35,
-                child: Image.asset(
-                  'assets/images/gold.png',
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-            Positioned.fill(
-              child: Opacity(
-                opacity: 0.45,
-                child: Image.asset(
-                  'assets/images/olivebranches.png',
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
+            // Fullscreen Fixed Viewport Background & Ornaments
+            const AppBackground(),
 
             // 3. Main Content Scrollable Canvas
             SafeArea(
@@ -98,7 +67,7 @@ class _HomePageState extends State<HomePage> {
                             // Greeting Title & Date Pill Container Row
                             _buildGreetingAndDateRow(context, greetingText),
 
-                            const SizedBox(height: 20),
+                            const SizedBox(height: 16),
 
                             // Card 1: ذكر اليوم
                             _buildDailyContentCard(
@@ -201,17 +170,41 @@ class _HomePageState extends State<HomePage> {
                             const SizedBox(height: 16),
 
                             // Card 3: آية عشوائية
-                            _buildDailyContentCard(
-                              context,
-                              tagText: 'آية عشوائية',
-                              tagIcon: Icons.menu_book_rounded,
-                              content: '﴿ أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ ﴾',
-                              source: 'سورة الرعد - الآية 28',
-                              hasDivider: false,
-                              leftAction: _buildActionButton(context, Icons.bookmark_border_rounded, () {}),
-                              rightActions: [
-                                _buildActionButton(context, Icons.share_outlined, () {}),
-                              ],
+                            ValueListenableBuilder<List<Map<String, dynamic>>>(
+                              valueListenable: FavoritesManager.favoriteDhikrs,
+                              builder: (context, favs, child) {
+                                const itemData = {
+                                  'text': '﴿ أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ ﴾',
+                                  'source': 'سورة الرعد - الآية 28',
+                                };
+                                final isFav = FavoritesManager.isFavorite(itemData);
+                                return _buildDailyContentCard(
+                                  context,
+                                  tagText: 'آية عشوائية',
+                                  tagIcon: Icons.menu_book_rounded,
+                                  content: '﴿ أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ ﴾',
+                                  source: 'سورة الرعد - الآية 28',
+                                  hasDivider: false,
+                                  leftAction: _buildActionButton(
+                                    context,
+                                    isFav ? Icons.bookmark_rounded : Icons.bookmark_border_rounded,
+                                    () => FavoritesManager.toggleFavorite(context, itemData),
+                                  ),
+                                  rightActions: [
+                                    _buildActionButton(
+                                      context,
+                                      Icons.copy_rounded,
+                                      () => DhikrCopyHelper.copyToClipboard(context, itemData),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    _buildActionButton(
+                                      context,
+                                      Icons.share_outlined,
+                                      () => DhikrShareHelper.shareDhikr(itemData),
+                                    ),
+                                  ],
+                                );
+                              },
                             ),
 
                             const SizedBox(height: 16),
@@ -225,10 +218,28 @@ class _HomePageState extends State<HomePage> {
                               source: 'سورة الأنفال - الآية 33',
                               hasDivider: false,
                               leftAction: null,
-                              rightActions: const [],
+                              rightActions: [
+                                _buildActionButton(
+                                  context,
+                                  Icons.copy_rounded,
+                                  () => DhikrCopyHelper.copyToClipboard(context, {
+                                    'text': 'وما كان الله معذبهم وهم يستغفرون.',
+                                    'source': 'سورة الأنفال - الآية 33',
+                                  }),
+                                ),
+                                const SizedBox(width: 8),
+                                _buildActionButton(
+                                  context,
+                                  Icons.share_outlined,
+                                  () => DhikrShareHelper.shareDhikr({
+                                    'text': 'وما كان الله معذبهم وهم يستغفرون.',
+                                    'source': 'سورة الأنفال - الآية 33',
+                                  }),
+                                ),
+                              ],
                             ),
 
-                            const SizedBox(height: 24),
+                            const SizedBox(height: 16),
 
                             // Single Centered Tasbeeh Card (75% Screen Width)
                             _buildTasbeehCard(context),
@@ -254,11 +265,13 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  /// Dynamic Time-based Greeting
+  /// Dynamic Time-based Greeting based on local device time.
   String _getGreetingText() {
     final hour = DateTime.now().hour;
     if (hour >= 5 && hour < 12) {
       return 'صباح الخير';
+    } else if (hour >= 12 && hour < 18) {
+      return 'نهارك سعيد';
     } else {
       return 'مساء الخير';
     }
@@ -576,15 +589,12 @@ class _HomePageState extends State<HomePage> {
     return Center(
       child: SizedBox(
         width: screenWidth * 0.75,
-        child: InkWell(
+        child: AnimatedCardTap(
           onTap: () {
             Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => const TasbeehPage(),
-              ),
+              AppPageRoute.create(const TasbeehPage()),
             );
           },
-          borderRadius: BorderRadius.circular(20),
           child: Container(
             padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
             decoration: BoxDecoration(
@@ -671,7 +681,7 @@ class _HeaderLogoRow extends StatelessWidget {
               children: [
                 _buildTopIconButton(context, Icons.search_rounded, () {
                   Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => const GlobalSearchPage()),
+                    AppPageRoute.create(const GlobalSearchPage()),
                   );
                 }),
                 const SizedBox(width: 8),

@@ -1,6 +1,8 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'home_page.dart';
+import 'single_dhikr_page.dart';
+import '../managers/settings_manager.dart';
 import '../../../../config/theme/app_colors.dart';
 import '../../../../config/theme/app_spacing.dart';
 import '../../../../config/theme/app_radius.dart';
@@ -208,11 +210,25 @@ class SplashPage extends StatelessWidget {
                                     isFullWidth: true,
                                     borderRadius: AppRadius.borderRound,
                                     onPressed: () {
-                                      Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                          builder: (context) => const HomePage(),
-                                        ),
-                                      );
+                                      final lastPosition = SettingsManager.getLastReadingPosition();
+                                      if (lastPosition != null && SettingsManager.rememberLastPosition.value) {
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder: (context) => SingleDhikrPage(
+                                              categoryTitle: lastPosition.categoryTitle,
+                                              jsonAssetPath: lastPosition.jsonAssetPath,
+                                              initialIndex: lastPosition.index,
+                                              initialScrollOffset: lastPosition.scrollOffset,
+                                            ),
+                                          ),
+                                        );
+                                      } else {
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder: (context) => const HomePage(),
+                                          ),
+                                        );
+                                      }
                                     },
                                     icon: CustomPaint(
                                       size: const Size(18, 18),

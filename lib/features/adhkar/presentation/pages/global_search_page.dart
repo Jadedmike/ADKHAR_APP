@@ -2,7 +2,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../../config/theme/app_colors.dart';
+import '../../../../config/theme/app_page_transitions.dart';
 import '../../../../core/utils/arabic_search_helper.dart';
+import '../../../../shared/widgets/animated_card_tap.dart';
+import '../../../../shared/widgets/app_background.dart';
+import '../../../../shared/widgets/staggered_list_fade_item.dart';
 import '../managers/favorites_manager.dart';
 import 'single_dhikr_page.dart';
 
@@ -158,9 +162,6 @@ class _GlobalSearchPageState extends State<GlobalSearchPage> {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final bgColor = isDark ? const Color(0xFF161A15) : const Color(0xFFF8F4EC);
-    final gradientColors = isDark
-        ? const [Color(0xFF1D221C), Color(0xFF161A15), Color(0xFF111410)]
-        : const [Color(0xFFFAF7F0), Color(0xFFF8F4EC), Color(0xFFEFE9DC)];
 
     return Directionality(
       textDirection: TextDirection.rtl,
@@ -168,39 +169,8 @@ class _GlobalSearchPageState extends State<GlobalSearchPage> {
         backgroundColor: bgColor,
         body: Stack(
           children: [
-            // 1. Background Texture & Soft Radial Gradient
-            Positioned.fill(
-              child: Container(
-                decoration: BoxDecoration(
-                  color: bgColor,
-                  gradient: RadialGradient(
-                    center: const Alignment(-0.6, -0.6),
-                    radius: 1.3,
-                    colors: gradientColors,
-                  ),
-                ),
-              ),
-            ),
-
-            // 2. Corner Background Ornaments (Gold & Olive Branches)
-            Positioned.fill(
-              child: Opacity(
-                opacity: 0.35,
-                child: Image.asset(
-                  'assets/images/gold.png',
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-            Positioned.fill(
-              child: Opacity(
-                opacity: 0.45,
-                child: Image.asset(
-                  'assets/images/olivebranches.png',
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
+            // Fullscreen Fixed Viewport Background & Ornaments
+            const AppBackground(),
 
             // 3. Main Content Area
             SafeArea(
@@ -383,7 +353,10 @@ class _GlobalSearchPageState extends State<GlobalSearchPage> {
             itemCount: _searchResults.length,
             separatorBuilder: (context, index) => const SizedBox(height: 14),
             itemBuilder: (context, index) {
-              return _buildSearchResultCard(_searchResults[index]);
+              return StaggeredListFadeItem(
+                index: index,
+                child: _buildSearchResultCard(_searchResults[index]),
+              );
             },
           ),
         ),
@@ -561,12 +534,12 @@ class _GlobalSearchPageState extends State<GlobalSearchPage> {
       backgroundColor: isDark ? const Color(0xFF524222) : const Color(0xFFF0E3C4),
     );
 
-    return InkWell(
+    return AnimatedCardTap(
       onTap: () {
         // Opens the Reading Screen (SingleDhikrPage)
         Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => SingleDhikrPage(
+          AppPageRoute.create(
+            SingleDhikrPage(
               categoryTitle: item.categoryTitle,
               dhikrList: item.fullCategoryList,
               initialIndex: item.indexInCategory,
@@ -574,7 +547,6 @@ class _GlobalSearchPageState extends State<GlobalSearchPage> {
           ),
         );
       },
-      borderRadius: BorderRadius.circular(22),
       child: Container(
         padding: const EdgeInsets.all(18),
         decoration: BoxDecoration(

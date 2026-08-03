@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import '../../../../config/theme/app_colors.dart';
+import '../../../../config/theme/app_page_transitions.dart';
+import '../../../../shared/widgets/animated_card_tap.dart';
+import '../../../../shared/widgets/app_background.dart';
 import '../../../../shared/widgets/floating_bottom_nav_bar.dart';
+import '../../../../shared/widgets/staggered_list_fade_item.dart';
 import 'category_list_page.dart';
 import 'global_search_page.dart';
 
@@ -17,9 +21,6 @@ class _AzkarCategoriesPageState extends State<AzkarCategoriesPage> {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final bgColor = isDark ? const Color(0xFF161A15) : const Color(0xFFF7F2E8);
-    final gradientColors = isDark
-        ? const [Color(0xFF1D221C), Color(0xFF161A15), Color(0xFF111410)]
-        : const [Color(0xFFFAF7F0), Color(0xFFF7F2E8), Color(0xFFEFE9DC)];
 
     return Directionality(
       textDirection: TextDirection.rtl,
@@ -27,39 +28,8 @@ class _AzkarCategoriesPageState extends State<AzkarCategoriesPage> {
         backgroundColor: bgColor,
         body: Stack(
           children: [
-            // 1. Background Texture & Soft Radial Texture Gradient
-            Positioned.fill(
-              child: Container(
-                decoration: BoxDecoration(
-                  color: bgColor,
-                  gradient: RadialGradient(
-                    center: const Alignment(-0.6, -0.6),
-                    radius: 1.3,
-                    colors: gradientColors,
-                  ),
-                ),
-              ),
-            ),
-
-            // 2. Soft Corner Background Ornaments (Gold Arches & Olive Branches)
-            Positioned.fill(
-              child: Opacity(
-                opacity: 0.35,
-                child: Image.asset(
-                  'assets/images/gold.png',
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-            Positioned.fill(
-              child: Opacity(
-                opacity: 0.45,
-                child: Image.asset(
-                  'assets/images/olivebranches.png',
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
+            // Fullscreen Fixed Viewport Background & Ornaments
+            const AppBackground(),
 
             // 3. Main Content Scrollable Area
             SafeArea(
@@ -250,19 +220,20 @@ class _AzkarCategoriesPageState extends State<AzkarCategoriesPage> {
       separatorBuilder: (context, index) => const SizedBox(height: 14),
       itemBuilder: (context, index) {
         final category = categories[index];
-        return InkWell(
-          onTap: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => CategoryListPage(
-                  categoryTitle: category['title'] as String,
-                  jsonAssetPath: category['jsonPath'] as String,
+        return StaggeredListFadeItem(
+          index: index,
+          child: AnimatedCardTap(
+            onTap: () {
+              Navigator.of(context).push(
+                AppPageRoute.create(
+                  CategoryListPage(
+                    categoryTitle: category['title'] as String,
+                    jsonAssetPath: category['jsonPath'] as String,
+                  ),
                 ),
-              ),
-            );
-          },
-          borderRadius: BorderRadius.circular(22),
-          child: Container(
+              );
+            },
+            child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
             decoration: BoxDecoration(
               color: isDark ? const Color(0xFF262D24) : const Color(0xFFFFFDF9),
@@ -365,7 +336,8 @@ class _AzkarCategoriesPageState extends State<AzkarCategoriesPage> {
               ],
             ),
           ),
-        );
+        ),
+      );
       },
     );
   }

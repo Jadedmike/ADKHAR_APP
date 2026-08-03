@@ -10,9 +10,14 @@ class DhikrCopyHelper {
 
     String textToCopy = text;
     if (SettingsManager.copySource.value) {
-      final String source = (dhikr['source'] ?? '').toString();
-      if (source.isNotEmpty) {
-        textToCopy += '\nالمصدر: $source';
+      final String source = (dhikr['source'] ?? '').toString().trim();
+      final String reference = (dhikr['reference'] ?? '').toString().trim();
+      final List<String> details = [];
+      if (source.isNotEmpty) details.add(source);
+      if (reference.isNotEmpty && reference != source) details.add(reference);
+
+      if (details.isNotEmpty) {
+        textToCopy += '\nالمصدر: ${details.join(' - ')}';
       }
     }
 

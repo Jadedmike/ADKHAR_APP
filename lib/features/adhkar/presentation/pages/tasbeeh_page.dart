@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../config/theme/app_colors.dart';
+import '../../../../shared/widgets/app_background.dart';
 import '../../../../shared/widgets/floating_bottom_nav_bar.dart';
 import '../managers/settings_manager.dart';
 
@@ -17,6 +18,7 @@ class TasbeehPage extends StatefulWidget {
 class _TasbeehPageState extends State<TasbeehPage> {
   int _counter = 0;
   int _todayTotal = 0;
+  bool _isCounterPulsing = false;
 
   static const String _keyTodayCount = 'tasbeeh_today_count';
   static const String _keyTodayDate = 'tasbeeh_today_date';
@@ -48,19 +50,31 @@ class _TasbeehPageState extends State<TasbeehPage> {
     } catch (_) {}
   }
 
-  Future<void> _incrementCounter() async {
+  Future<void> _saveProgress() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setInt(_keyTodayCount, _todayTotal);
+    } catch (_) {}
+  }
+
+  void _incrementCounter() {
     if (SettingsManager.vibrationOption.value) {
       HapticFeedback.lightImpact();
     }
     setState(() {
       _counter++;
       _todayTotal++;
+      _isCounterPulsing = true;
     });
+    _saveProgress();
 
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setInt(_keyTodayCount, _todayTotal);
-    } catch (_) {}
+    Future.delayed(const Duration(milliseconds: 120), () {
+      if (mounted) {
+        setState(() {
+          _isCounterPulsing = false;
+        });
+      }
+    });
   }
 
   Future<void> _resetCounter() async {
@@ -76,9 +90,6 @@ class _TasbeehPageState extends State<TasbeehPage> {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final bgColor = isDark ? const Color(0xFF161A15) : const Color(0xFFF7F2E8);
-    final gradientColors = isDark
-        ? const [Color(0xFF1D221C), Color(0xFF161A15), Color(0xFF111410)]
-        : const [Color(0xFFFAF7F0), Color(0xFFF7F2E8), Color(0xFFEFE9DC)];
 
     return Directionality(
       textDirection: TextDirection.rtl,
@@ -86,39 +97,8 @@ class _TasbeehPageState extends State<TasbeehPage> {
         backgroundColor: bgColor,
         body: Stack(
           children: [
-            // 1. Background Texture & Soft Radial Gradient
-            Positioned.fill(
-              child: Container(
-                decoration: BoxDecoration(
-                  color: bgColor,
-                  gradient: RadialGradient(
-                    center: const Alignment(-0.6, -0.6),
-                    radius: 1.3,
-                    colors: gradientColors,
-                  ),
-                ),
-              ),
-            ),
-
-            // 2. Corner Background Ornaments (Gold Arches & Olive Branches)
-            Positioned.fill(
-              child: Opacity(
-                opacity: 0.35,
-                child: Image.asset(
-                  'assets/images/gold.png',
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-            Positioned.fill(
-              child: Opacity(
-                opacity: 0.45,
-                child: Image.asset(
-                  'assets/images/olivebranches.png',
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
+            // Fullscreen Fixed Viewport Background & Ornaments
+            const AppBackground(),
 
             // 3. Main Content Scrollable Area
             SafeArea(
@@ -305,14 +285,19 @@ class _TasbeehPageState extends State<TasbeehPage> {
             ),
           ),
           const SizedBox(height: 12),
-          Text(
-            '$_counter',
-            style: TextStyle(
-              fontFamily: 'Fustat',
-              fontSize: 64,
-              fontWeight: FontWeight.bold,
-              color: isDark ? const Color(0xFFF6F1E7) : AppColors.primaryLight,
-              letterSpacing: 2,
+          AnimatedScale(
+            scale: _isCounterPulsing ? 1.08 : 1.0,
+            duration: const Duration(milliseconds: 120),
+            curve: Curves.easeOutCubic,
+            child: Text(
+              '$_counter',
+              style: TextStyle(
+                fontFamily: 'Fustat',
+                fontSize: 64,
+                fontWeight: FontWeight.bold,
+                color: isDark ? const Color(0xFFF6F1E7) : AppColors.primaryLight,
+                letterSpacing: 2,
+              ),
             ),
           ),
           const SizedBox(height: 12),

@@ -3,10 +3,21 @@ import 'app_colors.dart';
 import 'app_typography.dart';
 import 'app_radius.dart';
 import 'app_shadows.dart';
+import 'app_page_transitions.dart';
 
 /// Central theme orchestrator that builds production-ready MaterialApp [ThemeData].
 class AppTheme {
   AppTheme._();
+
+  static const _pageTransitionsTheme = PageTransitionsTheme(
+    builders: {
+      TargetPlatform.android: RtlFadeSlidePageTransitionsBuilder(),
+      TargetPlatform.iOS: RtlFadeSlidePageTransitionsBuilder(),
+      TargetPlatform.windows: RtlFadeSlidePageTransitionsBuilder(),
+      TargetPlatform.macOS: RtlFadeSlidePageTransitionsBuilder(),
+      TargetPlatform.linux: RtlFadeSlidePageTransitionsBuilder(),
+    },
+  );
 
   /// Global Card Theme Configuration for Light Mode
   static CardThemeData get lightCardTheme => const CardThemeData(
@@ -86,6 +97,7 @@ class AppTheme {
       useMaterial3: true,
       brightness: Brightness.light,
       scaffoldBackgroundColor: AppColors.backgroundLight,
+      pageTransitionsTheme: _pageTransitionsTheme,
       colorScheme: const ColorScheme.light(
         primary: AppColors.primaryLight,
         onPrimary: AppColors.onPrimaryLight,
@@ -122,6 +134,7 @@ class AppTheme {
       useMaterial3: true,
       brightness: Brightness.dark,
       scaffoldBackgroundColor: AppColors.backgroundDark,
+      pageTransitionsTheme: _pageTransitionsTheme,
       colorScheme: const ColorScheme.dark(
         primary: AppColors.primaryDark,
         onPrimary: AppColors.onPrimaryDark,
