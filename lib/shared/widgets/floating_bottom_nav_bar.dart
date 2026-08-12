@@ -10,10 +10,7 @@ import '../../features/adhkar/presentation/pages/settings_page.dart';
 class FloatingBottomNavBar extends StatelessWidget {
   final int selectedIndex;
 
-  const FloatingBottomNavBar({
-    super.key,
-    required this.selectedIndex,
-  });
+  const FloatingBottomNavBar({super.key, required this.selectedIndex});
 
   @override
   Widget build(BuildContext context) {
@@ -28,10 +25,18 @@ class FloatingBottomNavBar extends StatelessWidget {
     ];
 
     final bgColor = isDark ? const Color(0xFF1F241D) : const Color(0xFFFFFDF9);
-    final borderColor = isDark ? const Color(0xFF353E32) : const Color(0xFFEADFCF);
-    final selectedPillColor = isDark ? const Color(0xFF2E362C) : const Color(0xFFF0E8DA);
-    final selectedTextColor = isDark ? const Color(0xFFC9A15B) : const Color(0xFF4E5B4E);
-    final unselectedTextColor = isDark ? const Color(0xFF7E8A63) : const Color(0xFF707973);
+    final borderColor = isDark
+        ? const Color(0xFF353E32)
+        : const Color(0xFFEADFCF);
+    final selectedPillColor = isDark
+        ? const Color(0xFF2E362C)
+        : const Color(0xFFF0E8DA);
+    final selectedTextColor = isDark
+        ? const Color(0xFFC9A15B)
+        : const Color(0xFF4E5B4E);
+    final unselectedTextColor = isDark
+        ? const Color(0xFF7E8A63)
+        : const Color(0xFF707973);
 
     return Container(
       height: 64,
@@ -78,7 +83,9 @@ class FloatingBottomNavBar extends StatelessWidget {
                 default:
                   return;
               }
-              Navigator.of(context).pushReplacement(AppPageRoute.create(targetPage));
+              Navigator.of(
+                context,
+              ).pushReplacement(AppPageRoute.create(targetPage));
             },
             borderRadius: BorderRadius.circular(24),
             child: AnimatedContainer(
@@ -100,7 +107,9 @@ class FloatingBottomNavBar extends StatelessWidget {
                   children: [
                     Icon(
                       item['icon'] as IconData,
-                      color: isSelected ? selectedTextColor : unselectedTextColor,
+                      color: isSelected
+                          ? selectedTextColor
+                          : unselectedTextColor,
                       size: 20,
                     ),
                     if (isSelected) ...[

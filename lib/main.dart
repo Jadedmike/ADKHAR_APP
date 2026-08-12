@@ -31,9 +31,7 @@ class AdhkarApp extends StatelessWidget {
 
           // Localization: RTL Arabic by default and Arabic only
           locale: const Locale('ar'),
-          supportedLocales: const [
-            Locale('ar'),
-          ],
+          supportedLocales: const [Locale('ar')],
           localizationsDelegates: const [
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,

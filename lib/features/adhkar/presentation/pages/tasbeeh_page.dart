@@ -107,7 +107,10 @@ class _TasbeehPageState extends State<TasbeehPage> {
                 children: [
                   // Top Header Bar
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 18,
+                      vertical: 12,
+                    ),
                     child: _buildHeader(context),
                   ),
 
@@ -170,15 +173,21 @@ class _TasbeehPageState extends State<TasbeehPage> {
                 width: 42,
                 height: 42,
                 decoration: BoxDecoration(
-                  color: isDark ? const Color(0xFF262D24) : const Color(0xFFFFFDF9),
+                  color: isDark
+                      ? const Color(0xFF262D24)
+                      : const Color(0xFFFFFDF9),
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(
-                    color: isDark ? const Color(0xFF353E32) : const Color(0xFFEADFCF),
+                    color: isDark
+                        ? const Color(0xFF353E32)
+                        : const Color(0xFFEADFCF),
                     width: 1.2,
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: isDark ? const Color(0x20000000) : const Color(0x0A000000),
+                      color: isDark
+                          ? const Color(0x20000000)
+                          : const Color(0x0A000000),
                       blurRadius: 10,
                       offset: const Offset(0, 3),
                     ),
@@ -187,7 +196,9 @@ class _TasbeehPageState extends State<TasbeehPage> {
                 child: Icon(
                   Icons.arrow_forward_ios_rounded,
                   size: 18,
-                  color: isDark ? const Color(0xFFD8CEBE) : const Color(0xFF4E5B4E),
+                  color: isDark
+                      ? const Color(0xFFD8CEBE)
+                      : const Color(0xFF4E5B4E),
                 ),
               ),
             ),
@@ -198,7 +209,9 @@ class _TasbeehPageState extends State<TasbeehPage> {
                 fontFamily: 'Fustat',
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
-                color: isDark ? const Color(0xFFF6F1E7) : AppColors.primaryLight,
+                color: isDark
+                    ? const Color(0xFFF6F1E7)
+                    : AppColors.primaryLight,
               ),
             ),
           ],
@@ -214,12 +227,16 @@ class _TasbeehPageState extends State<TasbeehPage> {
               color: isDark ? const Color(0xFF262D24) : const Color(0xFFFFFDF9),
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
-                color: isDark ? const Color(0xFF353E32) : const Color(0xFFEADFCF),
+                color: isDark
+                    ? const Color(0xFF353E32)
+                    : const Color(0xFFEADFCF),
                 width: 1.2,
               ),
               boxShadow: [
                 BoxShadow(
-                  color: isDark ? const Color(0x20000000) : const Color(0x0A000000),
+                  color: isDark
+                      ? const Color(0x20000000)
+                      : const Color(0x0A000000),
                   blurRadius: 10,
                   offset: const Offset(0, 3),
                 ),
@@ -231,7 +248,9 @@ class _TasbeehPageState extends State<TasbeehPage> {
                 Icon(
                   Icons.refresh_rounded,
                   size: 18,
-                  color: isDark ? const Color(0xFFC9A15B) : const Color(0xFFC5A059),
+                  color: isDark
+                      ? const Color(0xFFC9A15B)
+                      : const Color(0xFFC5A059),
                 ),
                 const SizedBox(width: 6),
                 Text(
@@ -240,7 +259,9 @@ class _TasbeehPageState extends State<TasbeehPage> {
                     fontFamily: 'Fustat',
                     fontSize: 12.5,
                     fontWeight: FontWeight.bold,
-                    color: isDark ? const Color(0xFFC9A15B) : const Color(0xFF4E5B4E),
+                    color: isDark
+                        ? const Color(0xFFC9A15B)
+                        : const Color(0xFF4E5B4E),
                   ),
                 ),
               ],
@@ -295,7 +316,9 @@ class _TasbeehPageState extends State<TasbeehPage> {
                 fontFamily: 'Fustat',
                 fontSize: 64,
                 fontWeight: FontWeight.bold,
-                color: isDark ? const Color(0xFFF6F1E7) : AppColors.primaryLight,
+                color: isDark
+                    ? const Color(0xFFF6F1E7)
+                    : AppColors.primaryLight,
                 letterSpacing: 2,
               ),
             ),
@@ -312,8 +335,12 @@ class _TasbeehPageState extends State<TasbeehPage> {
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
-                      isDark ? const Color(0x00C9A15B) : const Color(0x00C5A059),
-                      isDark ? const Color(0xFFC9A15B) : const Color(0xFFC5A059),
+                      isDark
+                          ? const Color(0x00C9A15B)
+                          : const Color(0x00C5A059),
+                      isDark
+                          ? const Color(0xFFC9A15B)
+                          : const Color(0xFFC5A059),
                     ],
                   ),
                 ),
@@ -323,7 +350,9 @@ class _TasbeehPageState extends State<TasbeehPage> {
                 child: Icon(
                   Icons.auto_awesome,
                   size: 14,
-                  color: isDark ? const Color(0xFFC9A15B) : const Color(0xFFC5A059),
+                  color: isDark
+                      ? const Color(0xFFC9A15B)
+                      : const Color(0xFFC5A059),
                 ),
               ),
               Container(
@@ -332,8 +361,12 @@ class _TasbeehPageState extends State<TasbeehPage> {
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
-                      isDark ? const Color(0xFFC9A15B) : const Color(0xFFC5A059),
-                      isDark ? const Color(0x00C9A15B) : const Color(0x00C5A059),
+                      isDark
+                          ? const Color(0xFFC9A15B)
+                          : const Color(0xFFC5A059),
+                      isDark
+                          ? const Color(0x00C9A15B)
+                          : const Color(0x00C5A059),
                     ],
                   ),
                 ),
@@ -367,7 +400,9 @@ class _TasbeehPageState extends State<TasbeehPage> {
             ),
             boxShadow: [
               BoxShadow(
-                color: isDark ? const Color(0x35000000) : const Color(0x18000000),
+                color: isDark
+                    ? const Color(0x35000000)
+                    : const Color(0x18000000),
                 blurRadius: 24,
                 offset: const Offset(0, 10),
               ),
@@ -379,7 +414,9 @@ class _TasbeehPageState extends State<TasbeehPage> {
               Icon(
                 Icons.touch_app_rounded,
                 size: 42,
-                color: isDark ? const Color(0xFFC9A15B) : const Color(0xFF4E5B4E),
+                color: isDark
+                    ? const Color(0xFFC9A15B)
+                    : const Color(0xFF4E5B4E),
               ),
               const SizedBox(height: 6),
               Text(
@@ -388,7 +425,9 @@ class _TasbeehPageState extends State<TasbeehPage> {
                   fontFamily: 'Fustat',
                   fontSize: 13.5,
                   fontWeight: FontWeight.bold,
-                  color: isDark ? const Color(0xFFF6F1E7) : const Color(0xFF4E5B4E),
+                  color: isDark
+                      ? const Color(0xFFF6F1E7)
+                      : const Color(0xFF4E5B4E),
                 ),
               ),
             ],

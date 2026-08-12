@@ -18,9 +18,15 @@ class SplashPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    final Color calligraphicColor = isDark ? AppColors.primaryDark : AppColors.primaryLight;
-    final Color sloganColor = isDark ? AppColors.goldDark : const Color(0xFFC5A059);
-    final Color subtitleColor = isDark ? AppColors.textPrimaryDark : const Color(0xFF424942);
+    final Color calligraphicColor = isDark
+        ? AppColors.primaryDark
+        : AppColors.primaryLight;
+    final Color sloganColor = isDark
+        ? AppColors.goldDark
+        : const Color(0xFFC5A059);
+    final Color subtitleColor = isDark
+        ? AppColors.textPrimaryDark
+        : const Color(0xFF424942);
 
     return AppScaffold(
       wrapWithSafeArea: false,
@@ -30,7 +36,9 @@ class SplashPage extends StatelessWidget {
           Positioned.fill(
             child: Container(
               decoration: BoxDecoration(
-                color: isDark ? const Color(0xFF161A15) : const Color(0xFFF7F2E8),
+                color: isDark
+                    ? const Color(0xFF161A15)
+                    : const Color(0xFFF7F2E8),
                 gradient: RadialGradient(
                   center: const Alignment(-0.6, -0.6),
                   radius: 1.3,
@@ -52,19 +60,14 @@ class SplashPage extends StatelessWidget {
 
           // 2. Soft Diagonal Light Rays from Upper-Left Corner
           Positioned.fill(
-            child: CustomPaint(
-              painter: LightRaysPainter(isDark: isDark),
-            ),
+            child: CustomPaint(painter: LightRaysPainter(isDark: isDark)),
           ),
 
           // 3. Gold Arches Corner Ornaments (Slightly lighter / 65% opacity)
           Positioned.fill(
             child: Opacity(
               opacity: isDark ? 0.45 : 0.65,
-              child: Image.asset(
-                'assets/images/gold.png',
-                fit: BoxFit.cover,
-              ),
+              child: Image.asset('assets/images/gold.png', fit: BoxFit.cover),
             ),
           ),
 
@@ -137,7 +140,9 @@ class SplashPage extends StatelessWidget {
                                     ),
                                   ),
                                   Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 10,
+                                    ),
                                     child: Image.asset(
                                       'assets/images/gold.png',
                                       width: 22,
@@ -192,12 +197,16 @@ class SplashPage extends StatelessWidget {
 
                               // CTA Button ("ابدأ")
                               Container(
-                                margin: const EdgeInsets.only(bottom: AppSpacing.md),
+                                margin: const EdgeInsets.only(
+                                  bottom: AppSpacing.md,
+                                ),
                                 decoration: BoxDecoration(
                                   borderRadius: AppRadius.borderRound,
                                   boxShadow: [
                                     BoxShadow(
-                                      color: calligraphicColor.withOpacity(0.28),
+                                      color: calligraphicColor.withValues(
+                                        alpha: 0.28,
+                                      ),
                                       blurRadius: 20,
                                       offset: const Offset(0, 8),
                                     ),
@@ -210,29 +219,41 @@ class SplashPage extends StatelessWidget {
                                     isFullWidth: true,
                                     borderRadius: AppRadius.borderRound,
                                     onPressed: () {
-                                      final lastPosition = SettingsManager.getLastReadingPosition();
-                                      if (lastPosition != null && SettingsManager.rememberLastPosition.value) {
+                                      final lastPosition =
+                                          SettingsManager.getLastReadingPosition();
+                                      if (lastPosition != null &&
+                                          SettingsManager
+                                              .rememberLastPosition
+                                              .value) {
                                         Navigator.of(context).push(
                                           MaterialPageRoute(
-                                            builder: (context) => SingleDhikrPage(
-                                              categoryTitle: lastPosition.categoryTitle,
-                                              jsonAssetPath: lastPosition.jsonAssetPath,
-                                              initialIndex: lastPosition.index,
-                                              initialScrollOffset: lastPosition.scrollOffset,
-                                            ),
+                                            builder: (context) =>
+                                                SingleDhikrPage(
+                                                  categoryTitle: lastPosition
+                                                      .categoryTitle,
+                                                  jsonAssetPath: lastPosition
+                                                      .jsonAssetPath,
+                                                  initialIndex:
+                                                      lastPosition.index,
+                                                  initialScrollOffset:
+                                                      lastPosition.scrollOffset,
+                                                ),
                                           ),
                                         );
                                       } else {
                                         Navigator.of(context).push(
                                           MaterialPageRoute(
-                                            builder: (context) => const HomePage(),
+                                            builder: (context) =>
+                                                const HomePage(),
                                           ),
                                         );
                                       }
                                     },
                                     icon: CustomPaint(
                                       size: const Size(18, 18),
-                                      painter: const OliveLeafButtonIconPainter(color: Colors.white),
+                                      painter: const OliveLeafButtonIconPainter(
+                                        color: Colors.white,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -264,8 +285,8 @@ class LightRaysPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final Color beamColor = isDark
-        ? Colors.white.withOpacity(0.04)
-        : Colors.white.withOpacity(0.38);
+        ? Colors.white.withValues(alpha: 0.04)
+        : Colors.white.withValues(alpha: 0.38);
 
     final Paint paint = Paint()
       ..shader = LinearGradient(
@@ -273,7 +294,7 @@ class LightRaysPainter extends CustomPainter {
         end: Alignment.bottomRight,
         colors: [
           beamColor,
-          beamColor.withOpacity(0.12),
+          beamColor.withValues(alpha: 0.12),
           Colors.transparent,
         ],
         stops: const [0.0, 0.4, 0.95],
@@ -311,13 +332,22 @@ class OliveLeafButtonIconPainter extends CustomPainter {
     final double h = size.height;
 
     final Paint stemPaint = Paint()
-      ..color = color.withOpacity(0.75)
+      ..color = color.withValues(alpha: 0.75)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.2;
 
-    canvas.drawLine(Offset(w * 0.25, h * 0.75), Offset(w * 0.75, h * 0.25), stemPaint);
+    canvas.drawLine(
+      Offset(w * 0.25, h * 0.75),
+      Offset(w * 0.75, h * 0.25),
+      stemPaint,
+    );
 
-    void drawSmallLeaf(Canvas canvas, Offset pos, double angle, double leafSize) {
+    void drawSmallLeaf(
+      Canvas canvas,
+      Offset pos,
+      double angle,
+      double leafSize,
+    ) {
       canvas.save();
       canvas.translate(pos.dx, pos.dy);
       canvas.rotate(angle);

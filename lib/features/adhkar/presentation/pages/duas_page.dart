@@ -111,7 +111,9 @@ class _DuasPageState extends State<DuasPage> {
                                         fontFamily: 'Fustat',
                                         fontSize: 28,
                                         fontWeight: FontWeight.bold,
-                                        color: isDark ? const Color(0xFFF6F1E7) : AppColors.primaryLight,
+                                        color: isDark
+                                            ? const Color(0xFFF6F1E7)
+                                            : AppColors.primaryLight,
                                       ),
                                     ),
                                     const SizedBox(height: 4),
@@ -121,7 +123,9 @@ class _DuasPageState extends State<DuasPage> {
                                         fontFamily: 'Fustat',
                                         fontSize: 14,
                                         fontWeight: FontWeight.w500,
-                                        color: isDark ? const Color(0xFFD8CEBE) : const Color(0xFF707973),
+                                        color: isDark
+                                            ? const Color(0xFFD8CEBE)
+                                            : const Color(0xFF707973),
                                       ),
                                     ),
                                   ],
@@ -131,7 +135,9 @@ class _DuasPageState extends State<DuasPage> {
                                 InkWell(
                                   onTap: () {
                                     Navigator.of(context).push(
-                                      AppPageRoute.create(const GlobalSearchPage()),
+                                      AppPageRoute.create(
+                                        const GlobalSearchPage(),
+                                      ),
                                     );
                                   },
                                   borderRadius: BorderRadius.circular(16),
@@ -139,12 +145,21 @@ class _DuasPageState extends State<DuasPage> {
                                     width: 42,
                                     height: 42,
                                     decoration: BoxDecoration(
-                                      color: isDark ? const Color(0xFF262D24) : const Color(0xFFFFFDF9),
+                                      color: isDark
+                                          ? const Color(0xFF262D24)
+                                          : const Color(0xFFFFFDF9),
                                       borderRadius: BorderRadius.circular(16),
-                                      border: Border.all(color: isDark ? const Color(0xFF353E32) : const Color(0xFFEADFCF), width: 1.2),
+                                      border: Border.all(
+                                        color: isDark
+                                            ? const Color(0xFF353E32)
+                                            : const Color(0xFFEADFCF),
+                                        width: 1.2,
+                                      ),
                                       boxShadow: [
                                         BoxShadow(
-                                          color: isDark ? const Color(0x20000000) : const Color(0x0A000000),
+                                          color: isDark
+                                              ? const Color(0x20000000)
+                                              : const Color(0x0A000000),
                                           blurRadius: 10,
                                           offset: const Offset(0, 3),
                                         ),
@@ -153,7 +168,9 @@ class _DuasPageState extends State<DuasPage> {
                                     child: Icon(
                                       Icons.search_rounded,
                                       size: 20,
-                                      color: isDark ? const Color(0xFFD8CEBE) : const Color(0xFF4E5B4E),
+                                      color: isDark
+                                          ? const Color(0xFFD8CEBE)
+                                          : const Color(0xFF4E5B4E),
                                     ),
                                   ),
                                 ),
@@ -167,7 +184,8 @@ class _DuasPageState extends State<DuasPage> {
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
                               itemCount: _duaCategories.length,
-                              separatorBuilder: (context, index) => const SizedBox(height: 14),
+                              separatorBuilder: (context, index) =>
+                                  const SizedBox(height: 14),
                               itemBuilder: (context, index) {
                                 final item = _duaCategories[index];
                                 return StaggeredListFadeItem(
@@ -177,8 +195,10 @@ class _DuasPageState extends State<DuasPage> {
                                       Navigator.of(context).push(
                                         AppPageRoute.create(
                                           CategoryListPage(
-                                            categoryTitle: item['title'] as String,
-                                            jsonAssetPath: item['jsonPath'] as String,
+                                            categoryTitle:
+                                                item['title'] as String,
+                                            jsonAssetPath:
+                                                item['jsonPath'] as String,
                                           ),
                                         ),
                                       );
@@ -186,12 +206,21 @@ class _DuasPageState extends State<DuasPage> {
                                     child: Container(
                                       padding: const EdgeInsets.all(18),
                                       decoration: BoxDecoration(
-                                        color: isDark ? const Color(0xFF262D24) : const Color(0xFFFFFDF9),
+                                        color: isDark
+                                            ? const Color(0xFF262D24)
+                                            : const Color(0xFFFFFDF9),
                                         borderRadius: BorderRadius.circular(22),
-                                        border: Border.all(color: isDark ? const Color(0xFF353E32) : const Color(0xFFF3ECE0), width: 1.2),
+                                        border: Border.all(
+                                          color: isDark
+                                              ? const Color(0xFF353E32)
+                                              : const Color(0xFFF3ECE0),
+                                          width: 1.2,
+                                        ),
                                         boxShadow: [
                                           BoxShadow(
-                                            color: isDark ? const Color(0x20000000) : const Color(0x0C000000),
+                                            color: isDark
+                                                ? const Color(0x20000000)
+                                                : const Color(0x0C000000),
                                             blurRadius: 14,
                                             offset: const Offset(0, 5),
                                           ),
@@ -203,20 +232,30 @@ class _DuasPageState extends State<DuasPage> {
                                             width: 48,
                                             height: 48,
                                             decoration: BoxDecoration(
-                                              color: isDark ? const Color(0xFF1F241D) : const Color(0xFFF7F2E8),
+                                              color: isDark
+                                                  ? const Color(0xFF1F241D)
+                                                  : const Color(0xFFF7F2E8),
                                               shape: BoxShape.circle,
-                                              border: Border.all(color: isDark ? const Color(0xFF353E32) : const Color(0xFFEADFCF), width: 1),
+                                              border: Border.all(
+                                                color: isDark
+                                                    ? const Color(0xFF353E32)
+                                                    : const Color(0xFFEADFCF),
+                                                width: 1,
+                                              ),
                                             ),
                                             child: Icon(
                                               item['icon'] as IconData,
                                               size: 24,
-                                              color: isDark ? const Color(0xFFC9A15B) : const Color(0xFF4E5B4E),
+                                              color: isDark
+                                                  ? const Color(0xFFC9A15B)
+                                                  : const Color(0xFF4E5B4E),
                                             ),
                                           ),
                                           const SizedBox(width: 14),
                                           Expanded(
                                             child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
                                                 Text(
                                                   item['title'] as String,
@@ -224,7 +263,13 @@ class _DuasPageState extends State<DuasPage> {
                                                     fontFamily: 'Fustat',
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.bold,
-                                                    color: isDark ? const Color(0xFFF6F1E7) : const Color(0xFF1E281F),
+                                                    color: isDark
+                                                        ? const Color(
+                                                            0xFFF6F1E7,
+                                                          )
+                                                        : const Color(
+                                                            0xFF1E281F,
+                                                          ),
                                                   ),
                                                 ),
                                                 const SizedBox(height: 3),
@@ -234,7 +279,13 @@ class _DuasPageState extends State<DuasPage> {
                                                     fontFamily: 'Fustat',
                                                     fontSize: 12,
                                                     fontWeight: FontWeight.w500,
-                                                    color: isDark ? const Color(0xFFD8CEBE) : const Color(0xFF707973),
+                                                    color: isDark
+                                                        ? const Color(
+                                                            0xFFD8CEBE,
+                                                          )
+                                                        : const Color(
+                                                            0xFF707973,
+                                                          ),
                                                   ),
                                                 ),
                                               ],
@@ -243,7 +294,9 @@ class _DuasPageState extends State<DuasPage> {
                                           Icon(
                                             Icons.chevron_left_rounded,
                                             size: 20,
-                                            color: isDark ? const Color(0xFFD8CEBE) : const Color(0xFF4E5B4E),
+                                            color: isDark
+                                                ? const Color(0xFFD8CEBE)
+                                                : const Color(0xFF4E5B4E),
                                           ),
                                         ],
                                       ),

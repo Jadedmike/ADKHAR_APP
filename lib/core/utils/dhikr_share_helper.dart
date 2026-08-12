@@ -4,7 +4,14 @@ import 'package:share_plus/share_plus.dart';
 class DhikrShareHelper {
   /// Shares a Dhikr or Dua item formatted strictly with source and app attribution.
   static Future<void> shareDhikr(Map<String, dynamic> dhikr) async {
-    final String text = (dhikr['text'] ?? dhikr['content'] ?? dhikr['dhikr'] ?? dhikr['title'] ?? '').toString().trim();
+    final String text =
+        (dhikr['text'] ??
+                dhikr['content'] ??
+                dhikr['dhikr'] ??
+                dhikr['title'] ??
+                '')
+            .toString()
+            .trim();
     if (text.isEmpty) return;
 
     final String source = (dhikr['source'] ?? '').toString().trim();

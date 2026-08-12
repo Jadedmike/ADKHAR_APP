@@ -5,10 +5,7 @@ import 'single_dhikr_page.dart';
 class AzkarReaderPage extends StatelessWidget {
   final String categoryTitle;
 
-  const AzkarReaderPage({
-    super.key,
-    this.categoryTitle = 'أذكار الصباح',
-  });
+  const AzkarReaderPage({super.key, this.categoryTitle = 'أذكار الصباح'});
 
   @override
   Widget build(BuildContext context) {

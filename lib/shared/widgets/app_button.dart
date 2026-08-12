@@ -5,10 +5,7 @@ import '../../config/theme/app_radius.dart';
 import '../../config/theme/app_spacing.dart';
 
 /// Button variants available in the design system.
-enum AppButtonVariant {
-  primary,
-  secondary,
-}
+enum AppButtonVariant { primary, secondary }
 
 /// A highly reusable, responsive, and RTL-compatible button component
 /// that conforms to the centralized Adhkar design system.
@@ -46,17 +43,27 @@ class AppButton extends StatelessWidget {
     BorderSide borderSide = BorderSide.none;
 
     if (isDisabled) {
-      backgroundColor = isDark ? const Color(0xFF33302B) : const Color(0x80EADFCF); // 50% opacity sand
-      foregroundColor = isDark ? const Color(0xFF707973) : const Color(0x99707973); // 60% opacity gray
+      backgroundColor = isDark
+          ? const Color(0xFF33302B)
+          : const Color(0x80EADFCF); // 50% opacity sand
+      foregroundColor = isDark
+          ? const Color(0xFF707973)
+          : const Color(0x99707973); // 60% opacity gray
     } else {
       switch (variant) {
         case AppButtonVariant.primary:
-          backgroundColor = isDark ? AppColors.primaryDark : AppColors.primaryLight;
-          foregroundColor = isDark ? AppColors.textPrimaryLight : AppColors.onPrimaryLight;
+          backgroundColor = isDark
+              ? AppColors.primaryDark
+              : AppColors.primaryLight;
+          foregroundColor = isDark
+              ? AppColors.textPrimaryLight
+              : AppColors.onPrimaryLight;
           break;
         case AppButtonVariant.secondary:
           backgroundColor = Colors.transparent;
-          foregroundColor = isDark ? AppColors.primaryDark : AppColors.primaryLight;
+          foregroundColor = isDark
+              ? AppColors.primaryDark
+              : AppColors.primaryLight;
           borderSide = BorderSide(
             color: isDark ? AppColors.primaryDark : AppColors.primaryLight,
             width: 1.5,
@@ -76,9 +83,7 @@ class AppButton extends StatelessWidget {
         ],
         Text(
           text,
-          style: AppTypography.button.copyWith(
-            color: foregroundColor,
-          ),
+          style: AppTypography.button.copyWith(color: foregroundColor),
         ),
       ],
     );
@@ -105,24 +110,13 @@ class AppButton extends StatelessWidget {
 
     // Apply width constraints for responsiveness
     if (isFullWidth) {
-      return SizedBox(
-        width: double.infinity,
-        height: height,
-        child: button,
-      );
+      return SizedBox(width: double.infinity, height: height, child: button);
     }
 
     if (width != null || height != null) {
-      return SizedBox(
-        width: width,
-        height: height,
-        child: button,
-      );
+      return SizedBox(width: width, height: height, child: button);
     }
 
-    return SizedBox(
-      height: height,
-      child: button,
-    );
+    return SizedBox(height: height, child: button);
   }
 }

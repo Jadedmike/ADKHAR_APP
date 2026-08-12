@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 class CalligraphyPainter extends CustomPainter {
   final Color color;
 
-  const CalligraphyPainter({
-    required this.color,
-  });
+  const CalligraphyPainter({required this.color});
 
   @override
   void paint(Canvas canvas, Size size) {

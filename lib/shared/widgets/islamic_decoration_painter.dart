@@ -4,17 +4,17 @@ import 'package:flutter/material.dart';
 class IslamicDecorationPainter extends CustomPainter {
   final bool isLightMode;
 
-  const IslamicDecorationPainter({
-    required this.isLightMode,
-  });
+  const IslamicDecorationPainter({required this.isLightMode});
 
   @override
   void paint(Canvas canvas, Size size) {
     final Color goldColor = isLightMode
-        ? const Color(0xFFD4B579).withOpacity(0.35) // Soft gold arch line
-        : const Color(0xFFD6BE8D).withOpacity(0.20);
+        ? const Color(0xFFD4B579).withValues(alpha: 0.35) // Soft gold arch line
+        : const Color(0xFFD6BE8D).withValues(alpha: 0.20);
 
-    final Color shadowLeafColor = const Color(0xFF2C3E31).withOpacity(0.08); // Soft leaf shadow
+    final Color shadowLeafColor = const Color(
+      0xFF2C3E31,
+    ).withValues(alpha: 0.08); // Soft leaf shadow
 
     final Color deepGreen = const Color(0xFF3B4E3E); // Dark olive green
     final Color mediumGreen = const Color(0xFF6E8672); // Medium sage green
@@ -28,7 +28,13 @@ class IslamicDecorationPainter extends CustomPainter {
     // ==========================================
     // 2. TOP-LEFT CORNER: NATURAL OLIVE BRANCH & SHADOW
     // ==========================================
-    _drawTopLeftOliveBranchWithShadow(canvas, size, deepGreen, mediumGreen, shadowLeafColor);
+    _drawTopLeftOliveBranchWithShadow(
+      canvas,
+      size,
+      deepGreen,
+      mediumGreen,
+      shadowLeafColor,
+    );
 
     // ==========================================
     // 3. BOTTOM-RIGHT CORNER: NATURAL OLIVE BRANCH
@@ -52,7 +58,7 @@ class IslamicDecorationPainter extends CustomPainter {
       ..strokeWidth = 1.5;
 
     final Paint thinBorderPaint = Paint()
-      ..color = color.withOpacity(color.opacity * 0.5)
+      ..color = color.withValues(alpha: color.a * 0.5)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 0.8;
 
@@ -61,31 +67,29 @@ class IslamicDecorationPainter extends CustomPainter {
 
     if (isTopRight) {
       archPath.moveTo(w * 0.62, 0);
-      archPath.cubicTo(
-        w * 0.72, h * 0.12,
-        w * 0.85, h * 0.18,
-        w, h * 0.32,
-      );
+      archPath.cubicTo(w * 0.72, h * 0.12, w * 0.85, h * 0.18, w, h * 0.32);
 
       outerArchPath.moveTo(w * 0.58, 0);
       outerArchPath.cubicTo(
-        w * 0.68, h * 0.14,
-        w * 0.82, h * 0.20,
-        w, h * 0.35,
+        w * 0.68,
+        h * 0.14,
+        w * 0.82,
+        h * 0.20,
+        w,
+        h * 0.35,
       );
     } else {
       archPath.moveTo(0, h * 0.68);
-      archPath.cubicTo(
-        w * 0.18, h * 0.82,
-        w * 0.32, h * 0.88,
-        w * 0.42, h,
-      );
+      archPath.cubicTo(w * 0.18, h * 0.82, w * 0.32, h * 0.88, w * 0.42, h);
 
       outerArchPath.moveTo(0, h * 0.65);
       outerArchPath.cubicTo(
-        w * 0.20, h * 0.80,
-        w * 0.35, h * 0.86,
-        w * 0.45, h,
+        w * 0.20,
+        h * 0.80,
+        w * 0.35,
+        h * 0.86,
+        w * 0.45,
+        h,
       );
     }
 
@@ -119,7 +123,12 @@ class IslamicDecorationPainter extends CustomPainter {
 
     final Path shadowStem = Path()
       ..moveTo(-size.width * 0.15, -size.height * 0.08)
-      ..quadraticBezierTo(size.width * 0.12, size.height * 0.06, size.width * 0.38, size.height * 0.26);
+      ..quadraticBezierTo(
+        size.width * 0.12,
+        size.height * 0.06,
+        size.width * 0.38,
+        size.height * 0.26,
+      );
     canvas.drawPath(shadowStem, shadowStemPaint);
 
     void drawShadowLeaf(Offset pos, double rot, double len) {
@@ -144,14 +153,20 @@ class IslamicDecorationPainter extends CustomPainter {
     canvas.translate(-10, -10);
 
     final Paint stemPaint = Paint()
-      ..color = const Color(0xFF4E3D28) // Woody brown stem
+      ..color =
+          const Color(0xFF4E3D28) // Woody brown stem
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2.2
       ..strokeCap = StrokeCap.round;
 
     final Path realStem = Path()
       ..moveTo(-size.width * 0.15, -size.height * 0.08)
-      ..quadraticBezierTo(size.width * 0.12, size.height * 0.06, size.width * 0.38, size.height * 0.26);
+      ..quadraticBezierTo(
+        size.width * 0.12,
+        size.height * 0.06,
+        size.width * 0.38,
+        size.height * 0.26,
+      );
     canvas.drawPath(realStem, stemPaint);
 
     void drawBranchLeaf(Offset pos, double rot, double len) {
@@ -175,7 +190,7 @@ class IslamicDecorationPainter extends CustomPainter {
       canvas.drawPath(leafPath, leafFill);
 
       final Paint leafOutline = Paint()
-        ..color = deepGreen.withOpacity(0.6)
+        ..color = deepGreen.withValues(alpha: 0.6)
         ..style = PaintingStyle.stroke
         ..strokeWidth = 0.8;
       canvas.drawPath(leafPath, leafOutline);
@@ -233,17 +248,25 @@ class IslamicDecorationPainter extends CustomPainter {
         ..quadraticBezierTo(leafSize * 0.22, -leafSize * 0.4, 0, 0);
 
       final Paint leafPaint = Paint()
-        ..shader = LinearGradient(
-          begin: Alignment.bottomCenter,
-          end: Alignment.topCenter,
-          colors: [deepGreen, mediumGreen],
-        ).createShader(Rect.fromLTWH(-leafSize * 0.3, -leafSize, leafSize * 0.6, leafSize))
+        ..shader =
+            LinearGradient(
+              begin: Alignment.bottomCenter,
+              end: Alignment.topCenter,
+              colors: [deepGreen, mediumGreen],
+            ).createShader(
+              Rect.fromLTWH(
+                -leafSize * 0.3,
+                -leafSize,
+                leafSize * 0.6,
+                leafSize,
+              ),
+            )
         ..style = PaintingStyle.fill;
 
       canvas.drawPath(leafPath, leafPaint);
 
       final Paint strokePaint = Paint()
-        ..color = deepGreen.withOpacity(0.55)
+        ..color = deepGreen.withValues(alpha: 0.55)
         ..style = PaintingStyle.stroke
         ..strokeWidth = 0.8;
       canvas.drawPath(leafPath, strokePaint);
@@ -262,8 +285,10 @@ class IslamicDecorationPainter extends CustomPainter {
       final Offset p1 = Offset(len * 0.4, len * 0.12);
       final Offset p2 = Offset(len * 0.96, len * 0.04);
 
-      final double x = (1 - t) * (1 - t) * p0.dx + 2 * (1 - t) * t * p1.dx + t * t * p2.dx;
-      final double y = (1 - t) * (1 - t) * p0.dy + 2 * (1 - t) * t * p1.dy + t * t * p2.dy;
+      final double x =
+          (1 - t) * (1 - t) * p0.dx + 2 * (1 - t) * t * p1.dx + t * t * p2.dx;
+      final double y =
+          (1 - t) * (1 - t) * p0.dy + 2 * (1 - t) * t * p1.dy + t * t * p2.dy;
       return Offset(x, y);
     }
 

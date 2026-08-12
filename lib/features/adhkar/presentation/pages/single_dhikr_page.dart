@@ -108,7 +108,9 @@ class _SingleDhikrPageState extends State<SingleDhikrPage>
       categoryTitle: widget.categoryTitle,
       jsonAssetPath: widget.jsonAssetPath,
       index: _currentIndex,
-      scrollOffset: _scrollController.hasClients ? _scrollController.offset : widget.initialScrollOffset,
+      scrollOffset: _scrollController.hasClients
+          ? _scrollController.offset
+          : widget.initialScrollOffset,
     );
   }
 
@@ -143,7 +145,8 @@ class _SingleDhikrPageState extends State<SingleDhikrPage>
       HapticFeedback.lightImpact();
     }
     final currentDhikr = _activeList[_currentIndex];
-    final int target = (currentDhikr['count'] ?? currentDhikr['requiredCount'] ?? 1) as int;
+    final int target =
+        (currentDhikr['count'] ?? currentDhikr['requiredCount'] ?? 1) as int;
 
     setState(() {
       _counter++;
@@ -225,12 +228,24 @@ class _SingleDhikrPageState extends State<SingleDhikrPage>
         return Directionality(
           textDirection: TextDirection.rtl,
           child: Container(
-            padding: const EdgeInsets.only(left: 20, right: 20, top: 12, bottom: 28),
+            padding: const EdgeInsets.only(
+              left: 20,
+              right: 20,
+              top: 12,
+              bottom: 28,
+            ),
             decoration: BoxDecoration(
               color: isDark ? const Color(0xFF262D24) : const Color(0xFFFFFDF9),
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(28),
+              ),
               border: Border(
-                top: BorderSide(color: isDark ? const Color(0xFF353E32) : const Color(0xFFEADFCF), width: 1.5),
+                top: BorderSide(
+                  color: isDark
+                      ? const Color(0xFF353E32)
+                      : const Color(0xFFEADFCF),
+                  width: 1.5,
+                ),
               ),
             ),
             child: Column(
@@ -241,7 +256,9 @@ class _SingleDhikrPageState extends State<SingleDhikrPage>
                   width: 40,
                   height: 4,
                   decoration: BoxDecoration(
-                    color: isDark ? const Color(0xFF3E483B) : const Color(0xFFD6C8B4),
+                    color: isDark
+                        ? const Color(0xFF3E483B)
+                        : const Color(0xFFD6C8B4),
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
@@ -256,7 +273,9 @@ class _SingleDhikrPageState extends State<SingleDhikrPage>
                       children: [
                         Icon(
                           Icons.format_size_rounded,
-                          color: isDark ? const Color(0xFFC9A15B) : const Color(0xFF4E5B4E),
+                          color: isDark
+                              ? const Color(0xFFC9A15B)
+                              : const Color(0xFF4E5B4E),
                           size: 22,
                         ),
                         const SizedBox(width: 8),
@@ -266,7 +285,9 @@ class _SingleDhikrPageState extends State<SingleDhikrPage>
                             fontFamily: 'Fustat',
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
-                            color: isDark ? const Color(0xFFF6F1E7) : const Color(0xFF4E5B4E),
+                            color: isDark
+                                ? const Color(0xFFF6F1E7)
+                                : const Color(0xFF4E5B4E),
                           ),
                         ),
                       ],
@@ -277,14 +298,23 @@ class _SingleDhikrPageState extends State<SingleDhikrPage>
                       child: Container(
                         padding: const EdgeInsets.all(6),
                         decoration: BoxDecoration(
-                          color: isDark ? const Color(0xFF1F241D) : const Color(0xFFF7F2E8),
+                          color: isDark
+                              ? const Color(0xFF1F241D)
+                              : const Color(0xFFF7F2E8),
                           shape: BoxShape.circle,
-                          border: Border.all(color: isDark ? const Color(0xFF353E32) : const Color(0xFFEADFCF), width: 1),
+                          border: Border.all(
+                            color: isDark
+                                ? const Color(0xFF353E32)
+                                : const Color(0xFFEADFCF),
+                            width: 1,
+                          ),
                         ),
                         child: Icon(
                           Icons.close_rounded,
                           size: 18,
-                          color: isDark ? const Color(0xFFD8CEBE) : const Color(0xFF707973),
+                          color: isDark
+                              ? const Color(0xFFD8CEBE)
+                              : const Color(0xFF707973),
                         ),
                       ),
                     ),
@@ -311,24 +341,37 @@ class _SingleDhikrPageState extends State<SingleDhikrPage>
                             },
                             borderRadius: BorderRadius.circular(18),
                             child: Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 12,
+                              ),
                               decoration: BoxDecoration(
                                 color: isSelected
-                                    ? (isDark ? const Color(0xFF2E362C) : const Color(0xFFF0E8DA))
-                                    : (isDark ? const Color(0xFF1F241D) : const Color(0xFFF7F2E8)),
+                                    ? (isDark
+                                          ? const Color(0xFF2E362C)
+                                          : const Color(0xFFF0E8DA))
+                                    : (isDark
+                                          ? const Color(0xFF1F241D)
+                                          : const Color(0xFFF7F2E8)),
                                 borderRadius: BorderRadius.circular(18),
                                 border: Border.all(
                                   color: isSelected
-                                      ? (isDark ? const Color(0xFFC9A15B) : const Color(0xFFC5A059))
-                                      : (isDark ? const Color(0xFF353E32) : const Color(0xFFEADFCF)),
+                                      ? (isDark
+                                            ? const Color(0xFFC9A15B)
+                                            : const Color(0xFFC5A059))
+                                      : (isDark
+                                            ? const Color(0xFF353E32)
+                                            : const Color(0xFFEADFCF)),
                                   width: isSelected ? 1.5 : 1,
                                 ),
                               ),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         label,
@@ -337,8 +380,12 @@ class _SingleDhikrPageState extends State<SingleDhikrPage>
                                           fontSize: 15.5,
                                           fontWeight: FontWeight.bold,
                                           color: isSelected
-                                              ? (isDark ? const Color(0xFFC9A15B) : const Color(0xFF4E5B4E))
-                                              : (isDark ? const Color(0xFFF6F1E7) : const Color(0xFF1E281F)),
+                                              ? (isDark
+                                                    ? const Color(0xFFC9A15B)
+                                                    : const Color(0xFF4E5B4E))
+                                              : (isDark
+                                                    ? const Color(0xFFF6F1E7)
+                                                    : const Color(0xFF1E281F)),
                                         ),
                                       ),
                                       const SizedBox(height: 2),
@@ -348,7 +395,9 @@ class _SingleDhikrPageState extends State<SingleDhikrPage>
                                           fontFamily: 'Fustat',
                                           fontSize: 11.5,
                                           fontWeight: FontWeight.w500,
-                                          color: isDark ? const Color(0xFFD8CEBE) : const Color(0xFF707973),
+                                          color: isDark
+                                              ? const Color(0xFFD8CEBE)
+                                              : const Color(0xFF707973),
                                         ),
                                       ),
                                     ],
@@ -356,7 +405,9 @@ class _SingleDhikrPageState extends State<SingleDhikrPage>
                                   if (isSelected)
                                     Icon(
                                       Icons.check_circle_rounded,
-                                      color: isDark ? const Color(0xFFC9A15B) : const Color(0xFFC5A059),
+                                      color: isDark
+                                          ? const Color(0xFFC9A15B)
+                                          : const Color(0xFFC5A059),
                                       size: 22,
                                     ),
                                 ],
@@ -429,11 +480,21 @@ class _SingleDhikrPageState extends State<SingleDhikrPage>
                                 duration: const Duration(milliseconds: 300),
                                 switchInCurve: Curves.easeIn,
                                 switchOutCurve: Curves.easeOut,
-                                transitionBuilder: (Widget child, Animation<double> animation) {
-                                  return FadeTransition(opacity: animation, child: child);
-                                },
+                                transitionBuilder:
+                                    (
+                                      Widget child,
+                                      Animation<double> animation,
+                                    ) {
+                                      return FadeTransition(
+                                        opacity: animation,
+                                        child: child,
+                                      );
+                                    },
                                 key: ValueKey<String>(
-                                    _isSectionCompleted ? 'completed' : 'dhikr_$_currentIndex'),
+                                  _isSectionCompleted
+                                      ? 'completed'
+                                      : 'dhikr_$_currentIndex',
+                                ),
                                 child: _isSectionCompleted
                                     ? _buildCompletionCard(context)
                                     : _buildMainDhikrCard(currentDhikr),
@@ -474,7 +535,9 @@ class _SingleDhikrPageState extends State<SingleDhikrPage>
               Navigator.of(context).pop();
             } else {
               Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (context) => const AzkarCategoriesPage()),
+                MaterialPageRoute(
+                  builder: (context) => const AzkarCategoriesPage(),
+                ),
               );
             }
           },
@@ -485,10 +548,17 @@ class _SingleDhikrPageState extends State<SingleDhikrPage>
             decoration: BoxDecoration(
               color: isDark ? const Color(0xFF262D24) : const Color(0xFFFFFDF9),
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: isDark ? const Color(0xFF353E32) : const Color(0xFFEADFCF), width: 1.2),
+              border: Border.all(
+                color: isDark
+                    ? const Color(0xFF353E32)
+                    : const Color(0xFFEADFCF),
+                width: 1.2,
+              ),
               boxShadow: [
                 BoxShadow(
-                  color: isDark ? const Color(0x20000000) : const Color(0x0A000000),
+                  color: isDark
+                      ? const Color(0x20000000)
+                      : const Color(0x0A000000),
                   blurRadius: 10,
                   offset: const Offset(0, 3),
                 ),
@@ -508,7 +578,10 @@ class _SingleDhikrPageState extends State<SingleDhikrPage>
           decoration: BoxDecoration(
             color: isDark ? const Color(0xFF1F241D) : const Color(0xFFF0E8DA),
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: isDark ? const Color(0xFF353E32) : const Color(0xFFEADFCF), width: 1.2),
+            border: Border.all(
+              color: isDark ? const Color(0xFF353E32) : const Color(0xFFEADFCF),
+              width: 1.2,
+            ),
           ),
           child: Text(
             _isSectionCompleted
@@ -543,23 +616,36 @@ class _SingleDhikrPageState extends State<SingleDhikrPage>
                     width: 42,
                     height: 42,
                     decoration: BoxDecoration(
-                      color: isDark ? const Color(0xFF262D24) : const Color(0xFFFFFDF9),
+                      color: isDark
+                          ? const Color(0xFF262D24)
+                          : const Color(0xFFFFFDF9),
                       borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: isDark ? const Color(0xFF353E32) : const Color(0xFFEADFCF), width: 1.2),
+                      border: Border.all(
+                        color: isDark
+                            ? const Color(0xFF353E32)
+                            : const Color(0xFFEADFCF),
+                        width: 1.2,
+                      ),
                       boxShadow: [
                         BoxShadow(
-                          color: isDark ? const Color(0x20000000) : const Color(0x0A000000),
+                          color: isDark
+                              ? const Color(0x20000000)
+                              : const Color(0x0A000000),
                           blurRadius: 10,
                           offset: const Offset(0, 3),
                         ),
                       ],
                     ),
                     child: Icon(
-                      isFav ? Icons.bookmark_rounded : Icons.bookmark_border_rounded,
+                      isFav
+                          ? Icons.bookmark_rounded
+                          : Icons.bookmark_border_rounded,
                       size: 20,
                       color: isFav
                           ? const Color(0xFFC9A15B)
-                          : (isDark ? const Color(0xFFD8CEBE) : const Color(0xFF4E5B4E)),
+                          : (isDark
+                                ? const Color(0xFFD8CEBE)
+                                : const Color(0xFF4E5B4E)),
                     ),
                   ),
                 );
@@ -567,18 +653,28 @@ class _SingleDhikrPageState extends State<SingleDhikrPage>
             ),
             const SizedBox(width: 8),
             InkWell(
-              onTap: () => _copyToClipboard(context, _activeList[_currentIndex]),
+              onTap: () =>
+                  _copyToClipboard(context, _activeList[_currentIndex]),
               borderRadius: BorderRadius.circular(16),
               child: Container(
                 width: 42,
                 height: 42,
                 decoration: BoxDecoration(
-                  color: isDark ? const Color(0xFF262D24) : const Color(0xFFFFFDF9),
+                  color: isDark
+                      ? const Color(0xFF262D24)
+                      : const Color(0xFFFFFDF9),
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: isDark ? const Color(0xFF353E32) : const Color(0xFFEADFCF), width: 1.2),
+                  border: Border.all(
+                    color: isDark
+                        ? const Color(0xFF353E32)
+                        : const Color(0xFFEADFCF),
+                    width: 1.2,
+                  ),
                   boxShadow: [
                     BoxShadow(
-                      color: isDark ? const Color(0x20000000) : const Color(0x0A000000),
+                      color: isDark
+                          ? const Color(0x20000000)
+                          : const Color(0x0A000000),
                       blurRadius: 10,
                       offset: const Offset(0, 3),
                     ),
@@ -587,24 +683,36 @@ class _SingleDhikrPageState extends State<SingleDhikrPage>
                 child: Icon(
                   Icons.copy_rounded,
                   size: 20,
-                  color: isDark ? const Color(0xFFD8CEBE) : const Color(0xFF4E5B4E),
+                  color: isDark
+                      ? const Color(0xFFD8CEBE)
+                      : const Color(0xFF4E5B4E),
                 ),
               ),
             ),
             const SizedBox(width: 8),
             InkWell(
-              onTap: () => DhikrShareHelper.shareDhikr(_activeList[_currentIndex]),
+              onTap: () =>
+                  DhikrShareHelper.shareDhikr(_activeList[_currentIndex]),
               borderRadius: BorderRadius.circular(16),
               child: Container(
                 width: 42,
                 height: 42,
                 decoration: BoxDecoration(
-                  color: isDark ? const Color(0xFF262D24) : const Color(0xFFFFFDF9),
+                  color: isDark
+                      ? const Color(0xFF262D24)
+                      : const Color(0xFFFFFDF9),
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: isDark ? const Color(0xFF353E32) : const Color(0xFFEADFCF), width: 1.2),
+                  border: Border.all(
+                    color: isDark
+                        ? const Color(0xFF353E32)
+                        : const Color(0xFFEADFCF),
+                    width: 1.2,
+                  ),
                   boxShadow: [
                     BoxShadow(
-                      color: isDark ? const Color(0x20000000) : const Color(0x0A000000),
+                      color: isDark
+                          ? const Color(0x20000000)
+                          : const Color(0x0A000000),
                       blurRadius: 10,
                       offset: const Offset(0, 3),
                     ),
@@ -613,7 +721,9 @@ class _SingleDhikrPageState extends State<SingleDhikrPage>
                 child: Icon(
                   Icons.share_outlined,
                   size: 20,
-                  color: isDark ? const Color(0xFFD8CEBE) : const Color(0xFF4E5B4E),
+                  color: isDark
+                      ? const Color(0xFFD8CEBE)
+                      : const Color(0xFF4E5B4E),
                 ),
               ),
             ),
@@ -625,12 +735,21 @@ class _SingleDhikrPageState extends State<SingleDhikrPage>
                 width: 42,
                 height: 42,
                 decoration: BoxDecoration(
-                  color: isDark ? const Color(0xFF262D24) : const Color(0xFFFFFDF9),
+                  color: isDark
+                      ? const Color(0xFF262D24)
+                      : const Color(0xFFFFFDF9),
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: isDark ? const Color(0xFF353E32) : const Color(0xFFEADFCF), width: 1.2),
+                  border: Border.all(
+                    color: isDark
+                        ? const Color(0xFF353E32)
+                        : const Color(0xFFEADFCF),
+                    width: 1.2,
+                  ),
                   boxShadow: [
                     BoxShadow(
-                      color: isDark ? const Color(0x20000000) : const Color(0x0A000000),
+                      color: isDark
+                          ? const Color(0x20000000)
+                          : const Color(0x0A000000),
                       blurRadius: 10,
                       offset: const Offset(0, 3),
                     ),
@@ -639,7 +758,9 @@ class _SingleDhikrPageState extends State<SingleDhikrPage>
                 child: Icon(
                   Icons.format_size_rounded,
                   size: 20,
-                  color: isDark ? const Color(0xFFD8CEBE) : const Color(0xFF4E5B4E),
+                  color: isDark
+                      ? const Color(0xFFD8CEBE)
+                      : const Color(0xFF4E5B4E),
                 ),
               ),
             ),
@@ -657,7 +778,10 @@ class _SingleDhikrPageState extends State<SingleDhikrPage>
       decoration: BoxDecoration(
         color: isDark ? const Color(0xFF262D24) : const Color(0xFFFFFDF9),
         borderRadius: BorderRadius.circular(26),
-        border: Border.all(color: isDark ? const Color(0xFF353E32) : const Color(0xFFF3ECE0), width: 1.2),
+        border: Border.all(
+          color: isDark ? const Color(0xFF353E32) : const Color(0xFFF3ECE0),
+          width: 1.2,
+        ),
         boxShadow: [
           BoxShadow(
             color: isDark ? const Color(0x20000000) : const Color(0x0F000000),
@@ -673,7 +797,9 @@ class _SingleDhikrPageState extends State<SingleDhikrPage>
             right: 0,
             top: 0,
             child: ClipRRect(
-              borderRadius: const BorderRadius.only(topRight: Radius.circular(26)),
+              borderRadius: const BorderRadius.only(
+                topRight: Radius.circular(26),
+              ),
               child: Opacity(
                 opacity: 0.16,
                 child: Image.asset(
@@ -702,15 +828,23 @@ class _SingleDhikrPageState extends State<SingleDhikrPage>
                       valueListenable: SettingsManager.fontSizeOption,
                       builder: (context, fontSizeOpt, child) {
                         return Text(
-                          (currentDhikr['text'] ?? currentDhikr['content'] ?? currentDhikr['dhikr'] ?? '') as String,
+                          (currentDhikr['text'] ??
+                                  currentDhikr['content'] ??
+                                  currentDhikr['dhikr'] ??
+                                  '')
+                              as String,
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontFamily: 'Fustat',
                             fontSize: SettingsManager.dhikrFontSize,
                             fontWeight: FontWeight.bold,
                             color: _isCompleted
-                                ? (isDark ? const Color(0xFF7E8A63) : const Color(0xFF4E5B4E))
-                                : (isDark ? const Color(0xFFF6F1E7) : const Color(0xFF1E281F)),
+                                ? (isDark
+                                      ? const Color(0xFF7E8A63)
+                                      : const Color(0xFF4E5B4E))
+                                : (isDark
+                                      ? const Color(0xFFF6F1E7)
+                                      : const Color(0xFF1E281F)),
                             height: 1.85,
                           ),
                         );
@@ -733,8 +867,12 @@ class _SingleDhikrPageState extends State<SingleDhikrPage>
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
                               colors: [
-                                isDark ? const Color(0x00C9A15B) : const Color(0x00C5A059),
-                                isDark ? const Color(0xFFC9A15B) : const Color(0xFFC5A059)
+                                isDark
+                                    ? const Color(0x00C9A15B)
+                                    : const Color(0x00C5A059),
+                                isDark
+                                    ? const Color(0xFFC9A15B)
+                                    : const Color(0xFFC5A059),
                               ],
                             ),
                           ),
@@ -744,7 +882,9 @@ class _SingleDhikrPageState extends State<SingleDhikrPage>
                           child: Icon(
                             Icons.auto_awesome,
                             size: 15,
-                            color: isDark ? const Color(0xFFC9A15B) : const Color(0xFFC5A059),
+                            color: isDark
+                                ? const Color(0xFFC9A15B)
+                                : const Color(0xFFC5A059),
                           ),
                         ),
                         Container(
@@ -753,8 +893,12 @@ class _SingleDhikrPageState extends State<SingleDhikrPage>
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
                               colors: [
-                                isDark ? const Color(0xFFC9A15B) : const Color(0xFFC5A059),
-                                isDark ? const Color(0x00C9A15B) : const Color(0x00C5A059)
+                                isDark
+                                    ? const Color(0xFFC9A15B)
+                                    : const Color(0xFFC5A059),
+                                isDark
+                                    ? const Color(0x00C9A15B)
+                                    : const Color(0x00C5A059),
                               ],
                             ),
                           ),
@@ -762,7 +906,8 @@ class _SingleDhikrPageState extends State<SingleDhikrPage>
                       ],
                     ),
 
-                    if (currentDhikr.containsKey('count') || currentDhikr.containsKey('requiredCount')) ...[
+                    if (currentDhikr.containsKey('count') ||
+                        currentDhikr.containsKey('requiredCount')) ...[
                       const SizedBox(height: 22),
 
                       // 3. Counter Section (-) 0 (+)
@@ -777,16 +922,23 @@ class _SingleDhikrPageState extends State<SingleDhikrPage>
                               width: 50,
                               height: 50,
                               decoration: BoxDecoration(
-                                color: isDark ? const Color(0xFF1F241D) : const Color(0xFFF7F2E8),
+                                color: isDark
+                                    ? const Color(0xFF1F241D)
+                                    : const Color(0xFFF7F2E8),
                                 shape: BoxShape.circle,
                                 border: Border.all(
-                                    color: isDark ? const Color(0xFF353E32) : const Color(0xFFEADFCF),
-                                    width: 1.2),
+                                  color: isDark
+                                      ? const Color(0xFF353E32)
+                                      : const Color(0xFFEADFCF),
+                                  width: 1.2,
+                                ),
                               ),
                               child: Icon(
                                 Icons.remove_rounded,
                                 size: 22,
-                                color: isDark ? const Color(0xFFD8CEBE) : const Color(0xFF4E5B4E),
+                                color: isDark
+                                    ? const Color(0xFFD8CEBE)
+                                    : const Color(0xFF4E5B4E),
                               ),
                             ),
                           ),
@@ -804,8 +956,12 @@ class _SingleDhikrPageState extends State<SingleDhikrPage>
                                 fontSize: 36,
                                 fontWeight: FontWeight.bold,
                                 color: _isCompleted
-                                    ? (isDark ? const Color(0xFFC9A15B) : const Color(0xFFC5A059))
-                                    : (isDark ? const Color(0xFFF6F1E7) : AppColors.primaryLight),
+                                    ? (isDark
+                                          ? const Color(0xFFC9A15B)
+                                          : const Color(0xFFC5A059))
+                                    : (isDark
+                                          ? const Color(0xFFF6F1E7)
+                                          : AppColors.primaryLight),
                               ),
                               child: Text('$_counter'),
                             ),
@@ -821,7 +977,9 @@ class _SingleDhikrPageState extends State<SingleDhikrPage>
                               width: 50,
                               height: 50,
                               decoration: BoxDecoration(
-                                color: isDark ? const Color(0xFF2E362C) : const Color(0xFF4E5B4E),
+                                color: isDark
+                                    ? const Color(0xFF2E362C)
+                                    : const Color(0xFF4E5B4E),
                                 shape: BoxShape.circle,
                                 boxShadow: const [
                                   BoxShadow(
@@ -834,7 +992,9 @@ class _SingleDhikrPageState extends State<SingleDhikrPage>
                               child: Icon(
                                 Icons.add_rounded,
                                 size: 24,
-                                color: isDark ? const Color(0xFFC9A15B) : Colors.white,
+                                color: isDark
+                                    ? const Color(0xFFC9A15B)
+                                    : Colors.white,
                               ),
                             ),
                           ),
@@ -923,7 +1083,10 @@ class _SingleDhikrPageState extends State<SingleDhikrPage>
                       builder: (context, showSource, child) {
                         if (!showSource) return const SizedBox.shrink();
                         final String sourceText =
-                            (currentDhikr['source'] ?? currentDhikr['reference']) as String? ?? 'حصن المسلم';
+                            (currentDhikr['source'] ??
+                                    currentDhikr['reference'])
+                                as String? ??
+                            'حصن المسلم';
                         if (sourceText.trim().isEmpty) {
                           return const SizedBox.shrink();
                         }
@@ -932,12 +1095,19 @@ class _SingleDhikrPageState extends State<SingleDhikrPage>
                           children: [
                             const SizedBox(height: 18),
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 6,
+                              ),
                               decoration: BoxDecoration(
-                                color: isDark ? const Color(0xFF1F241D) : const Color(0xFFF7F2E8),
+                                color: isDark
+                                    ? const Color(0xFF1F241D)
+                                    : const Color(0xFFF7F2E8),
                                 borderRadius: BorderRadius.circular(16),
                                 border: Border.all(
-                                  color: isDark ? const Color(0xFF353E32) : const Color(0xFFEADFCF),
+                                  color: isDark
+                                      ? const Color(0xFF353E32)
+                                      : const Color(0xFFEADFCF),
                                   width: 1,
                                 ),
                               ),
@@ -947,7 +1117,9 @@ class _SingleDhikrPageState extends State<SingleDhikrPage>
                                   fontFamily: 'Fustat',
                                   fontSize: 11.5,
                                   fontWeight: FontWeight.w600,
-                                  color: isDark ? const Color(0xFFD8CEBE) : const Color(0xFF707973),
+                                  color: isDark
+                                      ? const Color(0xFFD8CEBE)
+                                      : const Color(0xFF707973),
                                 ),
                               ),
                             ),
@@ -974,7 +1146,10 @@ class _SingleDhikrPageState extends State<SingleDhikrPage>
       decoration: BoxDecoration(
         color: isDark ? const Color(0xFF262D24) : const Color(0xFFFFFDF9),
         borderRadius: BorderRadius.circular(26),
-        border: Border.all(color: isDark ? const Color(0xFF353E32) : const Color(0xFFF3ECE0), width: 1.2),
+        border: Border.all(
+          color: isDark ? const Color(0xFF353E32) : const Color(0xFFF3ECE0),
+          width: 1.2,
+        ),
         boxShadow: [
           BoxShadow(
             color: isDark ? const Color(0x20000000) : const Color(0x0F000000),
@@ -992,7 +1167,12 @@ class _SingleDhikrPageState extends State<SingleDhikrPage>
             decoration: BoxDecoration(
               color: isDark ? const Color(0xFF1F241D) : const Color(0xFFF7F2E8),
               shape: BoxShape.circle,
-              border: Border.all(color: isDark ? const Color(0xFFC9A15B) : const Color(0xFFC5A059), width: 1.5),
+              border: Border.all(
+                color: isDark
+                    ? const Color(0xFFC9A15B)
+                    : const Color(0xFFC5A059),
+                width: 1.5,
+              ),
             ),
             child: Icon(
               Icons.check_circle_outline_rounded,
@@ -1038,7 +1218,12 @@ class _SingleDhikrPageState extends State<SingleDhikrPage>
                   child: OutlinedButton(
                     onPressed: _restartSection,
                     style: OutlinedButton.styleFrom(
-                      side: BorderSide(color: isDark ? const Color(0xFF353E32) : const Color(0xFF4E5B4E), width: 1.2),
+                      side: BorderSide(
+                        color: isDark
+                            ? const Color(0xFF353E32)
+                            : const Color(0xFF4E5B4E),
+                        width: 1.2,
+                      ),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(24),
                       ),
@@ -1049,7 +1234,9 @@ class _SingleDhikrPageState extends State<SingleDhikrPage>
                         fontFamily: 'Fustat',
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
-                        color: isDark ? const Color(0xFFD8CEBE) : const Color(0xFF4E5B4E),
+                        color: isDark
+                            ? const Color(0xFFD8CEBE)
+                            : const Color(0xFF4E5B4E),
                       ),
                     ),
                   ),
@@ -1066,7 +1253,8 @@ class _SingleDhikrPageState extends State<SingleDhikrPage>
                       } else {
                         Navigator.of(context).pushReplacement(
                           MaterialPageRoute(
-                              builder: (context) => const AzkarCategoriesPage()),
+                            builder: (context) => const AzkarCategoriesPage(),
+                          ),
                         );
                       }
                     },

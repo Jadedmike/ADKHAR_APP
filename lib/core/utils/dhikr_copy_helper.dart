@@ -4,8 +4,17 @@ import '../../features/adhkar/presentation/managers/settings_manager.dart';
 
 /// Helper class for copying Dhikr/Dua text to clipboard and displaying feedback SnackBar.
 class DhikrCopyHelper {
-  static void copyToClipboard(BuildContext context, Map<String, dynamic> dhikr) {
-    final String text = (dhikr['text'] ?? dhikr['content'] ?? dhikr['dhikr'] ?? dhikr['title'] ?? '').toString();
+  static void copyToClipboard(
+    BuildContext context,
+    Map<String, dynamic> dhikr,
+  ) {
+    final String text =
+        (dhikr['text'] ??
+                dhikr['content'] ??
+                dhikr['dhikr'] ??
+                dhikr['title'] ??
+                '')
+            .toString();
     if (text.isEmpty) return;
 
     String textToCopy = text;

@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 /// Helper utility for normalizing Arabic text and highlighting search matches.
 class ArabicSearchHelper {
-  static final RegExp _diacriticsRegex = RegExp(r'[\u064B-\u0652\u0640\u0653-\u0655\u0670\u0671]');
+  static final RegExp _diacriticsRegex = RegExp(
+    r'[\u064B-\u0652\u0640\u0653-\u0655\u0670\u0671]',
+  );
 
   /// Normalizes Arabic text by removing diacritics and unifying alef, alef maqsura, and teh marbuta shapes.
   static String normalize(String text) {
@@ -78,7 +80,10 @@ class ArabicSearchHelper {
     int searchFromNormIndex = 0;
 
     while (searchFromNormIndex < cleanText.length) {
-      final int matchNormIndex = cleanText.indexOf(cleanQuery, searchFromNormIndex);
+      final int matchNormIndex = cleanText.indexOf(
+        cleanQuery,
+        searchFromNormIndex,
+      );
       if (matchNormIndex == -1) {
         break;
       }
@@ -88,26 +93,29 @@ class ArabicSearchHelper {
       final int origEnd = normToOrigMap[matchNormEnd];
 
       if (origStart > currentOrigIndex) {
-        spans.add(TextSpan(
-          text: text.substring(currentOrigIndex, origStart),
-          style: defaultStyle,
-        ));
+        spans.add(
+          TextSpan(
+            text: text.substring(currentOrigIndex, origStart),
+            style: defaultStyle,
+          ),
+        );
       }
 
-      spans.add(TextSpan(
-        text: text.substring(origStart, origEnd),
-        style: highlightStyle,
-      ));
+      spans.add(
+        TextSpan(
+          text: text.substring(origStart, origEnd),
+          style: highlightStyle,
+        ),
+      );
 
       currentOrigIndex = origEnd;
       searchFromNormIndex = matchNormEnd;
     }
 
     if (currentOrigIndex < text.length) {
-      spans.add(TextSpan(
-        text: text.substring(currentOrigIndex),
-        style: defaultStyle,
-      ));
+      spans.add(
+        TextSpan(text: text.substring(currentOrigIndex), style: defaultStyle),
+      );
     }
 
     return spans;

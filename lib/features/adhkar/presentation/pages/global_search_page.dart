@@ -54,14 +54,38 @@ class _GlobalSearchPageState extends State<GlobalSearchPage> {
   String _currentQuery = '';
 
   final List<Map<String, String>> _jsonSources = [
-    {'path': 'assets/json/morning.json', 'alt': 'assets/json/adhkar_morning.json', 'title': 'أذكار الصباح'},
-    {'path': 'assets/json/evening.json', 'alt': 'assets/json/adhkar_evening.json', 'title': 'أذكار المساء'},
-    {'path': 'assets/json/after_prayer.json', 'alt': '', 'title': 'أذكار بعد الصلاة'},
+    {
+      'path': 'assets/json/morning.json',
+      'alt': 'assets/json/adhkar_morning.json',
+      'title': 'أذكار الصباح',
+    },
+    {
+      'path': 'assets/json/evening.json',
+      'alt': 'assets/json/adhkar_evening.json',
+      'title': 'أذكار المساء',
+    },
+    {
+      'path': 'assets/json/after_prayer.json',
+      'alt': '',
+      'title': 'أذكار بعد الصلاة',
+    },
     {'path': 'assets/json/sleep.json', 'alt': '', 'title': 'أذكار النوم'},
     {'path': 'assets/json/travel.json', 'alt': '', 'title': 'أذكار السفر'},
-    {'path': 'assets/json/quran_duas.json', 'alt': '', 'title': 'أدعية من القرآن الكريم'},
-    {'path': 'assets/json/prophetic_duas.json', 'alt': '', 'title': 'أدعية من السنة النبوية'},
-    {'path': 'assets/json/forgiveness_duas.json', 'alt': '', 'title': 'أدعية الاستغفار والتوبة'},
+    {
+      'path': 'assets/json/quran_duas.json',
+      'alt': '',
+      'title': 'أدعية من القرآن الكريم',
+    },
+    {
+      'path': 'assets/json/prophetic_duas.json',
+      'alt': '',
+      'title': 'أدعية من السنة النبوية',
+    },
+    {
+      'path': 'assets/json/forgiveness_duas.json',
+      'alt': '',
+      'title': 'أدعية الاستغفار والتوبة',
+    },
   ];
 
   @override
@@ -102,12 +126,15 @@ class _GlobalSearchPageState extends State<GlobalSearchPage> {
 
       try {
         final List<dynamic> parsed = json.decode(jsonString);
-        final List<Map<String, dynamic>> categoryList =
-            parsed.map((e) => Map<String, dynamic>.from(e)).toList();
+        final List<Map<String, dynamic>> categoryList = parsed
+            .map((e) => Map<String, dynamic>.from(e))
+            .toList();
 
         for (int i = 0; i < categoryList.length; i++) {
           final item = categoryList[i];
-          final String text = (item['text'] ?? item['content'] ?? item['dhikr'] ?? '').toString();
+          final String text =
+              (item['text'] ?? item['content'] ?? item['dhikr'] ?? '')
+                  .toString();
           final String title = (item['title'] ?? '').toString();
           final String itemSource = (item['source'] ?? '').toString();
           final int count = (item['count'] is int)
@@ -186,7 +213,9 @@ class _GlobalSearchPageState extends State<GlobalSearchPage> {
                     child: _isLoading
                         ? Center(
                             child: CircularProgressIndicator(
-                              color: isDark ? const Color(0xFFC9A15B) : const Color(0xFF4E5B4E),
+                              color: isDark
+                                  ? const Color(0xFFC9A15B)
+                                  : const Color(0xFF4E5B4E),
                             ),
                           )
                         : _buildMainContent(),
@@ -217,12 +246,21 @@ class _GlobalSearchPageState extends State<GlobalSearchPage> {
               width: 44,
               height: 44,
               decoration: BoxDecoration(
-                color: isDark ? const Color(0xFF262D24) : const Color(0xFFFFFDF9),
+                color: isDark
+                    ? const Color(0xFF262D24)
+                    : const Color(0xFFFFFDF9),
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: isDark ? const Color(0xFF353E32) : const Color(0xFFEADFCF), width: 1.2),
+                border: Border.all(
+                  color: isDark
+                      ? const Color(0xFF353E32)
+                      : const Color(0xFFEADFCF),
+                  width: 1.2,
+                ),
                 boxShadow: [
                   BoxShadow(
-                    color: isDark ? const Color(0x20000000) : const Color(0x0A000000),
+                    color: isDark
+                        ? const Color(0x20000000)
+                        : const Color(0x0A000000),
                     blurRadius: 10,
                     offset: const Offset(0, 3),
                   ),
@@ -231,7 +269,9 @@ class _GlobalSearchPageState extends State<GlobalSearchPage> {
               child: Icon(
                 Icons.arrow_forward_ios_rounded,
                 size: 18,
-                color: isDark ? const Color(0xFFD8CEBE) : const Color(0xFF4E5B4E),
+                color: isDark
+                    ? const Color(0xFFD8CEBE)
+                    : const Color(0xFF4E5B4E),
               ),
             ),
           ),
@@ -243,17 +283,25 @@ class _GlobalSearchPageState extends State<GlobalSearchPage> {
             child: Container(
               height: 50,
               decoration: BoxDecoration(
-                color: isDark ? const Color(0xFF262D24) : const Color(0xFFFFFDF9),
+                color: isDark
+                    ? const Color(0xFF262D24)
+                    : const Color(0xFFFFFDF9),
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(
                   color: _searchFocusNode.hasFocus
-                      ? (isDark ? const Color(0xFFC9A15B) : const Color(0xFFC5A059))
-                      : (isDark ? const Color(0xFF353E32) : const Color(0xFFEADFCF)),
+                      ? (isDark
+                            ? const Color(0xFFC9A15B)
+                            : const Color(0xFFC5A059))
+                      : (isDark
+                            ? const Color(0xFF353E32)
+                            : const Color(0xFFEADFCF)),
                   width: 1.4,
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: isDark ? const Color(0x20000000) : const Color(0x0C000000),
+                    color: isDark
+                        ? const Color(0x20000000)
+                        : const Color(0x0C000000),
                     blurRadius: 12,
                     offset: const Offset(0, 4),
                   ),
@@ -264,7 +312,9 @@ class _GlobalSearchPageState extends State<GlobalSearchPage> {
                   const SizedBox(width: 14),
                   Icon(
                     Icons.search_rounded,
-                    color: isDark ? const Color(0xFFC9A15B) : const Color(0xFF4E5B4E),
+                    color: isDark
+                        ? const Color(0xFFC9A15B)
+                        : const Color(0xFF4E5B4E),
                     size: 22,
                   ),
                   const SizedBox(width: 10),
@@ -277,7 +327,9 @@ class _GlobalSearchPageState extends State<GlobalSearchPage> {
                         fontFamily: 'Fustat',
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
-                        color: isDark ? const Color(0xFFF6F1E7) : const Color(0xFF1E281F),
+                        color: isDark
+                            ? const Color(0xFFF6F1E7)
+                            : const Color(0xFF1E281F),
                       ),
                       decoration: InputDecoration(
                         hintText: 'ابحث في الأذكار والأدعية...',
@@ -285,7 +337,9 @@ class _GlobalSearchPageState extends State<GlobalSearchPage> {
                           fontFamily: 'Fustat',
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
-                          color: isDark ? const Color(0xFFD8CEBE) : const Color(0xFF9EA69F),
+                          color: isDark
+                              ? const Color(0xFFD8CEBE)
+                              : const Color(0xFF9EA69F),
                         ),
                         border: InputBorder.none,
                         isDense: true,
@@ -299,7 +353,9 @@ class _GlobalSearchPageState extends State<GlobalSearchPage> {
                     IconButton(
                       icon: Icon(
                         Icons.close_rounded,
-                        color: isDark ? const Color(0xFFD8CEBE) : const Color(0xFF707973),
+                        color: isDark
+                            ? const Color(0xFFD8CEBE)
+                            : const Color(0xFF707973),
                         size: 20,
                       ),
                       onPressed: () {
@@ -348,7 +404,12 @@ class _GlobalSearchPageState extends State<GlobalSearchPage> {
         ),
         Expanded(
           child: ListView.separated(
-            padding: const EdgeInsets.only(left: 18, right: 18, bottom: 24, top: 4),
+            padding: const EdgeInsets.only(
+              left: 18,
+              right: 18,
+              bottom: 24,
+              top: 4,
+            ),
             physics: const BouncingScrollPhysics(),
             itemCount: _searchResults.length,
             separatorBuilder: (context, index) => const SizedBox(height: 14),
@@ -378,12 +439,21 @@ class _GlobalSearchPageState extends State<GlobalSearchPage> {
               height: 84,
               padding: const EdgeInsets.all(18),
               decoration: BoxDecoration(
-                color: isDark ? const Color(0xFF262D24) : const Color(0xFFFFFDF9),
+                color: isDark
+                    ? const Color(0xFF262D24)
+                    : const Color(0xFFFFFDF9),
                 shape: BoxShape.circle,
-                border: Border.all(color: isDark ? const Color(0xFF353E32) : const Color(0xFFEADFCF), width: 1.5),
+                border: Border.all(
+                  color: isDark
+                      ? const Color(0xFF353E32)
+                      : const Color(0xFFEADFCF),
+                  width: 1.5,
+                ),
                 boxShadow: [
                   BoxShadow(
-                    color: isDark ? const Color(0x20000000) : const Color(0x0A000000),
+                    color: isDark
+                        ? const Color(0x20000000)
+                        : const Color(0x0A000000),
                     blurRadius: 12,
                     offset: const Offset(0, 4),
                   ),
@@ -402,7 +472,9 @@ class _GlobalSearchPageState extends State<GlobalSearchPage> {
                 fontFamily: 'Fustat',
                 fontSize: 17.5,
                 fontWeight: FontWeight.bold,
-                color: isDark ? const Color(0xFFF6F1E7) : AppColors.primaryLight,
+                color: isDark
+                    ? const Color(0xFFF6F1E7)
+                    : AppColors.primaryLight,
               ),
             ),
             const SizedBox(height: 8),
@@ -413,7 +485,9 @@ class _GlobalSearchPageState extends State<GlobalSearchPage> {
                 fontFamily: 'Fustat',
                 fontSize: 13,
                 fontWeight: FontWeight.w500,
-                color: isDark ? const Color(0xFFD8CEBE) : const Color(0xFF707973),
+                color: isDark
+                    ? const Color(0xFFD8CEBE)
+                    : const Color(0xFF707973),
                 height: 1.5,
               ),
             ),
@@ -435,10 +509,15 @@ class _GlobalSearchPageState extends State<GlobalSearchPage> {
           decoration: BoxDecoration(
             color: isDark ? const Color(0xFF262D24) : const Color(0xFFFFFDF9),
             borderRadius: BorderRadius.circular(26),
-            border: Border.all(color: isDark ? const Color(0xFF353E32) : const Color(0xFFF3ECE0), width: 1.2),
+            border: Border.all(
+              color: isDark ? const Color(0xFF353E32) : const Color(0xFFF3ECE0),
+              width: 1.2,
+            ),
             boxShadow: [
               BoxShadow(
-                color: isDark ? const Color(0x20000000) : const Color(0x0A000000),
+                color: isDark
+                    ? const Color(0x20000000)
+                    : const Color(0x0A000000),
                 blurRadius: 14,
                 offset: const Offset(0, 5),
               ),
@@ -454,9 +533,16 @@ class _GlobalSearchPageState extends State<GlobalSearchPage> {
                 height: 86,
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: isDark ? const Color(0xFF1F241D) : const Color(0xFFF7F2E8),
+                  color: isDark
+                      ? const Color(0xFF1F241D)
+                      : const Color(0xFFF7F2E8),
                   shape: BoxShape.circle,
-                  border: Border.all(color: isDark ? const Color(0xFF353E32) : const Color(0xFFEADFCF), width: 1.5),
+                  border: Border.all(
+                    color: isDark
+                        ? const Color(0xFF353E32)
+                        : const Color(0xFFEADFCF),
+                    width: 1.5,
+                  ),
                 ),
                 child: Image.asset(
                   'assets/images/logo2.png',
@@ -474,7 +560,9 @@ class _GlobalSearchPageState extends State<GlobalSearchPage> {
                   fontFamily: 'Fustat',
                   fontSize: 19,
                   fontWeight: FontWeight.bold,
-                  color: isDark ? const Color(0xFFF6F1E7) : AppColors.primaryLight,
+                  color: isDark
+                      ? const Color(0xFFF6F1E7)
+                      : AppColors.primaryLight,
                 ),
               ),
 
@@ -487,7 +575,9 @@ class _GlobalSearchPageState extends State<GlobalSearchPage> {
                   fontFamily: 'Fustat',
                   fontSize: 13.5,
                   fontWeight: FontWeight.w500,
-                  color: isDark ? const Color(0xFFD8CEBE) : const Color(0xFF707973),
+                  color: isDark
+                      ? const Color(0xFFD8CEBE)
+                      : const Color(0xFF707973),
                   height: 1.5,
                 ),
               ),
@@ -515,7 +605,9 @@ class _GlobalSearchPageState extends State<GlobalSearchPage> {
       fontSize: 15.5,
       fontWeight: FontWeight.bold,
       color: isDark ? const Color(0xFFF6F1E7) : const Color(0xFF7A5816),
-      backgroundColor: isDark ? const Color(0xFF524222) : const Color(0xFFF0E3C4),
+      backgroundColor: isDark
+          ? const Color(0xFF524222)
+          : const Color(0xFFF0E3C4),
       height: 1.6,
     );
 
@@ -531,7 +623,9 @@ class _GlobalSearchPageState extends State<GlobalSearchPage> {
       fontSize: 15,
       fontWeight: FontWeight.bold,
       color: isDark ? const Color(0xFFF6F1E7) : const Color(0xFF7A5816),
-      backgroundColor: isDark ? const Color(0xFF524222) : const Color(0xFFF0E3C4),
+      backgroundColor: isDark
+          ? const Color(0xFF524222)
+          : const Color(0xFFF0E3C4),
     );
 
     return AnimatedCardTap(
@@ -552,7 +646,10 @@ class _GlobalSearchPageState extends State<GlobalSearchPage> {
         decoration: BoxDecoration(
           color: isDark ? const Color(0xFF262D24) : const Color(0xFFFFFDF9),
           borderRadius: BorderRadius.circular(22),
-          border: Border.all(color: isDark ? const Color(0xFF353E32) : const Color(0xFFF3ECE0), width: 1.2),
+          border: Border.all(
+            color: isDark ? const Color(0xFF353E32) : const Color(0xFFF3ECE0),
+            width: 1.2,
+          ),
           boxShadow: [
             BoxShadow(
               color: isDark ? const Color(0x20000000) : const Color(0x0C000000),
@@ -568,7 +665,9 @@ class _GlobalSearchPageState extends State<GlobalSearchPage> {
               right: 0,
               top: 0,
               child: ClipRRect(
-                borderRadius: const BorderRadius.only(topRight: Radius.circular(22)),
+                borderRadius: const BorderRadius.only(
+                  topRight: Radius.circular(22),
+                ),
                 child: Opacity(
                   opacity: 0.14,
                   child: Image.asset(
@@ -590,11 +689,21 @@ class _GlobalSearchPageState extends State<GlobalSearchPage> {
                   children: [
                     // Category Badge
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 4,
+                      ),
                       decoration: BoxDecoration(
-                        color: isDark ? const Color(0xFF1F241D) : const Color(0xFFF7F2E8),
+                        color: isDark
+                            ? const Color(0xFF1F241D)
+                            : const Color(0xFFF7F2E8),
                         borderRadius: BorderRadius.circular(14),
-                        border: Border.all(color: isDark ? const Color(0xFF353E32) : const Color(0xFFEADFCF), width: 1),
+                        border: Border.all(
+                          color: isDark
+                              ? const Color(0xFF353E32)
+                              : const Color(0xFFEADFCF),
+                          width: 1,
+                        ),
                       ),
                       child: Text(
                         '${item.categoryTitle} • #${item.indexInCategory + 1}',
@@ -602,7 +711,9 @@ class _GlobalSearchPageState extends State<GlobalSearchPage> {
                           fontFamily: 'Fustat',
                           fontSize: 11.5,
                           fontWeight: FontWeight.bold,
-                          color: isDark ? const Color(0xFFC9A15B) : const Color(0xFF4E5B4E),
+                          color: isDark
+                              ? const Color(0xFFC9A15B)
+                              : const Color(0xFF4E5B4E),
                         ),
                       ),
                     ),
@@ -611,7 +722,9 @@ class _GlobalSearchPageState extends State<GlobalSearchPage> {
                     ValueListenableBuilder<List<Map<String, dynamic>>>(
                       valueListenable: FavoritesManager.favoriteDhikrs,
                       builder: (context, favorites, child) {
-                        final bool isFav = FavoritesManager.isFavoriteText(item.text);
+                        final bool isFav = FavoritesManager.isFavoriteText(
+                          item.text,
+                        );
                         return InkWell(
                           onTap: () {
                             FavoritesManager.toggleFavorite(context, {
@@ -626,11 +739,15 @@ class _GlobalSearchPageState extends State<GlobalSearchPage> {
                           child: Padding(
                             padding: const EdgeInsets.all(4),
                             child: Icon(
-                              isFav ? Icons.favorite_rounded : Icons.favorite_border_rounded,
+                              isFav
+                                  ? Icons.favorite_rounded
+                                  : Icons.favorite_border_rounded,
                               size: 20,
                               color: isFav
                                   ? const Color(0xFFC9A15B)
-                                  : (isDark ? const Color(0xFFD8CEBE) : const Color(0xFF707973)),
+                                  : (isDark
+                                        ? const Color(0xFFD8CEBE)
+                                        : const Color(0xFF707973)),
                             ),
                           ),
                         );
@@ -677,9 +794,14 @@ class _GlobalSearchPageState extends State<GlobalSearchPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 4,
+                      ),
                       decoration: BoxDecoration(
-                        color: isDark ? const Color(0xFF1F241D) : const Color(0xFFF0E8DA),
+                        color: isDark
+                            ? const Color(0xFF1F241D)
+                            : const Color(0xFFF0E8DA),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Row(
@@ -688,7 +810,9 @@ class _GlobalSearchPageState extends State<GlobalSearchPage> {
                           Icon(
                             Icons.repeat_rounded,
                             size: 14,
-                            color: isDark ? const Color(0xFFC9A15B) : const Color(0xFF4E5B4E),
+                            color: isDark
+                                ? const Color(0xFFC9A15B)
+                                : const Color(0xFF4E5B4E),
                           ),
                           const SizedBox(width: 4),
                           Text(
@@ -697,7 +821,9 @@ class _GlobalSearchPageState extends State<GlobalSearchPage> {
                               fontFamily: 'Fustat',
                               fontSize: 11.5,
                               fontWeight: FontWeight.bold,
-                              color: isDark ? const Color(0xFFC9A15B) : const Color(0xFF4E5B4E),
+                              color: isDark
+                                  ? const Color(0xFFC9A15B)
+                                  : const Color(0xFF4E5B4E),
                             ),
                           ),
                         ],
@@ -707,7 +833,9 @@ class _GlobalSearchPageState extends State<GlobalSearchPage> {
                     Icon(
                       Icons.chevron_left_rounded,
                       size: 20,
-                      color: isDark ? const Color(0xFFD8CEBE) : const Color(0xFF4E5B4E),
+                      color: isDark
+                          ? const Color(0xFFD8CEBE)
+                          : const Color(0xFF4E5B4E),
                     ),
                   ],
                 ),

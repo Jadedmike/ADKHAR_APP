@@ -11,10 +11,7 @@ class ContactUsPage extends StatelessWidget {
   static const String _contactEmail = 'a.xiondigital.j@gmail.com';
 
   Future<void> _launchEmail() async {
-    final Uri emailUri = Uri(
-      scheme: 'mailto',
-      path: _contactEmail,
-    );
+    final Uri emailUri = Uri(scheme: 'mailto', path: _contactEmail);
     try {
       await launchUrl(emailUri, mode: LaunchMode.externalApplication);
     } catch (_) {}
@@ -203,7 +200,9 @@ class ContactUsPage extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
               decoration: BoxDecoration(
-                color: isDark ? const Color(0xFF1F241D) : const Color(0xFFF7F2E8),
+                color: isDark
+                    ? const Color(0xFF1F241D)
+                    : const Color(0xFFF7F2E8),
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
                   color: isDark

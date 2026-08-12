@@ -13,9 +13,12 @@ class AppAssets {
   static const String appLogo = '${logosPath}app_logo.png';
 
   // Decorations & Ornaments
-  static const String oliveBranchLeft = '${decorationsPath}olive_branch_left.svg';
-  static const String oliveBranchRight = '${decorationsPath}olive_branch_right.svg';
-  static const String geometricOrnament = '${decorationsPath}islamic_ornament.svg';
+  static const String oliveBranchLeft =
+      '${decorationsPath}olive_branch_left.svg';
+  static const String oliveBranchRight =
+      '${decorationsPath}olive_branch_right.svg';
+  static const String geometricOrnament =
+      '${decorationsPath}islamic_ornament.svg';
   static const String geometricFrame = '${decorationsPath}islamic_frame.svg';
   static const String dividerPattern = '${decorationsPath}divider_pattern.svg';
 }

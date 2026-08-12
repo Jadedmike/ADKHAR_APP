@@ -38,10 +38,14 @@ class SettingsManager {
   static final ValueNotifier<bool> copySource = ValueNotifier<bool>(false);
 
   /// ValueNotifier holding current Dhikr font size option ('صغير', 'متوسط', 'كبير', 'كبير جداً')
-  static final ValueNotifier<String> fontSizeOption = ValueNotifier<String>('متوسط');
+  static final ValueNotifier<String> fontSizeOption = ValueNotifier<String>(
+    'متوسط',
+  );
 
   /// ValueNotifier holding current Theme Mode option ('فاتح', 'داكن', 'تكيّف حسب النظام')
-  static final ValueNotifier<String> themeModeOption = ValueNotifier<String>('فاتح');
+  static final ValueNotifier<String> themeModeOption = ValueNotifier<String>(
+    'فاتح',
+  );
 
   /// ValueNotifier for haptic vibration feedback during count.
   static final ValueNotifier<bool> vibrationOption = ValueNotifier<bool>(true);
@@ -65,7 +69,9 @@ class SettingsManager {
   static final ValueNotifier<bool> dailyReminder = ValueNotifier<bool>(true);
 
   /// ValueNotifier for remembering last reading position.
-  static final ValueNotifier<bool> rememberLastPosition = ValueNotifier<bool>(true);
+  static final ValueNotifier<bool> rememberLastPosition = ValueNotifier<bool>(
+    true,
+  );
 
   static String? _cachedLastCategoryTitle;
   static int _cachedLastDhikrIndex = 0;
@@ -114,7 +120,8 @@ class SettingsManager {
       morningReminder.value = prefs.getBool(_keyMorningReminder) ?? true;
       eveningReminder.value = prefs.getBool(_keyEveningReminder) ?? true;
       dailyReminder.value = prefs.getBool(_keyDailyReminder) ?? true;
-      rememberLastPosition.value = prefs.getBool(_keyRememberLastPosition) ?? true;
+      rememberLastPosition.value =
+          prefs.getBool(_keyRememberLastPosition) ?? true;
 
       _cachedLastCategoryTitle = prefs.getString(_keyLastCategoryTitle);
       _cachedLastJsonAssetPath = prefs.getString(_keyLastJsonAssetPath);

@@ -19,17 +19,31 @@ class AppColors {
   static const Color borderLight = Color(0xFFEADFCF);
 
   // --- DARK THEME PALETTE (Exact Specs) ---
-  static const Color primaryDark = Color(0xFF2E362C);        // Dark Olive Button (#2E362C)
-  static const Color onPrimaryDark = Color(0xFFC9A15B);       // Gold text on primary button (#C9A15B)
-  static const Color goldDark = Color(0xFFC9A15B);           // Gold Accent (#C9A15B)
-  static const Color oliveDark = Color(0xFF7E8A63);          // Muted Olive (#7E8A63)
-  static const Color backgroundDark = Color(0xFF161A15);     // Main Background (#161A15)
-  static const Color secondaryBgDark = Color(0xFF1F241D);    // Secondary Background (#1F241D)
-  static const Color cardDark = Color(0xFF262D24);           // Card Background (#262D24)
-  static const Color surfaceDark = Color(0xFF1F241D);        // Secondary Surface (#1F241D)
-  static const Color textPrimaryDark = Color(0xFFF6F1E7);     // Warm Cream Primary Text (#F6F1E7)
-  static const Color textSecondaryDark = Color(0xFFD8CEBE);   // Secondary Text (#D8CEBE)
-  static const Color borderDark = Color(0xFF353E32);         // Dark Border (#353E32)
+  static const Color primaryDark = Color(
+    0xFF2E362C,
+  ); // Dark Olive Button (#2E362C)
+  static const Color onPrimaryDark = Color(
+    0xFFC9A15B,
+  ); // Gold text on primary button (#C9A15B)
+  static const Color goldDark = Color(0xFFC9A15B); // Gold Accent (#C9A15B)
+  static const Color oliveDark = Color(0xFF7E8A63); // Muted Olive (#7E8A63)
+  static const Color backgroundDark = Color(
+    0xFF161A15,
+  ); // Main Background (#161A15)
+  static const Color secondaryBgDark = Color(
+    0xFF1F241D,
+  ); // Secondary Background (#1F241D)
+  static const Color cardDark = Color(0xFF262D24); // Card Background (#262D24)
+  static const Color surfaceDark = Color(
+    0xFF1F241D,
+  ); // Secondary Surface (#1F241D)
+  static const Color textPrimaryDark = Color(
+    0xFFF6F1E7,
+  ); // Warm Cream Primary Text (#F6F1E7)
+  static const Color textSecondaryDark = Color(
+    0xFFD8CEBE,
+  ); // Secondary Text (#D8CEBE)
+  static const Color borderDark = Color(0xFF353E32); // Dark Border (#353E32)
 
   // Feedback Colors
   static const Color error = Color(0xFFBA4A4A);

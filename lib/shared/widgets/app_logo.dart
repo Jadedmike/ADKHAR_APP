@@ -7,18 +7,10 @@ class AppLogo extends StatelessWidget {
   final double width;
   final double height;
 
-  const AppLogo({
-    super.key,
-    this.width = 170.0,
-    this.height = 170.0,
-  });
+  const AppLogo({super.key, this.width = 170.0, this.height = 170.0});
 
   @override
   Widget build(BuildContext context) {
-    return CustomPaint(
-      size: Size(width, height),
-      painter: const LogoPainter(),
-    );
+    return CustomPaint(size: Size(width, height), painter: const LogoPainter());
   }
 }
-

@@ -28,7 +28,8 @@ class AppScaffold extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     // Resolve default page background color using Design System Warm Beige / Warm Dark
-    final resolvedBackgroundColor = backgroundColor ??
+    final resolvedBackgroundColor =
+        backgroundColor ??
         (isDark ? AppColors.backgroundDark : AppColors.backgroundLight);
 
     return Scaffold(

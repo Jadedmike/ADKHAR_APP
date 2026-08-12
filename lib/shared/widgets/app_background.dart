@@ -6,10 +6,7 @@ import 'package:flutter/material.dart';
 class AppBackground extends StatelessWidget {
   final Widget? child;
 
-  const AppBackground({
-    super.key,
-    this.child,
-  });
+  const AppBackground({super.key, this.child});
 
   @override
   Widget build(BuildContext context) {

@@ -29,10 +29,7 @@ class _StaggeredListFadeItemState extends State<StaggeredListFadeItem>
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: widget.duration,
-    );
+    _controller = AnimationController(vsync: this, duration: widget.duration);
 
     _fadeAnimation = CurvedAnimation(
       parent: _controller,
@@ -42,10 +39,7 @@ class _StaggeredListFadeItemState extends State<StaggeredListFadeItem>
     _slideAnimation = Tween<Offset>(
       begin: const Offset(0.0, 0.08), // Slight 8px upward movement
       end: Offset.zero,
-    ).animate(CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeOutCubic,
-    ));
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic));
 
     final delay = widget.delayStep * widget.index;
     Future.delayed(delay, () {
@@ -65,10 +59,7 @@ class _StaggeredListFadeItemState extends State<StaggeredListFadeItem>
   Widget build(BuildContext context) {
     return FadeTransition(
       opacity: _fadeAnimation,
-      child: SlideTransition(
-        position: _slideAnimation,
-        child: widget.child,
-      ),
+      child: SlideTransition(position: _slideAnimation, child: widget.child),
     );
   }
 }

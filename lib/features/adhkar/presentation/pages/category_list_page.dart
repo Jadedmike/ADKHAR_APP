@@ -54,7 +54,9 @@ class _CategoryListPageState extends State<CategoryListPage> {
         final List<dynamic> parsedJson = json.decode(jsonString);
         if (parsedJson.isNotEmpty) {
           setState(() {
-            _dhikrItems = parsedJson.map((e) => Map<String, dynamic>.from(e)).toList();
+            _dhikrItems = parsedJson
+                .map((e) => Map<String, dynamic>.from(e))
+                .toList();
             _isLoading = false;
           });
           return;
@@ -72,21 +74,21 @@ class _CategoryListPageState extends State<CategoryListPage> {
           "text":
               "أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ لاَ إِلَهَ إِلاَّ اللَّهُ، وَحْدَهُ لاَ شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ.",
           "count": 1,
-          "source": "صحيح مسلم"
+          "source": "صحيح مسلم",
         },
         {
           "id": 2,
           "text":
               "اللَّهُمَّ بِكَ أَصْبَحْنَا، وَبِكَ أَمْسَيْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ، وَإِلَيْكَ النُّشُورُ.",
           "count": 1,
-          "source": "سنن الترمذي"
+          "source": "سنن الترمذي",
         },
         {
           "id": 3,
           "text":
               "سُبْحَانَ اللَّهِ وَبِحَمْدِهِ: عَدَدَ خَلْقِهِ، وَرِضَا نَفْسِهِ، وَزِنَةَ عَرْشِهِ، وَمِدَادَ كَلِمَاتِهِ.",
           "count": 3,
-          "source": "صحيح مسلم"
+          "source": "صحيح مسلم",
         },
       ];
       _isLoading = false;
@@ -139,7 +141,9 @@ class _CategoryListPageState extends State<CategoryListPage> {
                                 child: Padding(
                                   padding: const EdgeInsets.only(top: 60),
                                   child: CircularProgressIndicator(
-                                    color: isDark ? const Color(0xFFC9A15B) : const Color(0xFF4E5B4E),
+                                    color: isDark
+                                        ? const Color(0xFFC9A15B)
+                                        : const Color(0xFF4E5B4E),
                                   ),
                                 ),
                               )
@@ -179,7 +183,9 @@ class _CategoryListPageState extends State<CategoryListPage> {
               Navigator.of(context).pop();
             } else {
               Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (context) => const AzkarCategoriesPage()),
+                MaterialPageRoute(
+                  builder: (context) => const AzkarCategoriesPage(),
+                ),
               );
             }
           },
@@ -190,10 +196,17 @@ class _CategoryListPageState extends State<CategoryListPage> {
             decoration: BoxDecoration(
               color: isDark ? const Color(0xFF262D24) : const Color(0xFFFFFDF9),
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: isDark ? const Color(0xFF353E32) : const Color(0xFFEADFCF), width: 1.2),
+              border: Border.all(
+                color: isDark
+                    ? const Color(0xFF353E32)
+                    : const Color(0xFFEADFCF),
+                width: 1.2,
+              ),
               boxShadow: [
                 BoxShadow(
-                  color: isDark ? const Color(0x20000000) : const Color(0x0A000000),
+                  color: isDark
+                      ? const Color(0x20000000)
+                      : const Color(0x0A000000),
                   blurRadius: 10,
                   offset: const Offset(0, 3),
                 ),
@@ -220,7 +233,9 @@ class _CategoryListPageState extends State<CategoryListPage> {
                   fontFamily: 'Fustat',
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
-                  color: isDark ? const Color(0xFFF6F1E7) : AppColors.primaryLight,
+                  color: isDark
+                      ? const Color(0xFFF6F1E7)
+                      : AppColors.primaryLight,
                 ),
               ),
               const SizedBox(height: 2),
@@ -230,7 +245,9 @@ class _CategoryListPageState extends State<CategoryListPage> {
                   fontFamily: 'Fustat',
                   fontSize: 12.5,
                   fontWeight: FontWeight.w500,
-                  color: isDark ? const Color(0xFFD8CEBE) : const Color(0xFF707973),
+                  color: isDark
+                      ? const Color(0xFFD8CEBE)
+                      : const Color(0xFF707973),
                 ),
               ),
             ],
@@ -250,7 +267,13 @@ class _CategoryListPageState extends State<CategoryListPage> {
       separatorBuilder: (context, index) => const SizedBox(height: 14),
       itemBuilder: (context, index) {
         final item = _dhikrItems[index];
-        final String text = (item['text'] ?? item['content'] ?? item['dhikr'] ?? item['title'] ?? '') as String;
+        final String text =
+            (item['text'] ??
+                    item['content'] ??
+                    item['dhikr'] ??
+                    item['title'] ??
+                    '')
+                as String;
         final int count = (item['count'] is int)
             ? item['count'] as int
             : (int.tryParse(item['count']?.toString() ?? '') ?? 1);
@@ -270,158 +293,200 @@ class _CategoryListPageState extends State<CategoryListPage> {
               );
             },
             child: Container(
-            padding: const EdgeInsets.all(18),
-            decoration: BoxDecoration(
-              color: isDark ? const Color(0xFF262D24) : const Color(0xFFFFFDF9),
-              borderRadius: BorderRadius.circular(22),
-              border: Border.all(color: isDark ? const Color(0xFF353E32) : const Color(0xFFF3ECE0), width: 1.2),
-              boxShadow: [
-                BoxShadow(
-                  color: isDark ? const Color(0x20000000) : const Color(0x0C000000),
-                  blurRadius: 14,
-                  offset: const Offset(0, 5),
+              padding: const EdgeInsets.all(18),
+              decoration: BoxDecoration(
+                color: isDark
+                    ? const Color(0xFF262D24)
+                    : const Color(0xFFFFFDF9),
+                borderRadius: BorderRadius.circular(22),
+                border: Border.all(
+                  color: isDark
+                      ? const Color(0xFF353E32)
+                      : const Color(0xFFF3ECE0),
+                  width: 1.2,
                 ),
-              ],
-            ),
-            child: Stack(
-              children: [
-                // Corner Watermark Olive Leaf Graphic
-                Positioned(
-                  right: 0,
-                  top: 0,
-                  child: ClipRRect(
-                    borderRadius: const BorderRadius.only(topRight: Radius.circular(22)),
-                    child: Opacity(
-                      opacity: 0.14,
-                      child: Image.asset(
-                        'assets/images/olivebranches.png',
-                        width: 75,
-                        height: 75,
-                        fit: BoxFit.cover,
+                boxShadow: [
+                  BoxShadow(
+                    color: isDark
+                        ? const Color(0x20000000)
+                        : const Color(0x0C000000),
+                    blurRadius: 14,
+                    offset: const Offset(0, 5),
+                  ),
+                ],
+              ),
+              child: Stack(
+                children: [
+                  // Corner Watermark Olive Leaf Graphic
+                  Positioned(
+                    right: 0,
+                    top: 0,
+                    child: ClipRRect(
+                      borderRadius: const BorderRadius.only(
+                        topRight: Radius.circular(22),
+                      ),
+                      child: Opacity(
+                        opacity: 0.14,
+                        child: Image.asset(
+                          'assets/images/olivebranches.png',
+                          width: 75,
+                          height: 75,
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                   ),
-                ),
 
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Top Row: Dhikr Number badge & Favorite button
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        // Dhikr Number Badge
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                          decoration: BoxDecoration(
-                            color: isDark ? const Color(0xFF1F241D) : const Color(0xFFF7F2E8),
-                            borderRadius: BorderRadius.circular(14),
-                            border: Border.all(color: isDark ? const Color(0xFF353E32) : const Color(0xFFEADFCF), width: 1),
-                          ),
-                          child: Text(
-                            'ذِكْر #${index + 1}',
-                            style: TextStyle(
-                              fontFamily: 'Fustat',
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                              color: isDark ? const Color(0xFFC9A15B) : const Color(0xFF4E5B4E),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Top Row: Dhikr Number badge & Favorite button
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          // Dhikr Number Badge
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 4,
+                            ),
+                            decoration: BoxDecoration(
+                              color: isDark
+                                  ? const Color(0xFF1F241D)
+                                  : const Color(0xFFF7F2E8),
+                              borderRadius: BorderRadius.circular(14),
+                              border: Border.all(
+                                color: isDark
+                                    ? const Color(0xFF353E32)
+                                    : const Color(0xFFEADFCF),
+                                width: 1,
+                              ),
+                            ),
+                            child: Text(
+                              'ذِكْر #${index + 1}',
+                              style: TextStyle(
+                                fontFamily: 'Fustat',
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                                color: isDark
+                                    ? const Color(0xFFC9A15B)
+                                    : const Color(0xFF4E5B4E),
+                              ),
                             ),
                           ),
-                        ),
 
-                        // Favorite Button
-                        ValueListenableBuilder<List<Map<String, dynamic>>>(
-                          valueListenable: FavoritesManager.favoriteDhikrs,
-                          builder: (context, favorites, child) {
-                            final bool isFav = FavoritesManager.isFavorite(item);
-                            return InkWell(
-                              onTap: () {
-                                FavoritesManager.toggleFavorite(context, {
-                                  ...item,
-                                  'categoryTitle': widget.categoryTitle,
-                                });
-                              },
-                              borderRadius: BorderRadius.circular(14),
-                              child: Padding(
-                                padding: const EdgeInsets.all(4),
-                                child: Icon(
-                                  isFav ? Icons.favorite_rounded : Icons.favorite_border_rounded,
-                                  size: 20,
-                                  color: isFav
-                                      ? const Color(0xFFC9A15B)
-                                      : (isDark ? const Color(0xFFD8CEBE) : const Color(0xFF707973)),
+                          // Favorite Button
+                          ValueListenableBuilder<List<Map<String, dynamic>>>(
+                            valueListenable: FavoritesManager.favoriteDhikrs,
+                            builder: (context, favorites, child) {
+                              final bool isFav = FavoritesManager.isFavorite(
+                                item,
+                              );
+                              return InkWell(
+                                onTap: () {
+                                  FavoritesManager.toggleFavorite(context, {
+                                    ...item,
+                                    'categoryTitle': widget.categoryTitle,
+                                  });
+                                },
+                                borderRadius: BorderRadius.circular(14),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(4),
+                                  child: Icon(
+                                    isFav
+                                        ? Icons.favorite_rounded
+                                        : Icons.favorite_border_rounded,
+                                    size: 20,
+                                    color: isFav
+                                        ? const Color(0xFFC9A15B)
+                                        : (isDark
+                                              ? const Color(0xFFD8CEBE)
+                                              : const Color(0xFF707973)),
+                                  ),
                                 ),
-                              ),
-                            );
-                          },
-                        ),
-                      ],
-                    ),
-
-                    const SizedBox(height: 12),
-
-                    // First one or two lines of Dhikr text
-                    Text(
-                      text,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontFamily: 'Fustat',
-                        fontSize: 15.5,
-                        fontWeight: FontWeight.bold,
-                        color: isDark ? const Color(0xFFF6F1E7) : const Color(0xFF1E281F),
-                        height: 1.6,
+                              );
+                            },
+                          ),
+                        ],
                       ),
-                    ),
 
-                    const SizedBox(height: 14),
+                      const SizedBox(height: 12),
 
-                    // Bottom Row: Repetition Count Pill
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                          decoration: BoxDecoration(
-                            color: isDark ? const Color(0xFF1F241D) : const Color(0xFFF0E8DA),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(
-                                Icons.repeat_rounded,
-                                size: 14,
-                                color: isDark ? const Color(0xFFC9A15B) : const Color(0xFF4E5B4E),
-                              ),
-                              const SizedBox(width: 4),
-                              Text(
-                                'التكرار: $count ${count == 1 ? 'مرة واحدة' : 'مرات'}',
-                                style: TextStyle(
-                                  fontFamily: 'Fustat',
-                                  fontSize: 11.5,
-                                  fontWeight: FontWeight.bold,
-                                  color: isDark ? const Color(0xFFC9A15B) : const Color(0xFF4E5B4E),
+                      // First one or two lines of Dhikr text
+                      Text(
+                        text,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontFamily: 'Fustat',
+                          fontSize: 15.5,
+                          fontWeight: FontWeight.bold,
+                          color: isDark
+                              ? const Color(0xFFF6F1E7)
+                              : const Color(0xFF1E281F),
+                          height: 1.6,
+                        ),
+                      ),
+
+                      const SizedBox(height: 14),
+
+                      // Bottom Row: Repetition Count Pill
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 4,
+                            ),
+                            decoration: BoxDecoration(
+                              color: isDark
+                                  ? const Color(0xFF1F241D)
+                                  : const Color(0xFFF0E8DA),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  Icons.repeat_rounded,
+                                  size: 14,
+                                  color: isDark
+                                      ? const Color(0xFFC9A15B)
+                                      : const Color(0xFF4E5B4E),
                                 ),
-                              ),
-                            ],
+                                const SizedBox(width: 4),
+                                Text(
+                                  'التكرار: $count ${count == 1 ? 'مرة واحدة' : 'مرات'}',
+                                  style: TextStyle(
+                                    fontFamily: 'Fustat',
+                                    fontSize: 11.5,
+                                    fontWeight: FontWeight.bold,
+                                    color: isDark
+                                        ? const Color(0xFFC9A15B)
+                                        : const Color(0xFF4E5B4E),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
 
-                        Icon(
-                          Icons.chevron_left_rounded,
-                          size: 20,
-                          color: isDark ? const Color(0xFFD8CEBE) : const Color(0xFF4E5B4E),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
+                          Icon(
+                            Icons.chevron_left_rounded,
+                            size: 20,
+                            color: isDark
+                                ? const Color(0xFFD8CEBE)
+                                : const Color(0xFF4E5B4E),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-      );
+        );
       },
     );
   }

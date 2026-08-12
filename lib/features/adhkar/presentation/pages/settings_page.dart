@@ -190,14 +190,17 @@ class _SettingsPageState extends State<SettingsPage> {
                                       : const Color(0xFFF3ECE0),
                                 ),
                                 ValueListenableBuilder<bool>(
-                                  valueListenable: SettingsManager.showTranslation,
+                                  valueListenable:
+                                      SettingsManager.showTranslation,
                                   builder: (context, showTranslation, child) {
                                     return _buildSwitchTile(
                                       icon: Icons.translate_rounded,
                                       title: 'إظهار الترجمة (إن وجدت)',
                                       value: showTranslation,
                                       onChanged: (val) =>
-                                          SettingsManager.setShowTranslation(val),
+                                          SettingsManager.setShowTranslation(
+                                            val,
+                                          ),
                                     );
                                   },
                                 ),
@@ -253,8 +256,8 @@ class _SettingsPageState extends State<SettingsPage> {
                                       value: rememberLast,
                                       onChanged: (val) =>
                                           SettingsManager.setRememberLastPosition(
-                                        val,
-                                      ),
+                                            val,
+                                          ),
                                     );
                                   },
                                 ),
@@ -289,14 +292,17 @@ class _SettingsPageState extends State<SettingsPage> {
                               title: 'التنبيهات',
                               children: [
                                 ValueListenableBuilder<bool>(
-                                  valueListenable: SettingsManager.morningReminder,
+                                  valueListenable:
+                                      SettingsManager.morningReminder,
                                   builder: (context, morning, child) {
                                     return _buildSwitchTile(
                                       icon: Icons.wb_sunny_outlined,
                                       title: 'تنبيه أذكار الصباح',
                                       value: morning,
                                       onChanged: (val) =>
-                                          SettingsManager.setMorningReminder(val),
+                                          SettingsManager.setMorningReminder(
+                                            val,
+                                          ),
                                     );
                                   },
                                 ),
@@ -307,14 +313,17 @@ class _SettingsPageState extends State<SettingsPage> {
                                       : const Color(0xFFF3ECE0),
                                 ),
                                 ValueListenableBuilder<bool>(
-                                  valueListenable: SettingsManager.eveningReminder,
+                                  valueListenable:
+                                      SettingsManager.eveningReminder,
                                   builder: (context, evening, child) {
                                     return _buildSwitchTile(
                                       icon: Icons.nights_stay_outlined,
                                       title: 'تنبيه أذكار المساء',
                                       value: evening,
                                       onChanged: (val) =>
-                                          SettingsManager.setEveningReminder(val),
+                                          SettingsManager.setEveningReminder(
+                                            val,
+                                          ),
                                     );
                                   },
                                 ),
@@ -325,7 +334,8 @@ class _SettingsPageState extends State<SettingsPage> {
                                       : const Color(0xFFF3ECE0),
                                 ),
                                 ValueListenableBuilder<bool>(
-                                  valueListenable: SettingsManager.dailyReminder,
+                                  valueListenable:
+                                      SettingsManager.dailyReminder,
                                   builder: (context, daily, child) {
                                     return _buildSwitchTile(
                                       icon: Icons.access_alarm_rounded,
@@ -365,7 +375,9 @@ class _SettingsPageState extends State<SettingsPage> {
                                   title: 'سياسة الخصوصية',
                                   onTap: () {
                                     Navigator.of(context).push(
-                                      AppPageRoute.create(const PrivacyPolicyPage()),
+                                      AppPageRoute.create(
+                                        const PrivacyPolicyPage(),
+                                      ),
                                     );
                                   },
                                 ),
@@ -380,7 +392,9 @@ class _SettingsPageState extends State<SettingsPage> {
                                   title: 'تواصل معنا',
                                   onTap: () {
                                     Navigator.of(context).push(
-                                      AppPageRoute.create(const ContactUsPage()),
+                                      AppPageRoute.create(
+                                        const ContactUsPage(),
+                                      ),
                                     );
                                   },
                                 ),
@@ -397,28 +411,40 @@ class _SettingsPageState extends State<SettingsPage> {
                                     const String appPackageName = '';
                                     if (appPackageName.isNotEmpty) {
                                       final Uri playStoreUri = Uri.parse(
-                                          'market://details?id=$appPackageName');
+                                        'market://details?id=$appPackageName',
+                                      );
                                       final Uri webPlayStoreUri = Uri.parse(
-                                          'https://play.google.com/store/apps/details?id=$appPackageName');
+                                        'https://play.google.com/store/apps/details?id=$appPackageName',
+                                      );
                                       try {
                                         if (await canLaunchUrl(playStoreUri)) {
-                                          await launchUrl(playStoreUri,
-                                              mode: LaunchMode.externalApplication);
+                                          await launchUrl(
+                                            playStoreUri,
+                                            mode:
+                                                LaunchMode.externalApplication,
+                                          );
                                         } else {
-                                          await launchUrl(webPlayStoreUri,
-                                              mode: LaunchMode.externalApplication);
+                                          await launchUrl(
+                                            webPlayStoreUri,
+                                            mode:
+                                                LaunchMode.externalApplication,
+                                          );
                                         }
                                         return;
                                       } catch (_) {}
                                     }
 
                                     if (context.mounted) {
-                                      ScaffoldMessenger.of(context).showSnackBar(
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
                                         const SnackBar(
                                           content: Text(
                                             'سيصبح التقييم متاحًا بعد نشر التطبيق.',
                                             textAlign: TextAlign.center,
-                                            style: TextStyle(fontFamily: 'Fustat'),
+                                            style: TextStyle(
+                                              fontFamily: 'Fustat',
+                                            ),
                                           ),
                                           duration: Duration(seconds: 3),
                                         ),

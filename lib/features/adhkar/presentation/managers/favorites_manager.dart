@@ -17,15 +17,20 @@ class FavoritesManager {
       final String? jsonString = prefs.getString(_keyFavorites);
       if (jsonString != null && jsonString.isNotEmpty) {
         final List<dynamic> parsed = json.decode(jsonString);
-        favoriteDhikrs.value =
-            parsed.map((e) => Map<String, dynamic>.from(e)).toList();
+        favoriteDhikrs.value = parsed
+            .map((e) => Map<String, dynamic>.from(e))
+            .toList();
       }
     } catch (_) {}
   }
 
   /// Helper to extract text identifier from a Dhikr or Dua map.
   static String getItemText(Map<String, dynamic> dhikr) {
-    return (dhikr['text'] ?? dhikr['content'] ?? dhikr['dhikr'] ?? dhikr['title'] ?? '')
+    return (dhikr['text'] ??
+            dhikr['content'] ??
+            dhikr['dhikr'] ??
+            dhikr['title'] ??
+            '')
         .toString()
         .trim();
   }
@@ -45,8 +50,11 @@ class FavoritesManager {
   }
 
   /// Toggles favorite state for a given Dhikr/Dua item, persists to storage, and shows feedback.
-  static Future<bool> toggleFavorite(BuildContext? context, Map<String, dynamic> dhikr,
-      {bool showSnackBar = true}) async {
+  static Future<bool> toggleFavorite(
+    BuildContext? context,
+    Map<String, dynamic> dhikr, {
+    bool showSnackBar = true,
+  }) async {
     final String text = getItemText(dhikr);
     if (text.isEmpty) return false;
 
@@ -74,8 +82,11 @@ class FavoritesManager {
   }
 
   /// Removes an item directly from favorites.
-  static Future<void> removeFavorite(BuildContext? context, Map<String, dynamic> dhikr,
-      {bool showSnackBar = true}) async {
+  static Future<void> removeFavorite(
+    BuildContext? context,
+    Map<String, dynamic> dhikr, {
+    bool showSnackBar = true,
+  }) async {
     final String text = getItemText(dhikr);
     if (text.isEmpty) return;
 

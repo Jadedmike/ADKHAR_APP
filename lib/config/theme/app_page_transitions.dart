@@ -16,12 +16,7 @@ class RtlFadeSlidePageTransitionsBuilder extends PageTransitionsBuilder {
     final slideAnimation = Tween<Offset>(
       begin: const Offset(-0.15, 0.0), // RTL subtle slide
       end: Offset.zero,
-    ).animate(
-      CurvedAnimation(
-        parent: animation,
-        curve: Curves.easeInOutCubic,
-      ),
-    );
+    ).animate(CurvedAnimation(parent: animation, curve: Curves.easeInOutCubic));
 
     final fadeAnimation = CurvedAnimation(
       parent: animation,
@@ -30,10 +25,7 @@ class RtlFadeSlidePageTransitionsBuilder extends PageTransitionsBuilder {
 
     return SlideTransition(
       position: slideAnimation,
-      child: FadeTransition(
-        opacity: fadeAnimation,
-        child: child,
-      ),
+      child: FadeTransition(opacity: fadeAnimation, child: child),
     );
   }
 }
@@ -46,15 +38,13 @@ class AppPageRoute {
       reverseTransitionDuration: const Duration(milliseconds: 280),
       pageBuilder: (context, animation, secondaryAnimation) => page,
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        final slideAnimation = Tween<Offset>(
-          begin: const Offset(-0.15, 0.0),
-          end: Offset.zero,
-        ).animate(
-          CurvedAnimation(
-            parent: animation,
-            curve: Curves.easeInOutCubic,
-          ),
-        );
+        final slideAnimation =
+            Tween<Offset>(
+              begin: const Offset(-0.15, 0.0),
+              end: Offset.zero,
+            ).animate(
+              CurvedAnimation(parent: animation, curve: Curves.easeInOutCubic),
+            );
 
         final fadeAnimation = CurvedAnimation(
           parent: animation,
@@ -63,10 +53,7 @@ class AppPageRoute {
 
         return SlideTransition(
           position: slideAnimation,
-          child: FadeTransition(
-            opacity: fadeAnimation,
-            child: child,
-          ),
+          child: FadeTransition(opacity: fadeAnimation, child: child),
         );
       },
     );

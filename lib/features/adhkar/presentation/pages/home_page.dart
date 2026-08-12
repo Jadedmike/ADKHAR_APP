@@ -10,7 +10,6 @@ import '../managers/favorites_manager.dart';
 import 'global_search_page.dart';
 import 'tasbeeh_page.dart';
 
-
 /// The Home Screen of the Adhkar ("ذكر") application.
 /// Preserving top header, greeting, daily quote cards, background, and bottom navigation.
 /// Only category grid replaced with a single centered 75% width Tasbeeh card.
@@ -74,32 +73,48 @@ class _HomePageState extends State<HomePage> {
                               context,
                               tagText: 'ذكر اليوم',
                               tagIcon: Icons.eco_outlined,
-                              content: 'سُبْحَانَ اللَّهِ وَبِحَمْدِهِ، سُبْحَانَ اللَّهِ الْعَظِيمِ.',
+                              content:
+                                  'سُبْحَانَ اللَّهِ وَبِحَمْدِهِ، سُبْحَانَ اللَّهِ الْعَظِيمِ.',
                               source: 'رواه البخاري ومسلم',
                               hasDivider: true,
-                              leftAction: ValueListenableBuilder<List<Map<String, dynamic>>>(
-                                valueListenable: FavoritesManager.favoriteDhikrs,
-                                builder: (context, favorites, child) {
-                                  final item = {
-                                    'categoryTitle': 'أذكار اليوم',
-                                    'text': 'سُبْحَانَ اللَّهِ وَبِحَمْدِهِ، سُبْحَانَ اللَّهِ الْعَظِيمِ.',
-                                    'source': 'رواه البخاري ومسلم',
-                                  };
-                                  final isFav = FavoritesManager.isFavorite(item);
-                                  return _buildActionButton(
-                                    context,
-                                    isFav ? Icons.favorite_rounded : Icons.favorite_border_rounded,
-                                    () => FavoritesManager.toggleFavorite(context, item),
-                                    iconColor: isFav ? const Color(0xFFC5A059) : null,
-                                  );
-                                },
-                              ),
+                              leftAction:
+                                  ValueListenableBuilder<
+                                    List<Map<String, dynamic>>
+                                  >(
+                                    valueListenable:
+                                        FavoritesManager.favoriteDhikrs,
+                                    builder: (context, favorites, child) {
+                                      final item = {
+                                        'categoryTitle': 'أذكار اليوم',
+                                        'text':
+                                            'سُبْحَانَ اللَّهِ وَبِحَمْدِهِ، سُبْحَانَ اللَّهِ الْعَظِيمِ.',
+                                        'source': 'رواه البخاري ومسلم',
+                                      };
+                                      final isFav = FavoritesManager.isFavorite(
+                                        item,
+                                      );
+                                      return _buildActionButton(
+                                        context,
+                                        isFav
+                                            ? Icons.favorite_rounded
+                                            : Icons.favorite_border_rounded,
+                                        () => FavoritesManager.toggleFavorite(
+                                          context,
+                                          item,
+                                        ),
+                                        iconColor: isFav
+                                            ? const Color(0xFFC5A059)
+                                            : null,
+                                      );
+                                    },
+                                  ),
                               rightActions: [
                                 _buildActionButton(
                                   context,
                                   Icons.copy_rounded,
                                   () => DhikrCopyHelper.copyToClipboard(context, {
-                                    'text': 'سُبْحَانَ اللَّهِ وَبِحَمْدِهِ، سُبْحَانَ اللَّهِ الْعَظِيمِ.',
+                                    'text':
+                                        'سُبْحَانَ اللَّهِ وَبِحَمْدِهِ، سُبْحَانَ اللَّهِ الْعَظِيمِ.',
                                     'source': 'رواه البخاري ومسلم',
                                   }),
                                 ),
@@ -108,7 +123,8 @@ class _HomePageState extends State<HomePage> {
                                   context,
                                   Icons.share_outlined,
                                   () => DhikrShareHelper.shareDhikr({
-                                    'text': 'سُبْحَانَ اللَّهِ وَبِحَمْدِهِ، سُبْحَانَ اللَّهِ الْعَظِيمِ.',
+                                    'text':
+                                        'سُبْحَانَ اللَّهِ وَبِحَمْدِهِ، سُبْحَانَ اللَّهِ الْعَظِيمِ.',
                                     'source': 'رواه البخاري ومسلم',
                                   }),
                                 ),
@@ -126,24 +142,37 @@ class _HomePageState extends State<HomePage> {
                                   'اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَافِيَةَ فِي الدُّنْيَا وَالْآخِرَةِ، اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ وَالْعَافِيَةَ فِي دِينِي وَدُنْيَايَ وَأَهْلِي وَمَالِي.',
                               source: 'رواه أبو داود',
                               hasDivider: false,
-                              leftAction: ValueListenableBuilder<List<Map<String, dynamic>>>(
-                                valueListenable: FavoritesManager.favoriteDhikrs,
-                                builder: (context, favorites, child) {
-                                  final item = {
-                                    'categoryTitle': 'أدعية اليوم',
-                                    'text':
-                                        'اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَافِيَةَ فِي الدُّنْيَا وَالْآخِرَةِ، اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ وَالْعَافِيَةَ فِي دِينِي وَدُنْيَايَ وَأَهْلِي وَمَالِي.',
-                                    'source': 'رواه أبو داود',
-                                  };
-                                  final isFav = FavoritesManager.isFavorite(item);
-                                  return _buildActionButton(
-                                    context,
-                                    isFav ? Icons.favorite_rounded : Icons.favorite_border_rounded,
-                                    () => FavoritesManager.toggleFavorite(context, item),
-                                    iconColor: isFav ? const Color(0xFFC5A059) : null,
-                                  );
-                                },
-                              ),
+                              leftAction:
+                                  ValueListenableBuilder<
+                                    List<Map<String, dynamic>>
+                                  >(
+                                    valueListenable:
+                                        FavoritesManager.favoriteDhikrs,
+                                    builder: (context, favorites, child) {
+                                      final item = {
+                                        'categoryTitle': 'أدعية اليوم',
+                                        'text':
+                                            'اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَافِيَةَ فِي الدُّنْيَا وَالْآخِرَةِ، اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ وَالْعَافِيَةَ فِي دِينِي وَدُنْيَايَ وَأَهْلِي وَمَالِي.',
+                                        'source': 'رواه أبو داود',
+                                      };
+                                      final isFav = FavoritesManager.isFavorite(
+                                        item,
+                                      );
+                                      return _buildActionButton(
+                                        context,
+                                        isFav
+                                            ? Icons.favorite_rounded
+                                            : Icons.favorite_border_rounded,
+                                        () => FavoritesManager.toggleFavorite(
+                                          context,
+                                          item,
+                                        ),
+                                        iconColor: isFav
+                                            ? const Color(0xFFC5A059)
+                                            : null,
+                                      );
+                                    },
+                                  ),
                               rightActions: [
                                 _buildActionButton(
                                   context,
@@ -174,33 +203,46 @@ class _HomePageState extends State<HomePage> {
                               valueListenable: FavoritesManager.favoriteDhikrs,
                               builder: (context, favs, child) {
                                 const itemData = {
-                                  'text': '﴿ أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ ﴾',
+                                  'text':
+                                      '﴿ أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ ﴾',
                                   'source': 'سورة الرعد - الآية 28',
                                 };
-                                final isFav = FavoritesManager.isFavorite(itemData);
+                                final isFav = FavoritesManager.isFavorite(
+                                  itemData,
+                                );
                                 return _buildDailyContentCard(
                                   context,
                                   tagText: 'آية عشوائية',
                                   tagIcon: Icons.menu_book_rounded,
-                                  content: '﴿ أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ ﴾',
+                                  content:
+                                      '﴿ أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ ﴾',
                                   source: 'سورة الرعد - الآية 28',
                                   hasDivider: false,
                                   leftAction: _buildActionButton(
                                     context,
-                                    isFav ? Icons.bookmark_rounded : Icons.bookmark_border_rounded,
-                                    () => FavoritesManager.toggleFavorite(context, itemData),
+                                    isFav
+                                        ? Icons.bookmark_rounded
+                                        : Icons.bookmark_border_rounded,
+                                    () => FavoritesManager.toggleFavorite(
+                                      context,
+                                      itemData,
+                                    ),
                                   ),
                                   rightActions: [
                                     _buildActionButton(
                                       context,
                                       Icons.copy_rounded,
-                                      () => DhikrCopyHelper.copyToClipboard(context, itemData),
+                                      () => DhikrCopyHelper.copyToClipboard(
+                                        context,
+                                        itemData,
+                                      ),
                                     ),
                                     const SizedBox(width: 8),
                                     _buildActionButton(
                                       context,
                                       Icons.share_outlined,
-                                      () => DhikrShareHelper.shareDhikr(itemData),
+                                      () =>
+                                          DhikrShareHelper.shareDhikr(itemData),
                                     ),
                                   ],
                                 );
@@ -222,10 +264,12 @@ class _HomePageState extends State<HomePage> {
                                 _buildActionButton(
                                   context,
                                   Icons.copy_rounded,
-                                  () => DhikrCopyHelper.copyToClipboard(context, {
-                                    'text': 'وما كان الله معذبهم وهم يستغفرون.',
-                                    'source': 'سورة الأنفال - الآية 33',
-                                  }),
+                                  () =>
+                                      DhikrCopyHelper.copyToClipboard(context, {
+                                        'text':
+                                            'وما كان الله معذبهم وهم يستغفرون.',
+                                        'source': 'سورة الأنفال - الآية 33',
+                                      }),
                                 ),
                                 const SizedBox(width: 8),
                                 _buildActionButton(
@@ -295,7 +339,9 @@ class _HomePageState extends State<HomePage> {
                   fontFamily: 'Fustat',
                   fontSize: 26,
                   fontWeight: FontWeight.bold,
-                  color: isDark ? const Color(0xFFF6F1E7) : AppColors.primaryLight,
+                  color: isDark
+                      ? const Color(0xFFF6F1E7)
+                      : AppColors.primaryLight,
                 ),
               ),
               const SizedBox(height: 4),
@@ -305,7 +351,9 @@ class _HomePageState extends State<HomePage> {
                   fontFamily: 'Fustat',
                   fontSize: 12.5,
                   fontWeight: FontWeight.w500,
-                  color: isDark ? const Color(0xFFD8CEBE) : const Color(0xFF707973),
+                  color: isDark
+                      ? const Color(0xFFD8CEBE)
+                      : const Color(0xFF707973),
                 ),
               ),
             ],
@@ -320,10 +368,15 @@ class _HomePageState extends State<HomePage> {
           decoration: BoxDecoration(
             color: isDark ? const Color(0xFF262D24) : const Color(0xFFFFFDF9),
             borderRadius: BorderRadius.circular(22),
-            border: Border.all(color: isDark ? const Color(0xFF353E32) : const Color(0xFFEADFCF), width: 1.2),
+            border: Border.all(
+              color: isDark ? const Color(0xFF353E32) : const Color(0xFFEADFCF),
+              width: 1.2,
+            ),
             boxShadow: [
               BoxShadow(
-                color: isDark ? const Color(0x20000000) : const Color(0x0D000000),
+                color: isDark
+                    ? const Color(0x20000000)
+                    : const Color(0x0D000000),
                 blurRadius: 12,
                 offset: const Offset(0, 4),
               ),
@@ -341,7 +394,9 @@ class _HomePageState extends State<HomePage> {
                       fontFamily: 'Fustat',
                       fontSize: 11.5,
                       fontWeight: FontWeight.bold,
-                      color: isDark ? const Color(0xFFF6F1E7) : AppColors.primaryLight,
+                      color: isDark
+                          ? const Color(0xFFF6F1E7)
+                          : AppColors.primaryLight,
                     ),
                   ),
                   const SizedBox(height: 2),
@@ -351,7 +406,9 @@ class _HomePageState extends State<HomePage> {
                       fontFamily: 'Fustat',
                       fontSize: 10.5,
                       fontWeight: FontWeight.w500,
-                      color: isDark ? const Color(0xFFD8CEBE) : const Color(0xFF707973),
+                      color: isDark
+                          ? const Color(0xFFD8CEBE)
+                          : const Color(0xFF707973),
                     ),
                   ),
                 ],
@@ -361,12 +418,16 @@ class _HomePageState extends State<HomePage> {
                 width: 36,
                 height: 36,
                 decoration: BoxDecoration(
-                  color: isDark ? const Color(0xFF1F241D) : const Color(0xFFF7F2E8),
+                  color: isDark
+                      ? const Color(0xFF1F241D)
+                      : const Color(0xFFF7F2E8),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(
                   Icons.calendar_month_outlined,
-                  color: isDark ? const Color(0xFFC9A15B) : const Color(0xFFC5A059),
+                  color: isDark
+                      ? const Color(0xFFC9A15B)
+                      : const Color(0xFFC5A059),
                   size: 19,
                 ),
               ),
@@ -393,7 +454,10 @@ class _HomePageState extends State<HomePage> {
       decoration: BoxDecoration(
         color: isDark ? const Color(0xFF262D24) : const Color(0xFFFFFDF9),
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: isDark ? const Color(0xFF353E32) : const Color(0xFFF3ECE0), width: 1.2),
+        border: Border.all(
+          color: isDark ? const Color(0xFF353E32) : const Color(0xFFF3ECE0),
+          width: 1.2,
+        ),
         boxShadow: [
           BoxShadow(
             color: isDark ? const Color(0x20000000) : const Color(0x0E000000),
@@ -409,7 +473,9 @@ class _HomePageState extends State<HomePage> {
             right: 0,
             top: 0,
             child: ClipRRect(
-              borderRadius: const BorderRadius.only(topRight: Radius.circular(24)),
+              borderRadius: const BorderRadius.only(
+                topRight: Radius.circular(24),
+              ),
               child: Opacity(
                 opacity: 0.18,
                 child: Image.asset(
@@ -432,9 +498,14 @@ class _HomePageState extends State<HomePage> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 6,
+                      ),
                       decoration: BoxDecoration(
-                        color: isDark ? const Color(0xFF1F241D) : const Color(0xFFF7F2E8),
+                        color: isDark
+                            ? const Color(0xFF1F241D)
+                            : const Color(0xFFF7F2E8),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Row(
@@ -443,7 +514,9 @@ class _HomePageState extends State<HomePage> {
                           Icon(
                             tagIcon,
                             size: 16,
-                            color: isDark ? const Color(0xFFC9A15B) : const Color(0xFF4E5B4E),
+                            color: isDark
+                                ? const Color(0xFFC9A15B)
+                                : const Color(0xFF4E5B4E),
                           ),
                           const SizedBox(width: 6),
                           Text(
@@ -452,7 +525,9 @@ class _HomePageState extends State<HomePage> {
                               fontFamily: 'Fustat',
                               fontSize: 13,
                               fontWeight: FontWeight.bold,
-                              color: isDark ? const Color(0xFFC9A15B) : const Color(0xFF4E5B4E),
+                              color: isDark
+                                  ? const Color(0xFFC9A15B)
+                                  : const Color(0xFF4E5B4E),
                             ),
                           ),
                         ],
@@ -471,7 +546,9 @@ class _HomePageState extends State<HomePage> {
                     fontFamily: 'Fustat',
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
-                    color: isDark ? const Color(0xFFF6F1E7) : const Color(0xFF1E281F),
+                    color: isDark
+                        ? const Color(0xFFF6F1E7)
+                        : const Color(0xFF1E281F),
                     height: 1.8,
                   ),
                 ),
@@ -488,8 +565,12 @@ class _HomePageState extends State<HomePage> {
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
                             colors: [
-                              isDark ? const Color(0x00C9A15B) : const Color(0x00C5A059),
-                              isDark ? const Color(0xFFC9A15B) : const Color(0xFFC5A059)
+                              isDark
+                                  ? const Color(0x00C9A15B)
+                                  : const Color(0x00C5A059),
+                              isDark
+                                  ? const Color(0xFFC9A15B)
+                                  : const Color(0xFFC5A059),
                             ],
                           ),
                         ),
@@ -499,7 +580,9 @@ class _HomePageState extends State<HomePage> {
                         child: Icon(
                           Icons.auto_awesome,
                           size: 14,
-                          color: isDark ? const Color(0xFFC9A15B) : const Color(0xFFC5A059),
+                          color: isDark
+                              ? const Color(0xFFC9A15B)
+                              : const Color(0xFFC5A059),
                         ),
                       ),
                       Container(
@@ -508,8 +591,12 @@ class _HomePageState extends State<HomePage> {
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
                             colors: [
-                              isDark ? const Color(0xFFC9A15B) : const Color(0xFFC5A059),
-                              isDark ? const Color(0x00C9A15B) : const Color(0x00C5A059)
+                              isDark
+                                  ? const Color(0xFFC9A15B)
+                                  : const Color(0xFFC5A059),
+                              isDark
+                                  ? const Color(0x00C9A15B)
+                                  : const Color(0x00C5A059),
                             ],
                           ),
                         ),
@@ -528,7 +615,9 @@ class _HomePageState extends State<HomePage> {
                     fontFamily: 'Fustat',
                     fontSize: 12,
                     fontWeight: FontWeight.w500,
-                    color: isDark ? const Color(0xFFD8CEBE) : const Color(0xFF707973),
+                    color: isDark
+                        ? const Color(0xFFD8CEBE)
+                        : const Color(0xFF707973),
                   ),
                 ),
 
@@ -540,12 +629,13 @@ class _HomePageState extends State<HomePage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       // Left Action (Favorite / Bookmark)
-                      if (leftAction != null) leftAction else const SizedBox.shrink(),
+                      if (leftAction != null)
+                        leftAction
+                      else
+                        const SizedBox.shrink(),
 
                       // Right Actions (Copy, Share)
-                      Row(
-                        children: rightActions,
-                      ),
+                      Row(children: rightActions),
                     ],
                   ),
                 ],
@@ -558,7 +648,12 @@ class _HomePageState extends State<HomePage> {
   }
 
   /// Helper Action Button Icon Container
-  Widget _buildActionButton(BuildContext context, IconData icon, VoidCallback onTap, {Color? iconColor}) {
+  Widget _buildActionButton(
+    BuildContext context,
+    IconData icon,
+    VoidCallback onTap, {
+    Color? iconColor,
+  }) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return InkWell(
       onTap: onTap,
@@ -569,69 +664,76 @@ class _HomePageState extends State<HomePage> {
         decoration: BoxDecoration(
           color: isDark ? const Color(0xFF1F241D) : const Color(0xFFF7F2E8),
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: isDark ? const Color(0xFF353E32) : const Color(0xFFEADFCF), width: 1),
+          border: Border.all(
+            color: isDark ? const Color(0xFF353E32) : const Color(0xFFEADFCF),
+            width: 1,
+          ),
         ),
         child: Icon(
           icon,
           size: 20,
-          color: iconColor ?? (isDark ? const Color(0xFFD8CEBE) : const Color(0xFF4E5B4E)),
+          color:
+              iconColor ??
+              (isDark ? const Color(0xFFD8CEBE) : const Color(0xFF4E5B4E)),
         ),
       ),
     );
   }
 
-  /// Single Centered Premium Tasbeeh Card (75% Screen Width)
-  /// Uses the exact same card style, colors, border, rounded corners, shadow, typography, and icon style as app category cards.
+  /// Single Centered Premium Circular Tasbeeh Button
   Widget _buildTasbeehCard(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final screenWidth = MediaQuery.of(context).size.width;
 
     return Center(
-      child: SizedBox(
-        width: screenWidth * 0.75,
-        child: AnimatedCardTap(
-          onTap: () {
-            Navigator.of(context).push(
-              AppPageRoute.create(const TasbeehPage()),
-            );
-          },
-          child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
-            decoration: BoxDecoration(
-              color: isDark ? const Color(0xFF262D24) : const Color(0xFFFFFDF9),
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(
-                color: isDark ? const Color(0xFF353E32) : const Color(0xFFF3ECE0),
-                width: 1.2,
+      child: AnimatedCardTap(
+        onTap: () {
+          Navigator.of(context).push(AppPageRoute.create(const TasbeehPage()));
+        },
+        child: Container(
+          width: 120,
+          height: 120,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: isDark ? const Color(0xFF262D24) : const Color(0xFFFFFDF9),
+            border: Border.all(
+              color: isDark
+                  ? const Color(0xFFC9A15B).withValues(alpha: 0.6)
+                  : const Color(0xFFC5A059).withValues(alpha: 0.6),
+              width: 2.0,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: isDark
+                    ? const Color(0x30000000)
+                    : const Color(0x12000000),
+                blurRadius: 16,
+                offset: const Offset(0, 6),
               ),
-              boxShadow: [
-                BoxShadow(
-                  color: isDark ? const Color(0x20000000) : const Color(0x0A000000),
-                  blurRadius: 12,
-                  offset: const Offset(0, 4),
+            ],
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.grain_outlined,
+                size: 34,
+                color: isDark
+                    ? const Color(0xFFC9A15B)
+                    : const Color(0xFF4E5B4E),
+              ),
+              const SizedBox(height: 6),
+              Text(
+                'المسبحة',
+                style: TextStyle(
+                  fontFamily: 'Fustat',
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: isDark
+                      ? const Color(0xFFF6F1E7)
+                      : const Color(0xFF1E281F),
                 ),
-              ],
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.grain_outlined,
-                  size: 30,
-                  color: isDark ? const Color(0xFFC9A15B) : const Color(0xFF4E5B4E),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  'المسبحة',
-                  style: TextStyle(
-                    fontFamily: 'Fustat',
-                    fontSize: 13.5,
-                    fontWeight: FontWeight.bold,
-                    color: isDark ? const Color(0xFFF6F1E7) : const Color(0xFF1E281F),
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
@@ -666,7 +768,9 @@ class _HeaderLogoRow extends StatelessWidget {
                 fontFamily: 'Fustat',
                 fontSize: 17,
                 fontWeight: FontWeight.w800,
-                color: isDark ? const Color(0xFFF6F1E7) : const Color(0xFF4E5B4E),
+                color: isDark
+                    ? const Color(0xFFF6F1E7)
+                    : const Color(0xFF4E5B4E),
               ),
             ),
           ],
@@ -680,24 +784,36 @@ class _HeaderLogoRow extends StatelessWidget {
             Row(
               children: [
                 _buildTopIconButton(context, Icons.search_rounded, () {
-                  Navigator.of(context).push(
-                    AppPageRoute.create(const GlobalSearchPage()),
-                  );
+                  Navigator.of(
+                    context,
+                  ).push(AppPageRoute.create(const GlobalSearchPage()));
                 }),
                 const SizedBox(width: 8),
-                _buildTopIconButton(context, Icons.bookmark_border_rounded, () {}),
+                _buildTopIconButton(
+                  context,
+                  Icons.bookmark_border_rounded,
+                  () {},
+                ),
               ],
             ),
 
             // Notification Bell (Right side in RTL view)
-            _buildTopIconButton(context, Icons.notifications_none_rounded, () {}),
+            _buildTopIconButton(
+              context,
+              Icons.notifications_none_rounded,
+              () {},
+            ),
           ],
         ),
       ],
     );
   }
 
-  Widget _buildTopIconButton(BuildContext context, IconData icon, VoidCallback onTap) {
+  Widget _buildTopIconButton(
+    BuildContext context,
+    IconData icon,
+    VoidCallback onTap,
+  ) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return InkWell(
       onTap: onTap,
@@ -708,7 +824,10 @@ class _HeaderLogoRow extends StatelessWidget {
         decoration: BoxDecoration(
           color: isDark ? const Color(0xFF262D24) : const Color(0xFFFFFDF9),
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: isDark ? const Color(0xFF353E32) : const Color(0xFFEADFCF), width: 1.2),
+          border: Border.all(
+            color: isDark ? const Color(0xFF353E32) : const Color(0xFFEADFCF),
+            width: 1.2,
+          ),
           boxShadow: [
             BoxShadow(
               color: isDark ? const Color(0x20000000) : const Color(0x0A000000),

@@ -97,7 +97,9 @@ class _AzkarCategoriesPageState extends State<AzkarCategoriesPage> {
                 fontFamily: 'Fustat',
                 fontSize: 28,
                 fontWeight: FontWeight.bold,
-                color: isDark ? const Color(0xFFF6F1E7) : AppColors.primaryLight,
+                color: isDark
+                    ? const Color(0xFFF6F1E7)
+                    : AppColors.primaryLight,
               ),
             ),
             const SizedBox(height: 4),
@@ -107,7 +109,9 @@ class _AzkarCategoriesPageState extends State<AzkarCategoriesPage> {
                 fontFamily: 'Fustat',
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
-                color: isDark ? const Color(0xFFD8CEBE) : const Color(0xFF707973),
+                color: isDark
+                    ? const Color(0xFFD8CEBE)
+                    : const Color(0xFF707973),
               ),
             ),
           ],
@@ -127,10 +131,17 @@ class _AzkarCategoriesPageState extends State<AzkarCategoriesPage> {
             decoration: BoxDecoration(
               color: isDark ? const Color(0xFF262D24) : const Color(0xFFFFFDF9),
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: isDark ? const Color(0xFF353E32) : const Color(0xFFEADFCF), width: 1.2),
+              border: Border.all(
+                color: isDark
+                    ? const Color(0xFF353E32)
+                    : const Color(0xFFEADFCF),
+                width: 1.2,
+              ),
               boxShadow: [
                 BoxShadow(
-                  color: isDark ? const Color(0x20000000) : const Color(0x0A000000),
+                  color: isDark
+                      ? const Color(0x20000000)
+                      : const Color(0x0A000000),
                   blurRadius: 10,
                   offset: const Offset(0, 3),
                 ),
@@ -234,110 +245,138 @@ class _AzkarCategoriesPageState extends State<AzkarCategoriesPage> {
               );
             },
             child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
-            decoration: BoxDecoration(
-              color: isDark ? const Color(0xFF262D24) : const Color(0xFFFFFDF9),
-              borderRadius: BorderRadius.circular(22),
-              border: Border.all(color: isDark ? const Color(0xFF353E32) : const Color(0xFFF3ECE0), width: 1.2),
-              boxShadow: [
-                BoxShadow(
-                  color: isDark ? const Color(0x20000000) : const Color(0x0C000000),
-                  blurRadius: 14,
-                  offset: const Offset(0, 5),
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
+              decoration: BoxDecoration(
+                color: isDark
+                    ? const Color(0xFF262D24)
+                    : const Color(0xFFFFFDF9),
+                borderRadius: BorderRadius.circular(22),
+                border: Border.all(
+                  color: isDark
+                      ? const Color(0xFF353E32)
+                      : const Color(0xFFF3ECE0),
+                  width: 1.2,
                 ),
-              ],
-            ),
-            child: Stack(
-              children: [
-                // Corner Watermark Olive Leaf Graphic
-                Positioned(
-                  right: 0,
-                  top: 0,
-                  child: ClipRRect(
-                    borderRadius: const BorderRadius.only(topRight: Radius.circular(22)),
-                    child: Opacity(
-                      opacity: 0.14,
-                      child: Image.asset(
-                        'assets/images/olivebranches.png',
-                        width: 75,
-                        height: 75,
-                        fit: BoxFit.cover,
+                boxShadow: [
+                  BoxShadow(
+                    color: isDark
+                        ? const Color(0x20000000)
+                        : const Color(0x0C000000),
+                    blurRadius: 14,
+                    offset: const Offset(0, 5),
+                  ),
+                ],
+              ),
+              child: Stack(
+                children: [
+                  // Corner Watermark Olive Leaf Graphic
+                  Positioned(
+                    right: 0,
+                    top: 0,
+                    child: ClipRRect(
+                      borderRadius: const BorderRadius.only(
+                        topRight: Radius.circular(22),
+                      ),
+                      child: Opacity(
+                        opacity: 0.14,
+                        child: Image.asset(
+                          'assets/images/olivebranches.png',
+                          width: 75,
+                          height: 75,
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                   ),
-                ),
 
-                Row(
-                  children: [
-                    // Circular Icon Container
-                    Container(
-                      width: 48,
-                      height: 48,
-                      decoration: BoxDecoration(
-                        color: isDark ? const Color(0xFF1F241D) : const Color(0xFFF7F2E8),
-                        shape: BoxShape.circle,
-                        border: Border.all(color: isDark ? const Color(0xFF353E32) : const Color(0xFFEADFCF), width: 1),
-                      ),
-                      child: Icon(
-                        category['icon'] as IconData,
-                        size: 24,
-                        color: isDark ? const Color(0xFFC9A15B) : const Color(0xFF4E5B4E),
-                      ),
-                    ),
-
-                    const SizedBox(width: 14),
-
-                    // Title & Description Column
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            category['title'] as String,
-                            style: TextStyle(
-                              fontFamily: 'Fustat',
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: isDark ? const Color(0xFFF6F1E7) : const Color(0xFF1E281F),
-                            ),
+                  Row(
+                    children: [
+                      // Circular Icon Container
+                      Container(
+                        width: 48,
+                        height: 48,
+                        decoration: BoxDecoration(
+                          color: isDark
+                              ? const Color(0xFF1F241D)
+                              : const Color(0xFFF7F2E8),
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: isDark
+                                ? const Color(0xFF353E32)
+                                : const Color(0xFFEADFCF),
+                            width: 1,
                           ),
-                          const SizedBox(height: 3),
-                          Text(
-                            category['desc'] as String,
-                            style: TextStyle(
-                              fontFamily: 'Fustat',
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500,
-                              color: isDark ? const Color(0xFFD8CEBE) : const Color(0xFF707973),
+                        ),
+                        child: Icon(
+                          category['icon'] as IconData,
+                          size: 24,
+                          color: isDark
+                              ? const Color(0xFFC9A15B)
+                              : const Color(0xFF4E5B4E),
+                        ),
+                      ),
+
+                      const SizedBox(width: 14),
+
+                      // Title & Description Column
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              category['title'] as String,
+                              style: TextStyle(
+                                fontFamily: 'Fustat',
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: isDark
+                                    ? const Color(0xFFF6F1E7)
+                                    : const Color(0xFF1E281F),
+                              ),
                             ),
-                          ),
-                        ],
+                            const SizedBox(height: 3),
+                            Text(
+                              category['desc'] as String,
+                              style: TextStyle(
+                                fontFamily: 'Fustat',
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500,
+                                color: isDark
+                                    ? const Color(0xFFD8CEBE)
+                                    : const Color(0xFF707973),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
 
-                    const SizedBox(width: 8),
+                      const SizedBox(width: 8),
 
-                    // Navigation Chevron Arrow (RTL left pointing)
-                    Container(
-                      width: 32,
-                      height: 32,
-                      decoration: BoxDecoration(
-                        color: isDark ? const Color(0xFF1F241D) : const Color(0xFFF7F2E8),
-                        borderRadius: BorderRadius.circular(10),
+                      // Navigation Chevron Arrow (RTL left pointing)
+                      Container(
+                        width: 32,
+                        height: 32,
+                        decoration: BoxDecoration(
+                          color: isDark
+                              ? const Color(0xFF1F241D)
+                              : const Color(0xFFF7F2E8),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Icon(
+                          Icons.chevron_left_rounded,
+                          size: 20,
+                          color: isDark
+                              ? const Color(0xFFD8CEBE)
+                              : const Color(0xFF4E5B4E),
+                        ),
                       ),
-                      child: Icon(
-                        Icons.chevron_left_rounded,
-                        size: 20,
-                        color: isDark ? const Color(0xFFD8CEBE) : const Color(0xFF4E5B4E),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-      );
+        );
       },
     );
   }

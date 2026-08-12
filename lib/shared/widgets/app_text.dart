@@ -105,9 +105,13 @@ class AppText extends StatelessWidget {
         variant == AppTextVariant.bodyLarge ||
         variant == AppTextVariant.bodyMedium ||
         variant == AppTextVariant.bodySmall) {
-      defaultColor = isDark ? AppColors.textSecondaryDark : AppColors.textSecondaryLight; // Soft Gray
+      defaultColor = isDark
+          ? AppColors.textSecondaryDark
+          : AppColors.textSecondaryLight; // Soft Gray
     } else {
-      defaultColor = isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight; // Dark Olive
+      defaultColor = isDark
+          ? AppColors.textPrimaryDark
+          : AppColors.textPrimaryLight; // Dark Olive
     }
 
     final resolvedStyle = style.copyWith(
