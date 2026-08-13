@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../config/theme/app_assets.dart';
 
 /// Reusable full-screen viewport background widget for the "ذكر" application.
 /// Ensures decorative ornaments and radial gradients stay fixed to the screen viewport
@@ -43,7 +44,7 @@ class AppBackground extends StatelessWidget {
                   child: Opacity(
                     opacity: isDark ? 0.32 : 0.35,
                     child: Image.asset(
-                      'assets/images/gold.png',
+                      AppAssets.gold,
                       fit: BoxFit.cover,
                       filterQuality: FilterQuality.low,
                     ),
@@ -55,7 +56,7 @@ class AppBackground extends StatelessWidget {
                   child: Opacity(
                     opacity: isDark ? 0.42 : 0.45,
                     child: Image.asset(
-                      'assets/images/olivebranches.png',
+                      AppAssets.oliveBranches,
                       fit: BoxFit.cover,
                       filterQuality: FilterQuality.low,
                     ),

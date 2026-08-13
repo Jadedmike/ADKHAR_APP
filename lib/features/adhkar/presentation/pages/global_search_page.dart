@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../../../../config/theme/app_assets.dart';
 import '../../../../config/theme/app_colors.dart';
 import '../../../../config/theme/app_page_transitions.dart';
 import '../../../../core/utils/arabic_search_helper.dart';
@@ -55,34 +56,30 @@ class _GlobalSearchPageState extends State<GlobalSearchPage> {
 
   final List<Map<String, String>> _jsonSources = [
     {
-      'path': 'assets/json/morning.json',
-      'alt': 'assets/json/adhkar_morning.json',
+      'path': AppAssets.jsonMorning,
+      'alt': AppAssets.jsonAdhkarMorning,
       'title': 'أذكار الصباح',
     },
     {
-      'path': 'assets/json/evening.json',
-      'alt': 'assets/json/adhkar_evening.json',
+      'path': AppAssets.jsonEvening,
+      'alt': AppAssets.jsonAdhkarEvening,
       'title': 'أذكار المساء',
     },
+    {'path': AppAssets.jsonAfterPrayer, 'alt': '', 'title': 'أذكار بعد الصلاة'},
+    {'path': AppAssets.jsonSleep, 'alt': '', 'title': 'أذكار النوم'},
+    {'path': AppAssets.jsonTravel, 'alt': '', 'title': 'أذكار السفر'},
     {
-      'path': 'assets/json/after_prayer.json',
-      'alt': '',
-      'title': 'أذكار بعد الصلاة',
-    },
-    {'path': 'assets/json/sleep.json', 'alt': '', 'title': 'أذكار النوم'},
-    {'path': 'assets/json/travel.json', 'alt': '', 'title': 'أذكار السفر'},
-    {
-      'path': 'assets/json/quran_duas.json',
+      'path': AppAssets.jsonQuranDuas,
       'alt': '',
       'title': 'أدعية من القرآن الكريم',
     },
     {
-      'path': 'assets/json/prophetic_duas.json',
+      'path': AppAssets.jsonPropheticDuas,
       'alt': '',
       'title': 'أدعية من السنة النبوية',
     },
     {
-      'path': 'assets/json/forgiveness_duas.json',
+      'path': AppAssets.jsonForgivenessDuas,
       'alt': '',
       'title': 'أدعية الاستغفار والتوبة',
     },
@@ -459,10 +456,7 @@ class _GlobalSearchPageState extends State<GlobalSearchPage> {
                   ),
                 ],
               ),
-              child: Image.asset(
-                'assets/images/logo2.png',
-                fit: BoxFit.contain,
-              ),
+              child: Image.asset(AppAssets.logo2, fit: BoxFit.contain),
             ),
             const SizedBox(height: 18),
             Text(
@@ -544,10 +538,7 @@ class _GlobalSearchPageState extends State<GlobalSearchPage> {
                     width: 1.5,
                   ),
                 ),
-                child: Image.asset(
-                  'assets/images/logo2.png',
-                  fit: BoxFit.contain,
-                ),
+                child: Image.asset(AppAssets.logo2, fit: BoxFit.contain),
               ),
 
               const SizedBox(height: 22),
@@ -671,7 +662,7 @@ class _GlobalSearchPageState extends State<GlobalSearchPage> {
                 child: Opacity(
                   opacity: 0.14,
                   child: Image.asset(
-                    'assets/images/olivebranches.png',
+                    AppAssets.oliveBranches,
                     width: 75,
                     height: 75,
                     fit: BoxFit.cover,

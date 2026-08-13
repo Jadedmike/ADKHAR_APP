@@ -4,6 +4,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'about_page.dart';
 import 'contact_us_page.dart';
 import 'privacy_policy_page.dart';
+import '../../../../config/theme/app_assets.dart';
 import '../../../../config/theme/app_colors.dart';
 import '../../../../config/theme/app_page_transitions.dart';
 import '../../../../shared/widgets/app_background.dart';
@@ -865,7 +866,7 @@ class _SettingsPageState extends State<SettingsPage> {
             child: Opacity(
               opacity: 0.25,
               child: Image.asset(
-                'assets/images/gold.png',
+                AppAssets.gold,
                 width: 70,
                 height: 70,
                 fit: BoxFit.cover,

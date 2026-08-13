@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../../../../config/theme/app_assets.dart';
 import '../../../../config/theme/app_colors.dart';
 import '../../../../config/theme/app_page_transitions.dart';
 import '../../../../shared/widgets/animated_card_tap.dart';
@@ -42,10 +43,10 @@ class _CategoryListPageState extends State<CategoryListPage> {
     final String requestedPath = widget.jsonAssetPath;
     final List<String> candidatePaths = [
       requestedPath,
-      if (requestedPath.contains('morning')) 'assets/json/adhkar_morning.json',
-      if (requestedPath.contains('morning')) 'assets/json/morning.json',
-      if (requestedPath.contains('evening')) 'assets/json/adhkar_evening.json',
-      if (requestedPath.contains('evening')) 'assets/json/evening.json',
+      if (requestedPath.contains('morning')) AppAssets.jsonAdhkarMorning,
+      if (requestedPath.contains('morning')) AppAssets.jsonMorning,
+      if (requestedPath.contains('evening')) AppAssets.jsonAdhkarEvening,
+      if (requestedPath.contains('evening')) AppAssets.jsonEvening,
     ];
 
     for (final path in candidatePaths) {
@@ -66,31 +67,9 @@ class _CategoryListPageState extends State<CategoryListPage> {
       }
     }
 
-    // Fallback default list if specific JSON is unavailable
+    // If specific JSON is unavailable, set empty list so unavailable state is shown
     setState(() {
-      _dhikrItems = [
-        {
-          "id": 1,
-          "text":
-              "أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ لاَ إِلَهَ إِلاَّ اللَّهُ، وَحْدَهُ لاَ شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ.",
-          "count": 1,
-          "source": "صحيح مسلم",
-        },
-        {
-          "id": 2,
-          "text":
-              "اللَّهُمَّ بِكَ أَصْبَحْنَا، وَبِكَ أَمْسَيْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ، وَإِلَيْكَ النُّشُورُ.",
-          "count": 1,
-          "source": "سنن الترمذي",
-        },
-        {
-          "id": 3,
-          "text":
-              "سُبْحَانَ اللَّهِ وَبِحَمْدِهِ: عَدَدَ خَلْقِهِ، وَرِضَا نَفْسِهِ، وَزِنَةَ عَرْشِهِ، وَمِدَادَ كَلِمَاتِهِ.",
-          "count": 3,
-          "source": "صحيح مسلم",
-        },
-      ];
+      _dhikrItems = [];
       _isLoading = false;
     });
   }
@@ -259,6 +238,9 @@ class _CategoryListPageState extends State<CategoryListPage> {
 
   /// Build list of Dhikr Cards in exact order from JSON
   Widget _buildDhikrList() {
+    if (_dhikrItems.isEmpty) {
+      return _buildEmptyState(context);
+    }
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return ListView.separated(
       shrinkWrap: true,
@@ -328,7 +310,7 @@ class _CategoryListPageState extends State<CategoryListPage> {
                       child: Opacity(
                         opacity: 0.14,
                         child: Image.asset(
-                          'assets/images/olivebranches.png',
+                          AppAssets.oliveBranches,
                           width: 75,
                           height: 75,
                           fit: BoxFit.cover,
@@ -488,6 +470,80 @@ class _CategoryListPageState extends State<CategoryListPage> {
           ),
         );
       },
+    );
+  }
+
+  /// Displays a clear, elegant unavailable state when category content is not present
+  Widget _buildEmptyState(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 48, horizontal: 24),
+      margin: const EdgeInsets.only(top: 10),
+      decoration: BoxDecoration(
+        color: isDark ? const Color(0xFF262D24) : const Color(0xFFFFFDF9),
+        borderRadius: BorderRadius.circular(22),
+        border: Border.all(
+          color: isDark ? const Color(0xFF353E32) : const Color(0xFFEADFCF),
+          width: 1.2,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: isDark ? const Color(0x20000000) : const Color(0x0A000000),
+            blurRadius: 14,
+            offset: const Offset(0, 5),
+          ),
+        ],
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            width: 68,
+            height: 68,
+            decoration: BoxDecoration(
+              color: isDark ? const Color(0xFF1F241D) : const Color(0xFFF8F4EC),
+              shape: BoxShape.circle,
+              border: Border.all(
+                color: isDark
+                    ? const Color(0xFF353E32)
+                    : const Color(0xFFEADFCF),
+                width: 1.5,
+              ),
+            ),
+            child: Icon(
+              Icons.hourglass_empty_rounded,
+              size: 30,
+              color: isDark ? const Color(0xFFC9A15B) : AppColors.primaryLight,
+            ),
+          ),
+          const SizedBox(height: 18),
+          Text(
+            'هذا القسم غير متوفر حالياً',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontFamily: 'Fustat',
+              fontSize: 17.5,
+              fontWeight: FontWeight.bold,
+              color: isDark ? const Color(0xFFF6F1E7) : AppColors.primaryLight,
+              height: 1.5,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'سيتم إضافة أذكار هذا القسم في التحديثات القادمة بإذن الله.',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontFamily: 'Fustat',
+              fontSize: 13.5,
+              fontWeight: FontWeight.w500,
+              color: isDark ? const Color(0xFFD8CEBE) : const Color(0xFF707973),
+              height: 1.6,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

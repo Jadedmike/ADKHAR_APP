@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'home_page.dart';
 import 'single_dhikr_page.dart';
 import '../managers/settings_manager.dart';
+import '../../../../config/theme/app_assets.dart';
 import '../../../../config/theme/app_colors.dart';
 import '../../../../config/theme/app_spacing.dart';
 import '../../../../config/theme/app_radius.dart';
@@ -67,16 +68,13 @@ class SplashPage extends StatelessWidget {
           Positioned.fill(
             child: Opacity(
               opacity: isDark ? 0.45 : 0.65,
-              child: Image.asset('assets/images/gold.png', fit: BoxFit.cover),
+              child: Image.asset(AppAssets.gold, fit: BoxFit.cover),
             ),
           ),
 
           // 4. Olive Branches Corner Ornaments
           Positioned.fill(
-            child: Image.asset(
-              'assets/images/olivebranches.png',
-              fit: BoxFit.cover,
-            ),
+            child: Image.asset(AppAssets.oliveBranches, fit: BoxFit.cover),
           ),
 
           // 5. Main Content Stack
@@ -101,7 +99,7 @@ class SplashPage extends StatelessWidget {
 
                               // Main Logo Asset (Enlarged ~15%)
                               Image.asset(
-                                'assets/images/logo2.png',
+                                AppAssets.logo2,
                                 width: 305,
                                 height: 305,
                                 fit: BoxFit.contain,
@@ -144,7 +142,7 @@ class SplashPage extends StatelessWidget {
                                       horizontal: 10,
                                     ),
                                     child: Image.asset(
-                                      'assets/images/gold.png',
+                                      AppAssets.gold,
                                       width: 22,
                                       height: 22,
                                       fit: BoxFit.contain,

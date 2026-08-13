@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../config/theme/app_assets.dart';
 import '../../../../config/theme/app_colors.dart';
 import '../../../../config/theme/app_page_transitions.dart';
 import '../../../../shared/widgets/animated_card_tap.dart';
@@ -154,7 +155,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
                 width: 1.5,
               ),
             ),
-            child: Image.asset('assets/images/logo2.png', fit: BoxFit.contain),
+            child: Image.asset(AppAssets.logo2, fit: BoxFit.contain),
           ),
 
           const SizedBox(height: 22),
@@ -258,7 +259,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
                       child: Opacity(
                         opacity: 0.14,
                         child: Image.asset(
-                          'assets/images/olivebranches.png',
+                          AppAssets.oliveBranches,
                           width: 75,
                           height: 75,
                           fit: BoxFit.cover,

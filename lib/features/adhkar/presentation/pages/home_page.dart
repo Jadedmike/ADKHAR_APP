@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../config/theme/app_assets.dart';
 import '../../../../config/theme/app_colors.dart';
 import '../../../../config/theme/app_page_transitions.dart';
 import '../../../../core/utils/dhikr_copy_helper.dart';
@@ -479,7 +480,7 @@ class _HomePageState extends State<HomePage> {
               child: Opacity(
                 opacity: 0.18,
                 child: Image.asset(
-                  'assets/images/olivebranches.png',
+                  AppAssets.oliveBranches,
                   width: 90,
                   height: 90,
                   fit: BoxFit.cover,
@@ -756,7 +757,7 @@ class _HeaderLogoRow extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Image.asset(
-              'assets/images/logo2.png',
+              AppAssets.logo2,
               width: 58,
               height: 58,
               fit: BoxFit.contain,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../config/theme/app_assets.dart';
 import '../../../../config/theme/app_colors.dart';
 import '../../../../config/theme/app_page_transitions.dart';
 import '../../../../shared/widgets/animated_card_tap.dart';
@@ -166,61 +167,61 @@ class _AzkarCategoriesPageState extends State<AzkarCategoriesPage> {
         'title': 'أذكار الصباح',
         'desc': 'أذكار وأدعية يبدأ بها المسلم يومه',
         'icon': Icons.wb_sunny_outlined,
-        'jsonPath': 'assets/json/adhkar_morning.json',
+        'jsonPath': AppAssets.jsonAdhkarMorning,
       },
       {
         'title': 'أذكار المساء',
         'desc': 'حصن المسلم وتحصينه في المساء',
         'icon': Icons.nights_stay_outlined,
-        'jsonPath': 'assets/json/adhkar_evening.json',
+        'jsonPath': AppAssets.jsonAdhkarEvening,
       },
       {
         'title': 'أذكار بعد الصلاة',
         'desc': 'الأدعية والأذكار الواردة عقب الصلاة',
         'icon': Icons.mosque_outlined,
-        'jsonPath': 'assets/json/after_prayer.json',
+        'jsonPath': AppAssets.jsonAfterPrayer,
       },
       {
         'title': 'أذكار النوم',
         'desc': 'أذكار الطهارة والاستلقاء للنوم',
         'icon': Icons.bedtime_outlined,
-        'jsonPath': 'assets/json/sleep.json',
+        'jsonPath': AppAssets.jsonSleep,
       },
       {
         'title': 'أذكار المنزل',
         'desc': 'أذكار الدخول والخروج من المنزل',
         'icon': Icons.other_houses_outlined,
-        'jsonPath': 'assets/json/morning.json',
+        'jsonPath': AppAssets.jsonHome,
       },
       {
         'title': 'أذكار السفر',
         'desc': 'دعاء ركوب الدابة وأدعية السفر',
         'icon': Icons.flight_takeoff_outlined,
-        'jsonPath': 'assets/json/travel.json',
+        'jsonPath': AppAssets.jsonTravel,
       },
       {
         'title': 'أذكار الطعام',
         'desc': 'أذكار ما قبل وبعد الطعام والشراب',
         'icon': Icons.restaurant_outlined,
-        'jsonPath': 'assets/json/morning.json',
+        'jsonPath': AppAssets.jsonFood,
       },
       {
         'title': 'أذكار اللباس',
         'desc': 'دعاء لبس الثوب الجديد وخلعه',
         'icon': Icons.checkroom_outlined,
-        'jsonPath': 'assets/json/morning.json',
+        'jsonPath': AppAssets.jsonClothing,
       },
       {
         'title': 'أذكار المسجد',
         'desc': 'أدعية الذهاب إلى المسجد والدخول والخروج',
         'icon': Icons.synagogue_outlined,
-        'jsonPath': 'assets/json/morning.json',
+        'jsonPath': AppAssets.jsonMosque,
       },
       {
         'title': 'جميع الأذكار',
         'desc': 'تصفح كافة أذكار وأدعية الكتاب والسنة',
         'icon': Icons.menu_book_outlined,
-        'jsonPath': 'assets/json/morning.json',
+        'jsonPath': AppAssets.jsonMorning,
       },
     ];
 
@@ -280,7 +281,7 @@ class _AzkarCategoriesPageState extends State<AzkarCategoriesPage> {
                       child: Opacity(
                         opacity: 0.14,
                         child: Image.asset(
-                          'assets/images/olivebranches.png',
+                          AppAssets.oliveBranches,
                           width: 75,
                           height: 75,
                           fit: BoxFit.cover,

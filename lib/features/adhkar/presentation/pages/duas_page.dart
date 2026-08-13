@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../config/theme/app_assets.dart';
 import '../../../../config/theme/app_colors.dart';
 import '../../../../config/theme/app_page_transitions.dart';
 import '../../../../shared/widgets/animated_card_tap.dart';
@@ -22,43 +23,43 @@ class _DuasPageState extends State<DuasPage> {
       'title': 'أدعية من القرآن الكريم',
       'desc': 'مجموعة مباركة من دعوات الأنبياء والصالحين في القرآن',
       'icon': Icons.menu_book_outlined,
-      'jsonPath': 'assets/json/quran_duas.json',
+      'jsonPath': AppAssets.jsonQuranDuas,
     },
     {
       'title': 'أدعية من السنة النبوية',
       'desc': 'الأدعية المأثورة عن النبي ﷺ في مختلف الأحوال',
       'icon': Icons.synagogue_outlined,
-      'jsonPath': 'assets/json/prophetic_duas.json',
+      'jsonPath': AppAssets.jsonPropheticDuas,
     },
     {
       'title': 'أدعية الاستغفار والتوبة',
       'desc': 'أدعية طلب العفو والرحمة والمغفرة',
       'icon': Icons.auto_awesome_outlined,
-      'jsonPath': 'assets/json/forgiveness_duas.json',
+      'jsonPath': AppAssets.jsonForgivenessDuas,
     },
     {
       'title': 'أدعية الرزق والبركة',
       'desc': 'سؤال الله البركة في العمر والمال والعمل',
       'icon': Icons.volunteer_activism_outlined,
-      'jsonPath': 'assets/json/quran_duas.json',
+      'jsonPath': AppAssets.jsonQuranDuas,
     },
     {
       'title': 'أدعية الوالدين والذرية',
       'desc': 'دعوات بر الوالدين وصلاح الأولاد والذرية',
       'icon': Icons.family_restroom_outlined,
-      'jsonPath': 'assets/json/quran_duas.json',
+      'jsonPath': AppAssets.jsonQuranDuas,
     },
     {
       'title': 'أدعية السفر والركوب',
       'desc': 'أدعية ركوب الدابة والدخول والخروج في السفر',
       'icon': Icons.flight_takeoff_outlined,
-      'jsonPath': 'assets/json/travel.json',
+      'jsonPath': AppAssets.jsonTravel,
     },
     {
       'title': 'أدعية الشفاء والعافية',
       'desc': 'دعاء عيادة المريض وسؤال الله الصحة والعافية',
       'icon': Icons.health_and_safety_outlined,
-      'jsonPath': 'assets/json/prophetic_duas.json',
+      'jsonPath': AppAssets.jsonPropheticDuas,
     },
   ];
 

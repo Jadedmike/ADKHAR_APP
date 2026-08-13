@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../config/theme/app_assets.dart';
 import '../../../../config/theme/app_colors.dart';
 import '../../../../shared/widgets/app_background.dart';
 import '../../../../shared/widgets/floating_bottom_nav_bar.dart';
@@ -49,7 +50,7 @@ class AboutPage extends StatelessWidget {
 
                             // App Logo
                             Image.asset(
-                              'assets/images/logo2.png',
+                              AppAssets.logo2,
                               width: 135,
                               height: 135,
                               fit: BoxFit.contain,

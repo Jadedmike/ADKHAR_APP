@@ -36,16 +36,11 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
-  go_router: ^17.3.0
-  flutter_riverpod: ^3.3.2
   google_fonts: ^8.2.0
   flutter_svg: ^2.3.0
   shared_preferences: ^2.5.5
   share_plus: ^10.1.4
   intl: ^0.20.2
-  equatable: ^2.1.0
-  freezed_annotation: ^3.1.0
-  json_annotation: ^4.12.0
   wakelock_plus: ^1.5.2
   url_launcher: ^6.3.2
 
@@ -59,9 +54,7 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^6.0.0
-  build_runner: ^2.15.1
-  freezed: ^3.2.5
-  json_serializable: ^6.14.0
+  flutter_launcher_icons: ^0.14.4
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -115,3 +108,13 @@ flutter:
           weight: 800
         - asset: assets/fonts/Fustat-ExtraBold.ttf
           weight: 700
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon/icon.png"
+  min_sdk_android: 21
+  remove_alpha_ios: true
+  background_color_ios: "#F8F4EC"
+  adaptive_icon_background: "#F8F4EC"
+  adaptive_icon_foreground: "assets/icon/icon.png"

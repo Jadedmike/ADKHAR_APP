@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
+import '../../../../config/theme/app_assets.dart';
 import '../../../../config/theme/app_colors.dart';
 import '../../../../core/utils/dhikr_copy_helper.dart';
 import '../../../../core/utils/dhikr_share_helper.dart';
@@ -803,7 +804,7 @@ class _SingleDhikrPageState extends State<SingleDhikrPage>
               child: Opacity(
                 opacity: 0.16,
                 child: Image.asset(
-                  'assets/images/olivebranches.png',
+                  AppAssets.oliveBranches,
                   width: 110,
                   height: 110,
                   fit: BoxFit.cover,
