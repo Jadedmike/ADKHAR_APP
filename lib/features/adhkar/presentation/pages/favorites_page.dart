@@ -105,7 +105,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
             Positioned(
               left: 16,
               right: 16,
-              bottom: 16,
+              bottom: 16 + MediaQuery.of(context).padding.bottom,
               child: const FloatingBottomNavBar(selectedIndex: 0),
             ),
           ],

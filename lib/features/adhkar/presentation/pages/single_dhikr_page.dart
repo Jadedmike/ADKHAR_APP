@@ -514,7 +514,7 @@ class _SingleDhikrPageState extends State<SingleDhikrPage>
             Positioned(
               left: 16,
               right: 16,
-              bottom: 16,
+              bottom: 16 + MediaQuery.of(context).padding.bottom,
               child: const FloatingBottomNavBar(selectedIndex: 3),
             ),
           ],
@@ -529,75 +529,7 @@ class _SingleDhikrPageState extends State<SingleDhikrPage>
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        // Left: Back Button (RTL back arrow)
-        InkWell(
-          onTap: () {
-            if (Navigator.of(context).canPop()) {
-              Navigator.of(context).pop();
-            } else {
-              Navigator.of(context).pushReplacement(
-                MaterialPageRoute(
-                  builder: (context) => const AzkarCategoriesPage(),
-                ),
-              );
-            }
-          },
-          borderRadius: BorderRadius.circular(16),
-          child: Container(
-            width: 42,
-            height: 42,
-            decoration: BoxDecoration(
-              color: isDark ? const Color(0xFF262D24) : const Color(0xFFFFFDF9),
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                color: isDark
-                    ? const Color(0xFF353E32)
-                    : const Color(0xFFEADFCF),
-                width: 1.2,
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: isDark
-                      ? const Color(0x20000000)
-                      : const Color(0x0A000000),
-                  blurRadius: 10,
-                  offset: const Offset(0, 3),
-                ),
-              ],
-            ),
-            child: Icon(
-              Icons.arrow_forward_ios_rounded,
-              size: 18,
-              color: isDark ? const Color(0xFFD8CEBE) : const Color(0xFF4E5B4E),
-            ),
-          ),
-        ),
-
-        // Center: Position Badge ("1 من 45")
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 7),
-          decoration: BoxDecoration(
-            color: isDark ? const Color(0xFF1F241D) : const Color(0xFFF0E8DA),
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(
-              color: isDark ? const Color(0xFF353E32) : const Color(0xFFEADFCF),
-              width: 1.2,
-            ),
-          ),
-          child: Text(
-            _isSectionCompleted
-                ? 'مكتمل'
-                : '${_currentIndex + 1} من $totalCount',
-            style: TextStyle(
-              fontFamily: 'Fustat',
-              fontSize: 13,
-              fontWeight: FontWeight.bold,
-              color: isDark ? const Color(0xFFF6F1E7) : const Color(0xFF4E5B4E),
-            ),
-          ),
-        ),
-
-        // Right: Bookmark & Share Buttons
+        // Physical Right: Bookmark, Copy, Share & Font Size Buttons
         Row(
           children: [
             ValueListenableBuilder<List<Map<String, dynamic>>>(
@@ -766,6 +698,74 @@ class _SingleDhikrPageState extends State<SingleDhikrPage>
               ),
             ),
           ],
+        ),
+
+        // Center: Position Badge ("1 من 45")
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
+          decoration: BoxDecoration(
+            color: isDark ? const Color(0xFF1F241D) : const Color(0xFFF0E8DA),
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(
+              color: isDark ? const Color(0xFF353E32) : const Color(0xFFEADFCF),
+              width: 1.2,
+            ),
+          ),
+          child: Text(
+            _isSectionCompleted
+                ? 'مكتمل'
+                : '${_currentIndex + 1} من $totalCount',
+            style: TextStyle(
+              fontFamily: 'Fustat',
+              fontSize: 13,
+              fontWeight: FontWeight.bold,
+              color: isDark ? const Color(0xFFF6F1E7) : const Color(0xFF4E5B4E),
+            ),
+          ),
+        ),
+
+        // Physical Left: Back Button
+        InkWell(
+          onTap: () {
+            if (Navigator.of(context).canPop()) {
+              Navigator.of(context).pop();
+            } else {
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (context) => const AzkarCategoriesPage(),
+                ),
+              );
+            }
+          },
+          borderRadius: BorderRadius.circular(16),
+          child: Container(
+            width: 42,
+            height: 42,
+            decoration: BoxDecoration(
+              color: isDark ? const Color(0xFF262D24) : const Color(0xFFFFFDF9),
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: isDark
+                    ? const Color(0xFF353E32)
+                    : const Color(0xFFEADFCF),
+                width: 1.2,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: isDark
+                      ? const Color(0x20000000)
+                      : const Color(0x0A000000),
+                  blurRadius: 10,
+                  offset: const Offset(0, 3),
+                ),
+              ],
+            ),
+            child: Icon(
+              Icons.arrow_back_ios_new_rounded,
+              size: 18,
+              color: isDark ? const Color(0xFFD8CEBE) : const Color(0xFF4E5B4E),
+            ),
+          ),
         ),
       ],
     );

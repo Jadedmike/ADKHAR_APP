@@ -5,8 +5,11 @@ import 'package:adhkar/features/adhkar/presentation/managers/favorites_manager.d
 import 'package:adhkar/features/adhkar/presentation/managers/settings_manager.dart';
 import 'package:adhkar/features/adhkar/presentation/pages/splash_page.dart';
 
+import 'package:intl/date_symbol_data_local.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await initializeDateFormatting('ar', null);
   await SettingsManager.init();
   await FavoritesManager.init();
   runApp(const AdhkarApp());
@@ -39,6 +42,14 @@ class AdhkarApp extends StatelessWidget {
           ],
 
           home: const SplashPage(),
+
+          builder: (context, child) {
+            return MediaQuery.withClampedTextScaling(
+              minScaleFactor: 0.9,
+              maxScaleFactor: 1.2,
+              child: child!,
+            );
+          },
         );
       },
     );

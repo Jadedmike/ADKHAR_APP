@@ -73,7 +73,7 @@ class _AzkarCategoriesPageState extends State<AzkarCategoriesPage> {
             Positioned(
               left: 16,
               right: 16,
-              bottom: 16,
+              bottom: 16 + MediaQuery.of(context).padding.bottom,
               child: const FloatingBottomNavBar(selectedIndex: 3),
             ),
           ],
@@ -89,36 +89,7 @@ class _AzkarCategoriesPageState extends State<AzkarCategoriesPage> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'الأذكار',
-              style: TextStyle(
-                fontFamily: 'Fustat',
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-                color: isDark
-                    ? const Color(0xFFF6F1E7)
-                    : AppColors.primaryLight,
-              ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              'اختر القسم الذي ترغب بقراءته',
-              style: TextStyle(
-                fontFamily: 'Fustat',
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-                color: isDark
-                    ? const Color(0xFFD8CEBE)
-                    : const Color(0xFF707973),
-              ),
-            ),
-          ],
-        ),
-
-        // Search Button
+        // Search Button (Physical Right)
         InkWell(
           onTap: () {
             Navigator.of(context).push(
@@ -154,6 +125,36 @@ class _AzkarCategoriesPageState extends State<AzkarCategoriesPage> {
               color: isDark ? const Color(0xFFD8CEBE) : const Color(0xFF4E5B4E),
             ),
           ),
+        ),
+
+        // Title & Subtitle Column (Physical Left)
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'الأذكار',
+              style: TextStyle(
+                fontFamily: 'Fustat',
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+                color: isDark
+                    ? const Color(0xFFF6F1E7)
+                    : AppColors.primaryLight,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              'اختر القسم الذي ترغب بقراءته',
+              style: TextStyle(
+                fontFamily: 'Fustat',
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                color: isDark
+                    ? const Color(0xFFD8CEBE)
+                    : const Color(0xFF707973),
+              ),
+            ),
+          ],
         ),
       ],
     );

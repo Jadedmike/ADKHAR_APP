@@ -499,7 +499,7 @@ class _SettingsPageState extends State<SettingsPage> {
             Positioned(
               left: 16,
               right: 16,
-              bottom: 16,
+              bottom: 16 + MediaQuery.of(context).padding.bottom,
               child: const FloatingBottomNavBar(selectedIndex: 4),
             ),
           ],
@@ -821,7 +821,7 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
           const SizedBox(height: 10),
           Text(
-            'نسأل الله أن يجعل هذا العمل صدقةً جاريةً عن روح المرحوم والد سلمى الحيحي الحسن الحيحي ، وأن يتقبله صدقةً عن سلمى الحيحي، وأن ينفع به كل من قرأ ذكرًا أو دعا بدعاء.',
+            'نسأل الله أن يجعل هذا العمل صدقةً جاريةً عن روح المرحوم الحسن الحيحي ، وأن يتقبله صدقةً عن كل من ساهم بتطوير هذا التطبيق ، وأن ينفع به كل من قرأ ذكرًا أو دعا بدعاء.',
             textAlign: TextAlign.center,
             style: TextStyle(
               fontFamily: 'Fustat',

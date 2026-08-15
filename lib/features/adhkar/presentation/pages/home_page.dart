@@ -8,6 +8,10 @@ import '../../../../shared/widgets/animated_card_tap.dart';
 import '../../../../shared/widgets/app_background.dart';
 import '../../../../shared/widgets/floating_bottom_nav_bar.dart';
 import '../managers/favorites_manager.dart';
+import '../managers/settings_manager.dart';
+import 'package:intl/intl.dart' hide TextDirection;
+import 'package:hijri/hijri_calendar.dart';
+import 'favorites_page.dart';
 import 'global_search_page.dart';
 import 'tasbeeh_page.dart';
 
@@ -204,6 +208,7 @@ class _HomePageState extends State<HomePage> {
                               valueListenable: FavoritesManager.favoriteDhikrs,
                               builder: (context, favs, child) {
                                 const itemData = {
+                                  'categoryTitle': 'آية عشوائية',
                                   'text':
                                       '﴿ أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ ﴾',
                                   'source': 'سورة الرعد - الآية 28',
@@ -228,6 +233,9 @@ class _HomePageState extends State<HomePage> {
                                       context,
                                       itemData,
                                     ),
+                                    iconColor: isFav
+                                        ? const Color(0xFFC5A059)
+                                        : null,
                                   ),
                                   rightActions: [
                                     _buildActionButton(
@@ -301,7 +309,7 @@ class _HomePageState extends State<HomePage> {
             Positioned(
               left: 16,
               right: 16,
-              bottom: 16,
+              bottom: 16 + MediaQuery.of(context).padding.bottom,
               child: const FloatingBottomNavBar(selectedIndex: 2),
             ),
           ],
@@ -319,6 +327,64 @@ class _HomePageState extends State<HomePage> {
       return 'نهارك سعيد';
     } else {
       return 'مساء الخير';
+    }
+  }
+
+  /// Formats current date to dynamic Hijri string (e.g. "الجمعة 28 صفر 1448 هـ")
+  String _getHijriDateString() {
+    try {
+      HijriCalendar.setLocal('ar');
+      final now = DateTime.now();
+      final hDate = HijriCalendar.fromDate(now);
+      String weekdayName;
+      try {
+        weekdayName = DateFormat('EEEE', 'ar').format(now);
+      } catch (_) {
+        const weekdaysAr = [
+          'الإثنين',
+          'الثلاثاء',
+          'الأربعاء',
+          'الخميس',
+          'الجمعة',
+          'السبت',
+          'الأحد',
+        ];
+        weekdayName = weekdaysAr[now.weekday - 1];
+      }
+      return '$weekdayName ${hDate.hDay} ${hDate.longMonthName} ${hDate.hYear} هـ';
+    } catch (_) {
+      return '';
+    }
+  }
+
+  /// Formats current date to dynamic Gregorian string (e.g. "14 أغسطس 2026 م")
+  String _getGregorianDateString() {
+    try {
+      final now = DateTime.now();
+      String formatted;
+      try {
+        formatted = DateFormat('d MMMM yyyy', 'ar').format(now);
+      } catch (_) {
+        const monthsAr = [
+          'يناير',
+          'فبراير',
+          'مارس',
+          'أبريل',
+          'مايو',
+          'يونيو',
+          'يوليو',
+          'أغسطس',
+          'سبتمبر',
+          'أكتوبر',
+          'نوفمبر',
+          'ديسمبر',
+        ];
+        formatted = '${now.day} ${monthsAr[now.month - 1]} ${now.year}';
+      }
+      return '$formatted م';
+    } catch (_) {
+      final now = DateTime.now();
+      return '${now.day}/${now.month}/${now.year} م';
     }
   }
 
@@ -390,7 +456,7 @@ class _HomePageState extends State<HomePage> {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    'الثلاثاء 15 ذو الحجة 1445 هـ',
+                    _getHijriDateString(),
                     style: TextStyle(
                       fontFamily: 'Fustat',
                       fontSize: 11.5,
@@ -402,7 +468,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    '21 مايو 2024 م',
+                    _getGregorianDateString(),
                     style: TextStyle(
                       fontFamily: 'Fustat',
                       fontSize: 10.5,
@@ -777,11 +843,11 @@ class _HeaderLogoRow extends StatelessWidget {
           ],
         ),
 
-        // Action Buttons Row (Bookmark & Search on Left in RTL, Notification Bell on Right in RTL)
+        // Action Buttons Row (Search & Bookmark on Right in RTL, Notification Bell on Left in RTL)
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            // Bookmark & Search Buttons (Left side in RTL view)
+            // Search & Bookmark Navigation Buttons (Physical Right side)
             Row(
               children: [
                 _buildTopIconButton(context, Icons.search_rounded, () {
@@ -793,16 +859,50 @@ class _HeaderLogoRow extends StatelessWidget {
                 _buildTopIconButton(
                   context,
                   Icons.bookmark_border_rounded,
-                  () {},
+                  () {
+                    Navigator.of(
+                      context,
+                    ).push(AppPageRoute.create(const FavoritesPage()));
+                  },
                 ),
               ],
             ),
 
-            // Notification Bell (Right side in RTL view)
-            _buildTopIconButton(
-              context,
-              Icons.notifications_none_rounded,
-              () {},
+            // Notification Bell (Physical Left side)
+            ValueListenableBuilder<bool>(
+              valueListenable: SettingsManager.dailyReminder,
+              builder: (context, dailyActive, child) {
+                return _buildTopIconButton(
+                  context,
+                  dailyActive
+                      ? Icons.notifications_active_rounded
+                      : Icons.notifications_none_rounded,
+                  () {
+                    final newVal = !dailyActive;
+                    SettingsManager.setDailyReminder(newVal);
+                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          newVal
+                              ? 'تم تفعيل التنبيهات اليومية'
+                              : 'تم تعطيل التنبيهات اليومية',
+                          style: const TextStyle(
+                            fontFamily: 'Fustat',
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFFFFFDF9),
+                          ),
+                        ),
+                        backgroundColor: const Color(0xFF4E5B4E),
+                        behavior: SnackBarBehavior.floating,
+                        duration: const Duration(seconds: 2),
+                      ),
+                    );
+                  },
+                  iconColor: dailyActive ? const Color(0xFFC5A059) : null,
+                );
+              },
             ),
           ],
         ),
@@ -813,8 +913,9 @@ class _HeaderLogoRow extends StatelessWidget {
   Widget _buildTopIconButton(
     BuildContext context,
     IconData icon,
-    VoidCallback onTap,
-  ) {
+    VoidCallback onTap, {
+    Color? iconColor,
+  }) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return InkWell(
       onTap: onTap,
@@ -840,7 +941,8 @@ class _HeaderLogoRow extends StatelessWidget {
         child: Icon(
           icon,
           size: 20,
-          color: isDark ? const Color(0xFFD8CEBE) : const Color(0xFF4E5B4E),
+          color: iconColor ??
+              (isDark ? const Color(0xFFD8CEBE) : const Color(0xFF4E5B4E)),
         ),
       ),
     );

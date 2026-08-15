@@ -72,7 +72,7 @@ class ContactUsPage extends StatelessWidget {
             Positioned(
               left: 16,
               right: 16,
-              bottom: 16,
+              bottom: 16 + MediaQuery.of(context).padding.bottom,
               child: const FloatingBottomNavBar(selectedIndex: 4),
             ),
           ],
@@ -86,6 +86,22 @@ class ContactUsPage extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Row(
       children: [
+        // Title Text (Physical Right)
+        Expanded(
+          child: Text(
+            'تواصل معنا',
+            style: TextStyle(
+              fontFamily: 'Fustat',
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: isDark ? const Color(0xFFF6F1E7) : AppColors.primaryLight,
+            ),
+          ),
+        ),
+
+        const SizedBox(width: 14),
+
+        // Back Button (Physical Left)
         InkWell(
           onTap: () => Navigator.of(context).pop(),
           borderRadius: BorderRadius.circular(16),
@@ -112,20 +128,10 @@ class ContactUsPage extends StatelessWidget {
               ],
             ),
             child: Icon(
-              Icons.arrow_forward_ios_rounded,
+              Icons.arrow_back_ios_new_rounded,
               size: 18,
               color: isDark ? const Color(0xFFD8CEBE) : const Color(0xFF4E5B4E),
             ),
-          ),
-        ),
-        const SizedBox(width: 14),
-        Text(
-          'تواصل معنا',
-          style: TextStyle(
-            fontFamily: 'Fustat',
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            color: isDark ? const Color(0xFFF6F1E7) : AppColors.primaryLight,
           ),
         ),
       ],

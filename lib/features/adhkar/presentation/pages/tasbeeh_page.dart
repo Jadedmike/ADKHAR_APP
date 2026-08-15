@@ -149,7 +149,7 @@ class _TasbeehPageState extends State<TasbeehPage> {
             Positioned(
               left: 16,
               right: 16,
-              bottom: 16,
+              bottom: 16 + MediaQuery.of(context).padding.bottom,
               child: const FloatingBottomNavBar(selectedIndex: 2),
             ),
           ],
@@ -164,18 +164,28 @@ class _TasbeehPageState extends State<TasbeehPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
+        // Title & Small Reset Button (Physical Right side in RTL)
         Row(
           children: [
+            Text(
+              'المسبحة',
+              style: TextStyle(
+                fontFamily: 'Fustat',
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: isDark
+                    ? const Color(0xFFF6F1E7)
+                    : AppColors.primaryLight,
+              ),
+            ),
+            const SizedBox(width: 12),
             InkWell(
-              onTap: () => Navigator.of(context).pop(),
+              onTap: _resetCounter,
               borderRadius: BorderRadius.circular(16),
               child: Container(
-                width: 42,
-                height: 42,
+                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
                 decoration: BoxDecoration(
-                  color: isDark
-                      ? const Color(0xFF262D24)
-                      : const Color(0xFFFFFDF9),
+                  color: isDark ? const Color(0xFF262D24) : const Color(0xFFFFFDF9),
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(
                     color: isDark
@@ -193,36 +203,42 @@ class _TasbeehPageState extends State<TasbeehPage> {
                     ),
                   ],
                 ),
-                child: Icon(
-                  Icons.arrow_forward_ios_rounded,
-                  size: 18,
-                  color: isDark
-                      ? const Color(0xFFD8CEBE)
-                      : const Color(0xFF4E5B4E),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.refresh_rounded,
+                      size: 18,
+                      color: isDark
+                          ? const Color(0xFFC9A15B)
+                          : const Color(0xFFC5A059),
+                    ),
+                    const SizedBox(width: 6),
+                    Text(
+                      'تصفير',
+                      style: TextStyle(
+                        fontFamily: 'Fustat',
+                        fontSize: 13,
+                        fontWeight: FontWeight.bold,
+                        color: isDark
+                            ? const Color(0xFFD8CEBE)
+                            : const Color(0xFF4E5B4E),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-            ),
-            const SizedBox(width: 14),
-            Text(
-              'المسبحة',
-              style: TextStyle(
-                fontFamily: 'Fustat',
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: isDark
-                    ? const Color(0xFFF6F1E7)
-                    : AppColors.primaryLight,
               ),
             ),
           ],
         ),
 
-        // Small Reset Button (↺) in Header Action
+        // Back Button (Physical Left side in RTL)
         InkWell(
-          onTap: _resetCounter,
+          onTap: () => Navigator.of(context).pop(),
           borderRadius: BorderRadius.circular(16),
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
+            width: 42,
+            height: 42,
             decoration: BoxDecoration(
               color: isDark ? const Color(0xFF262D24) : const Color(0xFFFFFDF9),
               borderRadius: BorderRadius.circular(16),
@@ -242,29 +258,10 @@ class _TasbeehPageState extends State<TasbeehPage> {
                 ),
               ],
             ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  Icons.refresh_rounded,
-                  size: 18,
-                  color: isDark
-                      ? const Color(0xFFC9A15B)
-                      : const Color(0xFFC5A059),
-                ),
-                const SizedBox(width: 6),
-                Text(
-                  'إعادة ضبط',
-                  style: TextStyle(
-                    fontFamily: 'Fustat',
-                    fontSize: 12.5,
-                    fontWeight: FontWeight.bold,
-                    color: isDark
-                        ? const Color(0xFFC9A15B)
-                        : const Color(0xFF4E5B4E),
-                  ),
-                ),
-              ],
+            child: Icon(
+              Icons.arrow_back_ios_new_rounded,
+              size: 18,
+              color: isDark ? const Color(0xFFD8CEBE) : const Color(0xFF4E5B4E),
             ),
           ),
         ),

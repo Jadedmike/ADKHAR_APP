@@ -233,49 +233,7 @@ class _GlobalSearchPageState extends State<GlobalSearchPage> {
       padding: const EdgeInsets.only(left: 18, right: 18, top: 12),
       child: Row(
         children: [
-          // Back Button
-          InkWell(
-            onTap: () {
-              Navigator.of(context).pop();
-            },
-            borderRadius: BorderRadius.circular(16),
-            child: Container(
-              width: 44,
-              height: 44,
-              decoration: BoxDecoration(
-                color: isDark
-                    ? const Color(0xFF262D24)
-                    : const Color(0xFFFFFDF9),
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(
-                  color: isDark
-                      ? const Color(0xFF353E32)
-                      : const Color(0xFFEADFCF),
-                  width: 1.2,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: isDark
-                        ? const Color(0x20000000)
-                        : const Color(0x0A000000),
-                    blurRadius: 10,
-                    offset: const Offset(0, 3),
-                  ),
-                ],
-              ),
-              child: Icon(
-                Icons.arrow_forward_ios_rounded,
-                size: 18,
-                color: isDark
-                    ? const Color(0xFFD8CEBE)
-                    : const Color(0xFF4E5B4E),
-              ),
-            ),
-          ),
-
-          const SizedBox(width: 12),
-
-          // Instant Search Input Field
+          // Instant Search Input Field (Physical Right)
           Expanded(
             child: Container(
               height: 50,
@@ -361,6 +319,48 @@ class _GlobalSearchPageState extends State<GlobalSearchPage> {
                     ),
                   const SizedBox(width: 6),
                 ],
+              ),
+            ),
+          ),
+
+          const SizedBox(width: 12),
+
+          // Back Button (Physical Left)
+          InkWell(
+            onTap: () {
+              Navigator.of(context).pop();
+            },
+            borderRadius: BorderRadius.circular(16),
+            child: Container(
+              width: 44,
+              height: 44,
+              decoration: BoxDecoration(
+                color: isDark
+                    ? const Color(0xFF262D24)
+                    : const Color(0xFFFFFDF9),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: isDark
+                      ? const Color(0xFF353E32)
+                      : const Color(0xFFEADFCF),
+                  width: 1.2,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: isDark
+                        ? const Color(0x20000000)
+                        : const Color(0x0A000000),
+                    blurRadius: 10,
+                    offset: const Offset(0, 3),
+                  ),
+                ],
+              ),
+              child: Icon(
+                Icons.arrow_back_ios_new_rounded,
+                size: 18,
+                color: isDark
+                    ? const Color(0xFFD8CEBE)
+                    : const Color(0xFF4E5B4E),
               ),
             ),
           ),
