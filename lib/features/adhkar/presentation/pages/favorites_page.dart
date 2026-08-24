@@ -5,6 +5,7 @@ import '../../../../config/theme/app_page_transitions.dart';
 import '../../../../shared/widgets/animated_card_tap.dart';
 import '../../../../shared/widgets/app_background.dart';
 import '../../../../shared/widgets/floating_bottom_nav_bar.dart';
+import '../../../../shared/widgets/screen_header.dart';
 import '../../../../shared/widgets/staggered_list_fade_item.dart';
 import '../managers/favorites_manager.dart';
 import 'single_dhikr_page.dart';
@@ -57,30 +58,11 @@ class _FavoritesPageState extends State<FavoritesPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 // Screen Header
-                                Text(
-                                  'المفضلة',
-                                  style: TextStyle(
-                                    fontFamily: 'Fustat',
-                                    fontSize: 28,
-                                    fontWeight: FontWeight.bold,
-                                    color: isDark
-                                        ? const Color(0xFFF6F1E7)
-                                        : AppColors.primaryLight,
-                                  ),
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  favorites.isEmpty
+                                ScreenHeader(
+                                  title: 'المفضلة',
+                                  subtitle: favorites.isEmpty
                                       ? 'لا توجد أذكار مضافة'
                                       : 'قائمة الأذكار والأدعية المحفوظة (${favorites.length})',
-                                  style: TextStyle(
-                                    fontFamily: 'Fustat',
-                                    fontSize: 13.5,
-                                    fontWeight: FontWeight.w500,
-                                    color: isDark
-                                        ? const Color(0xFFD8CEBE)
-                                        : const Color(0xFF707973),
-                                  ),
                                 ),
 
                                 const SizedBox(height: 20),

@@ -8,7 +8,9 @@ import '../../../../config/theme/app_assets.dart';
 import '../../../../config/theme/app_colors.dart';
 import '../../../../config/theme/app_page_transitions.dart';
 import '../../../../shared/widgets/app_background.dart';
+import '../../../../core/services/notification_service.dart';
 import '../../../../shared/widgets/floating_bottom_nav_bar.dart';
+import '../../../../shared/widgets/screen_header.dart';
 import '../managers/settings_manager.dart';
 
 /// The Settings Screen for the "ذكر" application.
@@ -19,9 +21,30 @@ class SettingsPage extends StatefulWidget {
   State<SettingsPage> createState() => _SettingsPageState();
 }
 
-class _SettingsPageState extends State<SettingsPage> {
+class _SettingsPageState extends State<SettingsPage>
+    with WidgetsBindingObserver {
   // General Settings State
   String _selectedLanguage = 'العربية';
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    SettingsManager.syncNotificationPermissionsWithOs();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      SettingsManager.syncNotificationPermissionsWithOs();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,28 +82,10 @@ class _SettingsPageState extends State<SettingsPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             // Header Title & Subtitle
-                            Text(
-                              'الإعدادات',
-                              style: TextStyle(
-                                fontFamily: 'Fustat',
-                                fontSize: 28,
-                                fontWeight: FontWeight.bold,
-                                color: isDark
-                                    ? const Color(0xFFF6F1E7)
-                                    : AppColors.primaryLight,
-                              ),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              'تخصيص الخيارات العامة والتنبيهات والقراءة',
-                              style: TextStyle(
-                                fontFamily: 'Fustat',
-                                fontSize: 13.5,
-                                fontWeight: FontWeight.w500,
-                                color: isDark
-                                    ? const Color(0xFFD8CEBE)
-                                    : const Color(0xFF707973),
-                              ),
+                            const ScreenHeader(
+                              title: 'الإعدادات',
+                              subtitle:
+                                  'تخصيص الخيارات العامة والتنبيهات والقراءة',
                             ),
 
                             const SizedBox(height: 20),
@@ -292,6 +297,45 @@ class _SettingsPageState extends State<SettingsPage> {
                             _buildSectionGroup(
                               title: 'التنبيهات',
                               children: [
+                                _buildActionTile(
+                                  icon: Icons.notifications_active_outlined,
+                                  title: 'اختبار التنبيه الفوري',
+                                  onTap: () async {
+                                    final bool granted =
+                                        await NotificationService.isPermissionGranted();
+                                    if (!granted) {
+                                      await NotificationService.requestPermission();
+                                    }
+                                    await NotificationService.testImmediateNotification();
+                                    if (context.mounted) {
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).hideCurrentSnackBar();
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        const SnackBar(
+                                          content: Text(
+                                            'تم إرسال إشعار التجربة بنجاح 🔔',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              fontFamily: 'Fustat',
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          behavior: SnackBarBehavior.floating,
+                                          duration: Duration(seconds: 3),
+                                        ),
+                                      );
+                                    }
+                                  },
+                                ),
+                                Divider(
+                                  height: 22,
+                                  color: isDark
+                                      ? const Color(0xFF353E32)
+                                      : const Color(0xFFF3ECE0),
+                                ),
                                 ValueListenableBuilder<bool>(
                                   valueListenable:
                                       SettingsManager.morningReminder,
@@ -300,10 +344,39 @@ class _SettingsPageState extends State<SettingsPage> {
                                       icon: Icons.wb_sunny_outlined,
                                       title: 'تنبيه أذكار الصباح',
                                       value: morning,
-                                      onChanged: (val) =>
-                                          SettingsManager.setMorningReminder(
-                                            val,
-                                          ),
+                                      onChanged: (val) async {
+                                        final bool success =
+                                            await SettingsManager.setMorningReminder(
+                                              val,
+                                            );
+                                        if (!context.mounted) return;
+                                        if (val && !success) {
+                                          ScaffoldMessenger.of(
+                                            context,
+                                          ).hideCurrentSnackBar();
+                                          ScaffoldMessenger.of(
+                                            context,
+                                          ).showSnackBar(
+                                            const SnackBar(
+                                              content: Text(
+                                                'عذراً، يلزم إذن الإشعارات من النظام لتفعيل التنبيهات',
+                                                style: TextStyle(
+                                                  fontFamily: 'Fustat',
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Color(0xFFFFFDF9),
+                                                ),
+                                              ),
+                                              backgroundColor: Color(
+                                                0xFFC94A4A,
+                                              ),
+                                              behavior:
+                                                  SnackBarBehavior.floating,
+                                              duration: Duration(seconds: 3),
+                                            ),
+                                          );
+                                        }
+                                      },
                                     );
                                   },
                                 ),
@@ -321,10 +394,39 @@ class _SettingsPageState extends State<SettingsPage> {
                                       icon: Icons.nights_stay_outlined,
                                       title: 'تنبيه أذكار المساء',
                                       value: evening,
-                                      onChanged: (val) =>
-                                          SettingsManager.setEveningReminder(
-                                            val,
-                                          ),
+                                      onChanged: (val) async {
+                                        final bool success =
+                                            await SettingsManager.setEveningReminder(
+                                              val,
+                                            );
+                                        if (!context.mounted) return;
+                                        if (val && !success) {
+                                          ScaffoldMessenger.of(
+                                            context,
+                                          ).hideCurrentSnackBar();
+                                          ScaffoldMessenger.of(
+                                            context,
+                                          ).showSnackBar(
+                                            const SnackBar(
+                                              content: Text(
+                                                'عذراً، يلزم إذن الإشعارات من النظام لتفعيل التنبيهات',
+                                                style: TextStyle(
+                                                  fontFamily: 'Fustat',
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Color(0xFFFFFDF9),
+                                                ),
+                                              ),
+                                              backgroundColor: Color(
+                                                0xFFC94A4A,
+                                              ),
+                                              behavior:
+                                                  SnackBarBehavior.floating,
+                                              duration: Duration(seconds: 3),
+                                            ),
+                                          );
+                                        }
+                                      },
                                     );
                                   },
                                 ),
@@ -342,8 +444,39 @@ class _SettingsPageState extends State<SettingsPage> {
                                       icon: Icons.access_alarm_rounded,
                                       title: 'التذكير اليومي للأدعية',
                                       value: daily,
-                                      onChanged: (val) =>
-                                          SettingsManager.setDailyReminder(val),
+                                      onChanged: (val) async {
+                                        final bool success =
+                                            await SettingsManager.setDailyReminder(
+                                              val,
+                                            );
+                                        if (!context.mounted) return;
+                                        if (val && !success) {
+                                          ScaffoldMessenger.of(
+                                            context,
+                                          ).hideCurrentSnackBar();
+                                          ScaffoldMessenger.of(
+                                            context,
+                                          ).showSnackBar(
+                                            const SnackBar(
+                                              content: Text(
+                                                'عذراً، يلزم إذن الإشعارات من النظام لتفعيل التنبيهات',
+                                                style: TextStyle(
+                                                  fontFamily: 'Fustat',
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Color(0xFFFFFDF9),
+                                                ),
+                                              ),
+                                              backgroundColor: Color(
+                                                0xFFC94A4A,
+                                              ),
+                                              behavior:
+                                                  SnackBarBehavior.floating,
+                                              duration: Duration(seconds: 3),
+                                            ),
+                                          );
+                                        }
+                                      },
                                     );
                                   },
                                 ),
@@ -821,7 +954,7 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
           const SizedBox(height: 10),
           Text(
-            'نسأل الله أن يجعل هذا العمل صدقةً جاريةً عن روح المرحوم الحسن الحيحي ، وأن يتقبله صدقةً عن كل من ساهم بتطوير هذا التطبيق ، وأن ينفع به كل من قرأ ذكرًا أو دعا بدعاء.',
+            'نسأل الله أن يجعل هذا العمل صدقةً جاريةً ، وأن يتقبله صدقةً عن كل من ساهم بتطوير هذا التطبيق ، وأن ينفع به كل من قرأ ذكرًا أو دعا بدعاء.',
             textAlign: TextAlign.center,
             style: TextStyle(
               fontFamily: 'Fustat',

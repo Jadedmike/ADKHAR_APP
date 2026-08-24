@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../../../core/services/notification_service.dart';
 
 /// Data class representing saved reading position state.
 class LastReadingPosition {
@@ -130,6 +131,20 @@ class SettingsManager {
     } catch (_) {}
   }
 
+  /// Sync notification setting states with real operating system permission status.
+  static Future<void> syncNotificationPermissionsWithOs() async {
+    final bool osGranted = await NotificationService.isPermissionGranted();
+    if (!osGranted) {
+      // Real OS permission is disabled: reflect real state in app
+      morningReminder.value = false;
+      eveningReminder.value = false;
+      dailyReminder.value = false;
+      await NotificationService.cancelAll();
+    } else {
+      await NotificationService.syncSchedulesWithOsState();
+    }
+  }
+
   /// Set and persist vibration option
   static Future<void> setVibrationOption(bool value) async {
     vibrationOption.value = value;
@@ -166,31 +181,109 @@ class SettingsManager {
     } catch (_) {}
   }
 
-  /// Set and persist morning reminder option
-  static Future<void> setMorningReminder(bool value) async {
-    morningReminder.value = value;
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setBool(_keyMorningReminder, value);
-    } catch (_) {}
+  /// Set and persist morning reminder option after checking OS notification permissions.
+  /// Returns `true` if operation succeeded, `false` if OS permission was denied.
+  static Future<bool> setMorningReminder(bool value) async {
+    if (value) {
+      bool granted = await NotificationService.isPermissionGranted();
+      if (!granted) {
+        granted = await NotificationService.requestPermission();
+      }
+      if (!granted) {
+        morningReminder.value = false;
+        try {
+          final prefs = await SharedPreferences.getInstance();
+          await prefs.setBool(_keyMorningReminder, false);
+        } catch (_) {}
+        await NotificationService.cancelMorning();
+        return false;
+      }
+      morningReminder.value = true;
+      try {
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setBool(_keyMorningReminder, true);
+      } catch (_) {}
+      await NotificationService.scheduleMorningNotification();
+      return true;
+    } else {
+      morningReminder.value = false;
+      try {
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setBool(_keyMorningReminder, false);
+      } catch (_) {}
+      await NotificationService.cancelMorning();
+      return true;
+    }
   }
 
-  /// Set and persist evening reminder option
-  static Future<void> setEveningReminder(bool value) async {
-    eveningReminder.value = value;
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setBool(_keyEveningReminder, value);
-    } catch (_) {}
+  /// Set and persist evening reminder option after checking OS notification permissions.
+  /// Returns `true` if operation succeeded, `false` if OS permission was denied.
+  static Future<bool> setEveningReminder(bool value) async {
+    if (value) {
+      bool granted = await NotificationService.isPermissionGranted();
+      if (!granted) {
+        granted = await NotificationService.requestPermission();
+      }
+      if (!granted) {
+        eveningReminder.value = false;
+        try {
+          final prefs = await SharedPreferences.getInstance();
+          await prefs.setBool(_keyEveningReminder, false);
+        } catch (_) {}
+        await NotificationService.cancelEvening();
+        return false;
+      }
+      eveningReminder.value = true;
+      try {
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setBool(_keyEveningReminder, true);
+      } catch (_) {}
+      await NotificationService.scheduleEveningNotification();
+      return true;
+    } else {
+      eveningReminder.value = false;
+      try {
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setBool(_keyEveningReminder, false);
+      } catch (_) {}
+      await NotificationService.cancelEvening();
+      return true;
+    }
   }
 
-  /// Set and persist daily reminder option
-  static Future<void> setDailyReminder(bool value) async {
-    dailyReminder.value = value;
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setBool(_keyDailyReminder, value);
-    } catch (_) {}
+  /// Set and persist daily reminder option after checking OS notification permissions.
+  /// Returns `true` if operation succeeded, `false` if OS permission was denied.
+  static Future<bool> setDailyReminder(bool value) async {
+    if (value) {
+      bool granted = await NotificationService.isPermissionGranted();
+      if (!granted) {
+        granted = await NotificationService.requestPermission();
+      }
+      if (!granted) {
+        dailyReminder.value = false;
+        try {
+          final prefs = await SharedPreferences.getInstance();
+          await prefs.setBool(_keyDailyReminder, false);
+        } catch (_) {}
+        await NotificationService.cancelDaily();
+        return false;
+      }
+      dailyReminder.value = true;
+      try {
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setBool(_keyDailyReminder, true);
+      } catch (_) {}
+      await NotificationService.scheduleRandomDhikrNotifications();
+      return true;
+    } else {
+      dailyReminder.value = false;
+      try {
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setBool(_keyDailyReminder, false);
+      } catch (_) {}
+      await NotificationService.cancelDaily();
+      return true;
+    }
   }
 
   /// Set and persist remember last position option

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import '../../../../config/theme/app_assets.dart';
-import '../../../../config/theme/app_colors.dart';
 import '../../../../config/theme/app_page_transitions.dart';
 import '../../../../shared/widgets/animated_card_tap.dart';
 import '../../../../shared/widgets/app_background.dart';
 import '../../../../shared/widgets/floating_bottom_nav_bar.dart';
+import '../../../../shared/widgets/screen_header.dart';
 import '../../../../shared/widgets/staggered_list_fade_item.dart';
 import 'category_list_page.dart';
 import 'global_search_page.dart';
@@ -85,78 +85,45 @@ class _AzkarCategoriesPageState extends State<AzkarCategoriesPage> {
   /// Header App Bar (Title & Subtitle + Search Icon)
   Widget _buildHeader() {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Search Button (Physical Right)
-        InkWell(
-          onTap: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => const GlobalSearchPage()),
-            );
-          },
-          borderRadius: BorderRadius.circular(16),
-          child: Container(
-            width: 42,
-            height: 42,
-            decoration: BoxDecoration(
-              color: isDark ? const Color(0xFF262D24) : const Color(0xFFFFFDF9),
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(
+    return ScreenHeader(
+      title: 'الأذكار',
+      subtitle: 'اختر القسم الذي ترغب بقراءته',
+      leading: InkWell(
+        onTap: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => const GlobalSearchPage()),
+          );
+        },
+        borderRadius: BorderRadius.circular(16),
+        child: Container(
+          width: 42,
+          height: 42,
+          decoration: BoxDecoration(
+            color: isDark ? const Color(0xFF262D24) : const Color(0xFFFFFDF9),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: isDark
+                  ? const Color(0xFF353E32)
+                  : const Color(0xFFEADFCF),
+              width: 1.2,
+            ),
+            boxShadow: [
+              BoxShadow(
                 color: isDark
-                    ? const Color(0xFF353E32)
-                    : const Color(0xFFEADFCF),
-                width: 1.2,
+                    ? const Color(0x20000000)
+                    : const Color(0x0A000000),
+                blurRadius: 10,
+                offset: const Offset(0, 3),
               ),
-              boxShadow: [
-                BoxShadow(
-                  color: isDark
-                      ? const Color(0x20000000)
-                      : const Color(0x0A000000),
-                  blurRadius: 10,
-                  offset: const Offset(0, 3),
-                ),
-              ],
-            ),
-            child: Icon(
-              Icons.search_rounded,
-              size: 20,
-              color: isDark ? const Color(0xFFD8CEBE) : const Color(0xFF4E5B4E),
-            ),
+            ],
+          ),
+          child: Icon(
+            Icons.search_rounded,
+            size: 20,
+            color: isDark ? const Color(0xFFD8CEBE) : const Color(0xFF4E5B4E),
           ),
         ),
-
-        // Title & Subtitle Column (Physical Left)
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'الأذكار',
-              style: TextStyle(
-                fontFamily: 'Fustat',
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-                color: isDark
-                    ? const Color(0xFFF6F1E7)
-                    : AppColors.primaryLight,
-              ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              'اختر القسم الذي ترغب بقراءته',
-              style: TextStyle(
-                fontFamily: 'Fustat',
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-                color: isDark
-                    ? const Color(0xFFD8CEBE)
-                    : const Color(0xFF707973),
-              ),
-            ),
-          ],
-        ),
-      ],
+      ),
     );
   }
 

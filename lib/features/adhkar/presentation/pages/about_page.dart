@@ -3,6 +3,7 @@ import '../../../../config/theme/app_assets.dart';
 import '../../../../config/theme/app_colors.dart';
 import '../../../../shared/widgets/app_background.dart';
 import '../../../../shared/widgets/floating_bottom_nav_bar.dart';
+import '../../../../shared/widgets/screen_header.dart';
 
 /// The About App Screen for the "ذكر" application.
 class AboutPage extends StatelessWidget {
@@ -155,57 +156,40 @@ class AboutPage extends StatelessWidget {
   /// Header Bar with Back Button & Screen Title
   Widget _buildHeader(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    return Row(
-      children: [
-        // Title Text (Physical Right)
-        Expanded(
-          child: Text(
-            'عن التطبيق',
-            style: TextStyle(
-              fontFamily: 'Fustat',
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: isDark ? const Color(0xFFF6F1E7) : AppColors.primaryLight,
+    return ScreenHeader(
+      title: 'عن التطبيق',
+      trailing: InkWell(
+        onTap: () => Navigator.of(context).pop(),
+        borderRadius: BorderRadius.circular(16),
+        child: Container(
+          width: 42,
+          height: 42,
+          decoration: BoxDecoration(
+            color: isDark ? const Color(0xFF262D24) : const Color(0xFFFFFDF9),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: isDark
+                  ? const Color(0xFF353E32)
+                  : const Color(0xFFEADFCF),
+              width: 1.2,
             ),
-          ),
-        ),
-
-        const SizedBox(width: 14),
-
-        // Back Button (Physical Left)
-        InkWell(
-          onTap: () => Navigator.of(context).pop(),
-          borderRadius: BorderRadius.circular(16),
-          child: Container(
-            width: 42,
-            height: 42,
-            decoration: BoxDecoration(
-              color: isDark ? const Color(0xFF262D24) : const Color(0xFFFFFDF9),
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(
+            boxShadow: [
+              BoxShadow(
                 color: isDark
-                    ? const Color(0xFF353E32)
-                    : const Color(0xFFEADFCF),
-                width: 1.2,
+                    ? const Color(0x20000000)
+                    : const Color(0x0A000000),
+                blurRadius: 10,
+                offset: const Offset(0, 3),
               ),
-              boxShadow: [
-                BoxShadow(
-                  color: isDark
-                      ? const Color(0x20000000)
-                      : const Color(0x0A000000),
-                  blurRadius: 10,
-                  offset: const Offset(0, 3),
-                ),
-              ],
-            ),
-            child: Icon(
-              Icons.arrow_back_ios_new_rounded,
-              size: 18,
-              color: isDark ? const Color(0xFFD8CEBE) : const Color(0xFF4E5B4E),
-            ),
+            ],
+          ),
+          child: Icon(
+            Icons.arrow_back_ios_new_rounded,
+            size: 18,
+            color: isDark ? const Color(0xFFD8CEBE) : const Color(0xFF4E5B4E),
           ),
         ),
-      ],
+      ),
     );
   }
 
