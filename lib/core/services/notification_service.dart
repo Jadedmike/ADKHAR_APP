@@ -246,13 +246,22 @@ class NotificationService {
     }
   }
 
-  /// Schedule Daily Morning Notification (Default 07:00 AM)
+  /// Schedule Daily Morning Notification
   static Future<void> scheduleMorningNotification({
-    int hour = 7,
-    int minute = 0,
+    int? hour,
+    int? minute,
   }) async {
     try {
-      final tz.TZDateTime scheduledDate = _nextInstanceOfTime(hour, minute);
+      final int targetHour = hour ?? SettingsManager.morningTime.value.hour;
+      final int targetMinute =
+          minute ?? SettingsManager.morningTime.value.minute;
+
+      await cancelMorning();
+
+      final tz.TZDateTime scheduledDate = _nextInstanceOfTime(
+        targetHour,
+        targetMinute,
+      );
       final AndroidScheduleMode mode = await _determineScheduleMode();
 
       const AndroidNotificationDetails androidDetails =
@@ -278,8 +287,8 @@ class NotificationService {
 
       await _notificationsPlugin.zonedSchedule(
         _idMorning,
-        '🌅 أذكار الصباح',
-        'لا تنسَ أذكار الصباح 🤍 "ألا بذكر الله تطمئن القلوب"',
+        'ذِكْر',
+        'حان وقت أذكار الصباح',
         scheduledDate,
         details,
         androidScheduleMode: mode,
@@ -290,13 +299,22 @@ class NotificationService {
     } catch (_) {}
   }
 
-  /// Schedule Daily Evening Notification (Default 06:30 PM / 18:30)
+  /// Schedule Daily Evening Notification
   static Future<void> scheduleEveningNotification({
-    int hour = 18,
-    int minute = 30,
+    int? hour,
+    int? minute,
   }) async {
     try {
-      final tz.TZDateTime scheduledDate = _nextInstanceOfTime(hour, minute);
+      final int targetHour = hour ?? SettingsManager.eveningTime.value.hour;
+      final int targetMinute =
+          minute ?? SettingsManager.eveningTime.value.minute;
+
+      await cancelEvening();
+
+      final tz.TZDateTime scheduledDate = _nextInstanceOfTime(
+        targetHour,
+        targetMinute,
+      );
       final AndroidScheduleMode mode = await _determineScheduleMode();
 
       const AndroidNotificationDetails androidDetails =
@@ -322,8 +340,8 @@ class NotificationService {
 
       await _notificationsPlugin.zonedSchedule(
         _idEvening,
-        '🌙 أذكار المساء',
-        'حان وقت أذكار المساء 🤍 حصّن نفسك بذكر الله',
+        'ذِكْر',
+        'حان وقت أذكار المساء',
         scheduledDate,
         details,
         androidScheduleMode: mode,

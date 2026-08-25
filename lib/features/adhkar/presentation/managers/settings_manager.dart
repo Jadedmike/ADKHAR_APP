@@ -29,6 +29,10 @@ class SettingsManager {
   static const String _keyMorningReminder = 'morning_reminder';
   static const String _keyEveningReminder = 'evening_reminder';
   static const String _keyDailyReminder = 'daily_reminder';
+  static const String _keyMorningTimeHour = 'morning_time_hour';
+  static const String _keyMorningTimeMinute = 'morning_time_minute';
+  static const String _keyEveningTimeHour = 'evening_time_hour';
+  static const String _keyEveningTimeMinute = 'evening_time_minute';
   static const String _keyRememberLastPosition = 'remember_last_position';
   static const String _keyLastCategoryTitle = 'last_category_title';
   static const String _keyLastDhikrIndex = 'last_dhikr_index';
@@ -65,6 +69,16 @@ class SettingsManager {
 
   /// ValueNotifier for Evening Dhikr reminder.
   static final ValueNotifier<bool> eveningReminder = ValueNotifier<bool>(true);
+
+  /// ValueNotifier for Morning Dhikr reminder time (default 6:00 AM).
+  static final ValueNotifier<TimeOfDay> morningTime = ValueNotifier<TimeOfDay>(
+    const TimeOfDay(hour: 6, minute: 0),
+  );
+
+  /// ValueNotifier for Evening Dhikr reminder time (default 5:00 PM / 17:00).
+  static final ValueNotifier<TimeOfDay> eveningTime = ValueNotifier<TimeOfDay>(
+    const TimeOfDay(hour: 17, minute: 0),
+  );
 
   /// ValueNotifier for Daily Duas reminder.
   static final ValueNotifier<bool> dailyReminder = ValueNotifier<bool>(true);
@@ -120,6 +134,15 @@ class SettingsManager {
       showTranslation.value = prefs.getBool(_keyShowTranslation) ?? true;
       morningReminder.value = prefs.getBool(_keyMorningReminder) ?? true;
       eveningReminder.value = prefs.getBool(_keyEveningReminder) ?? true;
+
+      final morningHour = prefs.getInt(_keyMorningTimeHour) ?? 6;
+      final morningMinute = prefs.getInt(_keyMorningTimeMinute) ?? 0;
+      morningTime.value = TimeOfDay(hour: morningHour, minute: morningMinute);
+
+      final eveningHour = prefs.getInt(_keyEveningTimeHour) ?? 17;
+      final eveningMinute = prefs.getInt(_keyEveningTimeMinute) ?? 0;
+      eveningTime.value = TimeOfDay(hour: eveningHour, minute: eveningMinute);
+
       dailyReminder.value = prefs.getBool(_keyDailyReminder) ?? true;
       rememberLastPosition.value =
           prefs.getBool(_keyRememberLastPosition) ?? true;
@@ -250,6 +273,49 @@ class SettingsManager {
       return true;
     }
   }
+
+  /// Set and persist morning reminder time and reschedule if morning reminder is enabled.
+  static Future<void> setMorningTime(TimeOfDay time) async {
+    morningTime.value = time;
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setInt(_keyMorningTimeHour, time.hour);
+      await prefs.setInt(_keyMorningTimeMinute, time.minute);
+    } catch (_) {}
+
+    if (morningReminder.value) {
+      final bool granted = await NotificationService.isPermissionGranted();
+      if (granted) {
+        await NotificationService.cancelMorning();
+        await NotificationService.scheduleMorningNotification(
+          hour: time.hour,
+          minute: time.minute,
+        );
+      }
+    }
+  }
+
+  /// Set and persist evening reminder time and reschedule if evening reminder is enabled.
+  static Future<void> setEveningTime(TimeOfDay time) async {
+    eveningTime.value = time;
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setInt(_keyEveningTimeHour, time.hour);
+      await prefs.setInt(_keyEveningTimeMinute, time.minute);
+    } catch (_) {}
+
+    if (eveningReminder.value) {
+      final bool granted = await NotificationService.isPermissionGranted();
+      if (granted) {
+        await NotificationService.cancelEvening();
+        await NotificationService.scheduleEveningNotification(
+          hour: time.hour,
+          minute: time.minute,
+        );
+      }
+    }
+  }
+
 
   /// Set and persist daily reminder option after checking OS notification permissions.
   /// Returns `true` if operation succeeded, `false` if OS permission was denied.

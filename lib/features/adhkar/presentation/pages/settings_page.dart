@@ -340,43 +340,82 @@ class _SettingsPageState extends State<SettingsPage>
                                   valueListenable:
                                       SettingsManager.morningReminder,
                                   builder: (context, morning, child) {
-                                    return _buildSwitchTile(
-                                      icon: Icons.wb_sunny_outlined,
-                                      title: 'تنبيه أذكار الصباح',
-                                      value: morning,
-                                      onChanged: (val) async {
-                                        final bool success =
-                                            await SettingsManager.setMorningReminder(
-                                              val,
-                                            );
-                                        if (!context.mounted) return;
-                                        if (val && !success) {
-                                          ScaffoldMessenger.of(
-                                            context,
-                                          ).hideCurrentSnackBar();
-                                          ScaffoldMessenger.of(
-                                            context,
-                                          ).showSnackBar(
-                                            const SnackBar(
-                                              content: Text(
-                                                'عذراً، يلزم إذن الإشعارات من النظام لتفعيل التنبيهات',
-                                                style: TextStyle(
-                                                  fontFamily: 'Fustat',
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Color(0xFFFFFDF9),
+                                    return Column(
+                                      children: [
+                                        _buildSwitchTile(
+                                          icon: Icons.wb_sunny_outlined,
+                                          title: 'تنبيه أذكار الصباح',
+                                          value: morning,
+                                          onChanged: (val) async {
+                                            final bool success =
+                                                await SettingsManager.setMorningReminder(
+                                                  val,
+                                                );
+                                            if (!context.mounted) return;
+                                            if (val && !success) {
+                                              ScaffoldMessenger.of(
+                                                context,
+                                              ).hideCurrentSnackBar();
+                                              ScaffoldMessenger.of(
+                                                context,
+                                              ).showSnackBar(
+                                                const SnackBar(
+                                                  content: Text(
+                                                    'عذراً، يلزم إذن الإشعارات من النظام لتفعيل التنبيهات',
+                                                    style: TextStyle(
+                                                      fontFamily: 'Fustat',
+                                                      fontSize: 14,
+                                                      fontWeight: FontWeight.bold,
+                                                      color: Color(0xFFFFFDF9),
+                                                    ),
+                                                  ),
+                                                  backgroundColor: Color(
+                                                    0xFFC94A4A,
+                                                  ),
+                                                  behavior:
+                                                      SnackBarBehavior.floating,
+                                                  duration: Duration(seconds: 3),
                                                 ),
-                                              ),
-                                              backgroundColor: Color(
-                                                0xFFC94A4A,
-                                              ),
-                                              behavior:
-                                                  SnackBarBehavior.floating,
-                                              duration: Duration(seconds: 3),
-                                            ),
-                                          );
-                                        }
-                                      },
+                                              );
+                                            }
+                                          },
+                                        ),
+                                        if (morning) ...[
+                                          Divider(
+                                            height: 18,
+                                            color: isDark
+                                                ? const Color(0xFF353E32)
+                                                : const Color(0xFFF3ECE0),
+                                          ),
+                                          ValueListenableBuilder<TimeOfDay>(
+                                            valueListenable:
+                                                SettingsManager.morningTime,
+                                            builder: (
+                                              context,
+                                              morningTime,
+                                              child,
+                                            ) {
+                                              return _buildTimeTile(
+                                                icon: Icons.access_time_rounded,
+                                                title: 'وقت تذكير الصباح',
+                                                time: morningTime,
+                                                onTap: () async {
+                                                  final TimeOfDay? picked =
+                                                      await showTimePicker(
+                                                        context: context,
+                                                        initialTime: morningTime,
+                                                      );
+                                                  if (picked != null) {
+                                                    await SettingsManager.setMorningTime(
+                                                      picked,
+                                                    );
+                                                  }
+                                                },
+                                              );
+                                            },
+                                          ),
+                                        ],
+                                      ],
                                     );
                                   },
                                 ),
@@ -390,43 +429,82 @@ class _SettingsPageState extends State<SettingsPage>
                                   valueListenable:
                                       SettingsManager.eveningReminder,
                                   builder: (context, evening, child) {
-                                    return _buildSwitchTile(
-                                      icon: Icons.nights_stay_outlined,
-                                      title: 'تنبيه أذكار المساء',
-                                      value: evening,
-                                      onChanged: (val) async {
-                                        final bool success =
-                                            await SettingsManager.setEveningReminder(
-                                              val,
-                                            );
-                                        if (!context.mounted) return;
-                                        if (val && !success) {
-                                          ScaffoldMessenger.of(
-                                            context,
-                                          ).hideCurrentSnackBar();
-                                          ScaffoldMessenger.of(
-                                            context,
-                                          ).showSnackBar(
-                                            const SnackBar(
-                                              content: Text(
-                                                'عذراً، يلزم إذن الإشعارات من النظام لتفعيل التنبيهات',
-                                                style: TextStyle(
-                                                  fontFamily: 'Fustat',
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Color(0xFFFFFDF9),
+                                    return Column(
+                                      children: [
+                                        _buildSwitchTile(
+                                          icon: Icons.nights_stay_outlined,
+                                          title: 'تنبيه أذكار المساء',
+                                          value: evening,
+                                          onChanged: (val) async {
+                                            final bool success =
+                                                await SettingsManager.setEveningReminder(
+                                                  val,
+                                                );
+                                            if (!context.mounted) return;
+                                            if (val && !success) {
+                                              ScaffoldMessenger.of(
+                                                context,
+                                              ).hideCurrentSnackBar();
+                                              ScaffoldMessenger.of(
+                                                context,
+                                              ).showSnackBar(
+                                                const SnackBar(
+                                                  content: Text(
+                                                    'عذراً، يلزم إذن الإشعارات من النظام لتفعيل التنبيهات',
+                                                    style: TextStyle(
+                                                      fontFamily: 'Fustat',
+                                                      fontSize: 14,
+                                                      fontWeight: FontWeight.bold,
+                                                      color: Color(0xFFFFFDF9),
+                                                    ),
+                                                  ),
+                                                  backgroundColor: Color(
+                                                    0xFFC94A4A,
+                                                  ),
+                                                  behavior:
+                                                      SnackBarBehavior.floating,
+                                                  duration: Duration(seconds: 3),
                                                 ),
-                                              ),
-                                              backgroundColor: Color(
-                                                0xFFC94A4A,
-                                              ),
-                                              behavior:
-                                                  SnackBarBehavior.floating,
-                                              duration: Duration(seconds: 3),
-                                            ),
-                                          );
-                                        }
-                                      },
+                                              );
+                                            }
+                                          },
+                                        ),
+                                        if (evening) ...[
+                                          Divider(
+                                            height: 18,
+                                            color: isDark
+                                                ? const Color(0xFF353E32)
+                                                : const Color(0xFFF3ECE0),
+                                          ),
+                                          ValueListenableBuilder<TimeOfDay>(
+                                            valueListenable:
+                                                SettingsManager.eveningTime,
+                                            builder: (
+                                              context,
+                                              eveningTime,
+                                              child,
+                                            ) {
+                                              return _buildTimeTile(
+                                                icon: Icons.access_time_rounded,
+                                                title: 'وقت تذكير المساء',
+                                                time: eveningTime,
+                                                onTap: () async {
+                                                  final TimeOfDay? picked =
+                                                      await showTimePicker(
+                                                        context: context,
+                                                        initialTime: eveningTime,
+                                                      );
+                                                  if (picked != null) {
+                                                    await SettingsManager.setEveningTime(
+                                                      picked,
+                                                    );
+                                                  }
+                                                },
+                                              );
+                                            },
+                                          ),
+                                        ],
+                                      ],
                                     );
                                   },
                                 ),
@@ -751,6 +829,116 @@ class _SettingsPageState extends State<SettingsPage>
       ],
     );
   }
+
+  /// Time Picker Option Tile
+  Widget _buildTimeTile({
+    required IconData icon,
+    required String title,
+    required TimeOfDay time,
+    required VoidCallback onTap,
+  }) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final hour = time.hourOfPeriod == 0 ? 12 : time.hourOfPeriod;
+    final minute = time.minute.toString().padLeft(2, '0');
+    final period = time.period == DayPeriod.am ? 'ص' : 'م';
+    final formattedTime = '$hour:$minute $period';
+
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 4),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Row(
+                children: [
+                  Container(
+                    width: 38,
+                    height: 38,
+                    decoration: BoxDecoration(
+                      color: isDark
+                          ? const Color(0xFF1F241D)
+                          : const Color(0xFFF7F2E8),
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: isDark
+                            ? const Color(0xFF353E32)
+                            : const Color(0xFFEADFCF),
+                        width: 1,
+                      ),
+                    ),
+                    child: Icon(
+                      icon,
+                      size: 20,
+                      color: isDark
+                          ? const Color(0xFFC9A15B)
+                          : const Color(0xFF4E5B4E),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      title,
+                      style: TextStyle(
+                        fontFamily: 'Fustat',
+                        fontSize: 14.5,
+                        fontWeight: FontWeight.bold,
+                        color: isDark
+                            ? const Color(0xFFF6F1E7)
+                            : const Color(0xFF1E281F),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              decoration: BoxDecoration(
+                color: isDark
+                    ? const Color(0xFF1F241D)
+                    : const Color(0xFFF0E8DA),
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(
+                  color: isDark
+                      ? const Color(0xFF353E32)
+                      : const Color(0xFFEADFCF),
+                  width: 1,
+                ),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    formattedTime,
+                    style: TextStyle(
+                      fontFamily: 'Fustat',
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: isDark
+                          ? const Color(0xFFC9A15B)
+                          : const Color(0xFF4E5B4E),
+                    ),
+                  ),
+                  const SizedBox(width: 4),
+                  Icon(
+                    Icons.access_time_rounded,
+                    size: 16,
+                    color: isDark
+                        ? const Color(0xFFC9A15B)
+                        : const Color(0xFF4E5B4E),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
 
   /// Dropdown Selection Tile
   Widget _buildDropdownTile({

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../../config/theme/app_assets.dart';
 import '../../../../config/theme/app_colors.dart';
 import '../../../../config/theme/app_page_transitions.dart';
+import '../../../../core/utils/daily_content_helper.dart';
 import '../../../../core/utils/dhikr_copy_helper.dart';
 import '../../../../core/utils/dhikr_share_helper.dart';
 import '../../../../shared/widgets/animated_card_tap.dart';
@@ -25,13 +26,37 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      setState(() {});
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final String greetingText = _getGreetingText();
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     final bgColor = isDark ? const Color(0xFF161A15) : const Color(0xFFF7F2E8);
+
+    final dhikrItem = DailyContentHelper.getDhikrOfTheDay();
+    final duaItem = DailyContentHelper.getDuaOfTheDay();
+    final ayahItem = DailyContentHelper.getAyahOfTheDay();
+    final quoteItem = DailyContentHelper.getQuoteOfTheDay();
 
     return Directionality(
       textDirection: TextDirection.rtl,
@@ -74,131 +99,105 @@ class _HomePageState extends State<HomePage> {
                             const SizedBox(height: 16),
 
                             // Card 1: ذكر اليوم
-                            _buildDailyContentCard(
-                              context,
-                              tagText: 'ذكر اليوم',
-                              tagIcon: Icons.eco_outlined,
-                              content:
-                                  'سُبْحَانَ اللَّهِ وَبِحَمْدِهِ، سُبْحَانَ اللَّهِ الْعَظِيمِ.',
-                              source: 'رواه البخاري ومسلم',
-                              hasDivider: true,
-                              leftAction:
-                                  ValueListenableBuilder<
-                                    List<Map<String, dynamic>>
-                                  >(
-                                    valueListenable:
-                                        FavoritesManager.favoriteDhikrs,
-                                    builder: (context, favorites, child) {
-                                      final item = {
-                                        'categoryTitle': 'أذكار اليوم',
-                                        'text':
-                                            'سُبْحَانَ اللَّهِ وَبِحَمْدِهِ، سُبْحَانَ اللَّهِ الْعَظِيمِ.',
-                                        'source': 'رواه البخاري ومسلم',
-                                      };
-                                      final isFav = FavoritesManager.isFavorite(
-                                        item,
-                                      );
-                                      return _buildActionButton(
-                                        context,
-                                        isFav
-                                            ? Icons.favorite_rounded
-                                            : Icons.favorite_border_rounded,
-                                        () => FavoritesManager.toggleFavorite(
-                                          context,
-                                          item,
-                                        ),
-                                        iconColor: isFav
-                                            ? const Color(0xFFC5A059)
-                                            : null,
-                                      );
-                                    },
+                            ValueListenableBuilder<List<Map<String, dynamic>>>(
+                              valueListenable: FavoritesManager.favoriteDhikrs,
+                              builder: (context, favorites, child) {
+                                final itemData = dhikrItem.toFavoriteItem();
+                                final isFav = FavoritesManager.isFavorite(
+                                  itemData,
+                                );
+                                return _buildDailyContentCard(
+                                  context,
+                                  tagText: 'ذكر اليوم',
+                                  tagIcon: Icons.eco_outlined,
+                                  content: dhikrItem.text,
+                                  source: dhikrItem.source,
+                                  hasDivider: true,
+                                  leftAction: _buildActionButton(
+                                    context,
+                                    isFav
+                                        ? Icons.favorite_rounded
+                                        : Icons.favorite_border_rounded,
+                                    () => FavoritesManager.toggleFavorite(
+                                      context,
+                                      itemData,
+                                    ),
+                                    iconColor: isFav
+                                        ? const Color(0xFFC5A059)
+                                        : null,
                                   ),
-                              rightActions: [
-                                _buildActionButton(
-                                  context,
-                                  Icons.copy_rounded,
-                                  () => DhikrCopyHelper.copyToClipboard(context, {
-                                    'text':
-                                        'سُبْحَانَ اللَّهِ وَبِحَمْدِهِ، سُبْحَانَ اللَّهِ الْعَظِيمِ.',
-                                    'source': 'رواه البخاري ومسلم',
-                                  }),
-                                ),
-                                const SizedBox(width: 8),
-                                _buildActionButton(
-                                  context,
-                                  Icons.share_outlined,
-                                  () => DhikrShareHelper.shareDhikr({
-                                    'text':
-                                        'سُبْحَانَ اللَّهِ وَبِحَمْدِهِ، سُبْحَانَ اللَّهِ الْعَظِيمِ.',
-                                    'source': 'رواه البخاري ومسلم',
-                                  }),
-                                ),
-                              ],
+                                  rightActions: [
+                                    _buildActionButton(
+                                      context,
+                                      Icons.copy_rounded,
+                                      () => DhikrCopyHelper.copyToClipboard(
+                                        context,
+                                        itemData,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    _buildActionButton(
+                                      context,
+                                      Icons.share_outlined,
+                                      () => DhikrShareHelper.shareDhikr(
+                                        itemData,
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              },
                             ),
 
                             const SizedBox(height: 16),
 
                             // Card 2: دعاء اليوم
-                            _buildDailyContentCard(
-                              context,
-                              tagText: 'دعاء اليوم',
-                              tagIcon: Icons.back_hand_outlined,
-                              content:
-                                  'اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَافِيَةَ فِي الدُّنْيَا وَالْآخِرَةِ، اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ وَالْعَافِيَةَ فِي دِينِي وَدُنْيَايَ وَأَهْلِي وَمَالِي.',
-                              source: 'رواه أبو داود',
-                              hasDivider: false,
-                              leftAction:
-                                  ValueListenableBuilder<
-                                    List<Map<String, dynamic>>
-                                  >(
-                                    valueListenable:
-                                        FavoritesManager.favoriteDhikrs,
-                                    builder: (context, favorites, child) {
-                                      final item = {
-                                        'categoryTitle': 'أدعية اليوم',
-                                        'text':
-                                            'اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَافِيَةَ فِي الدُّنْيَا وَالْآخِرَةِ، اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ وَالْعَافِيَةَ فِي دِينِي وَدُنْيَايَ وَأَهْلِي وَمَالِي.',
-                                        'source': 'رواه أبو داود',
-                                      };
-                                      final isFav = FavoritesManager.isFavorite(
-                                        item,
-                                      );
-                                      return _buildActionButton(
-                                        context,
-                                        isFav
-                                            ? Icons.favorite_rounded
-                                            : Icons.favorite_border_rounded,
-                                        () => FavoritesManager.toggleFavorite(
-                                          context,
-                                          item,
-                                        ),
-                                        iconColor: isFav
-                                            ? const Color(0xFFC5A059)
-                                            : null,
-                                      );
-                                    },
+                            ValueListenableBuilder<List<Map<String, dynamic>>>(
+                              valueListenable: FavoritesManager.favoriteDhikrs,
+                              builder: (context, favorites, child) {
+                                final itemData = duaItem.toFavoriteItem();
+                                final isFav = FavoritesManager.isFavorite(
+                                  itemData,
+                                );
+                                return _buildDailyContentCard(
+                                  context,
+                                  tagText: 'دعاء اليوم',
+                                  tagIcon: Icons.back_hand_outlined,
+                                  content: duaItem.text,
+                                  source: duaItem.source,
+                                  hasDivider: false,
+                                  leftAction: _buildActionButton(
+                                    context,
+                                    isFav
+                                        ? Icons.favorite_rounded
+                                        : Icons.favorite_border_rounded,
+                                    () => FavoritesManager.toggleFavorite(
+                                      context,
+                                      itemData,
+                                    ),
+                                    iconColor: isFav
+                                        ? const Color(0xFFC5A059)
+                                        : null,
                                   ),
-                              rightActions: [
-                                _buildActionButton(
-                                  context,
-                                  Icons.copy_rounded,
-                                  () => DhikrCopyHelper.copyToClipboard(context, {
-                                    'text':
-                                        'اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَافِيَةَ فِي الدُّنْيَا وَالْآخِرَةِ، اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ وَالْعَافِيَةَ فِي دِينِي وَدُنْيَايَ وَأَهْلِي وَمَالِي.',
-                                    'source': 'رواه أبو داود',
-                                  }),
-                                ),
-                                const SizedBox(width: 8),
-                                _buildActionButton(
-                                  context,
-                                  Icons.share_outlined,
-                                  () => DhikrShareHelper.shareDhikr({
-                                    'text':
-                                        'اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَافِيَةَ فِي الدُّنْيَا وَالْآخِرَةِ، اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ وَالْعَافِيَةَ فِي دِينِي وَدُنْيَايَ وَأَهْلِي وَمَالِي.',
-                                    'source': 'رواه أبو داود',
-                                  }),
-                                ),
-                              ],
+                                  rightActions: [
+                                    _buildActionButton(
+                                      context,
+                                      Icons.copy_rounded,
+                                      () => DhikrCopyHelper.copyToClipboard(
+                                        context,
+                                        itemData,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    _buildActionButton(
+                                      context,
+                                      Icons.share_outlined,
+                                      () => DhikrShareHelper.shareDhikr(
+                                        itemData,
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              },
                             ),
 
                             const SizedBox(height: 16),
@@ -207,12 +206,7 @@ class _HomePageState extends State<HomePage> {
                             ValueListenableBuilder<List<Map<String, dynamic>>>(
                               valueListenable: FavoritesManager.favoriteDhikrs,
                               builder: (context, favs, child) {
-                                const itemData = {
-                                  'categoryTitle': 'آية عشوائية',
-                                  'text':
-                                      '﴿ أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ ﴾',
-                                  'source': 'سورة الرعد - الآية 28',
-                                };
+                                final itemData = ayahItem.toFavoriteItem();
                                 final isFav = FavoritesManager.isFavorite(
                                   itemData,
                                 );
@@ -220,9 +214,8 @@ class _HomePageState extends State<HomePage> {
                                   context,
                                   tagText: 'آية عشوائية',
                                   tagIcon: Icons.menu_book_rounded,
-                                  content:
-                                      '﴿ أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ ﴾',
-                                  source: 'سورة الرعد - الآية 28',
+                                  content: ayahItem.text,
+                                  source: ayahItem.source,
                                   hasDivider: false,
                                   leftAction: _buildActionButton(
                                     context,
@@ -250,8 +243,9 @@ class _HomePageState extends State<HomePage> {
                                     _buildActionButton(
                                       context,
                                       Icons.share_outlined,
-                                      () =>
-                                          DhikrShareHelper.shareDhikr(itemData),
+                                      () => DhikrShareHelper.shareDhikr(
+                                        itemData,
+                                      ),
                                     ),
                                   ],
                                 );
@@ -265,29 +259,26 @@ class _HomePageState extends State<HomePage> {
                               context,
                               tagText: 'اقتباس إسلامي',
                               tagIcon: Icons.format_quote_rounded,
-                              content: 'وما كان الله معذبهم وهم يستغفرون.',
-                              source: 'سورة الأنفال - الآية 33',
+                              content: quoteItem.text,
+                              source: quoteItem.source,
                               hasDivider: false,
                               leftAction: null,
                               rightActions: [
                                 _buildActionButton(
                                   context,
                                   Icons.copy_rounded,
-                                  () =>
-                                      DhikrCopyHelper.copyToClipboard(context, {
-                                        'text':
-                                            'وما كان الله معذبهم وهم يستغفرون.',
-                                        'source': 'سورة الأنفال - الآية 33',
-                                      }),
+                                  () => DhikrCopyHelper.copyToClipboard(
+                                    context,
+                                    quoteItem.toFavoriteItem(),
+                                  ),
                                 ),
                                 const SizedBox(width: 8),
                                 _buildActionButton(
                                   context,
                                   Icons.share_outlined,
-                                  () => DhikrShareHelper.shareDhikr({
-                                    'text': 'وما كان الله معذبهم وهم يستغفرون.',
-                                    'source': 'سورة الأنفال - الآية 33',
-                                  }),
+                                  () => DhikrShareHelper.shareDhikr(
+                                    quoteItem.toFavoriteItem(),
+                                  ),
                                 ),
                               ],
                             ),
