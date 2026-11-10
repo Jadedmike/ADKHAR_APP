@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import '../../../../config/theme/app_assets.dart';
 import '../../../../config/theme/app_page_transitions.dart';
-import '../../../../shared/widgets/animated_card_tap.dart';
 import '../../../../shared/widgets/app_background.dart';
 import '../../../../shared/widgets/floating_bottom_nav_bar.dart';
+import '../../../../shared/widgets/glass_button.dart';
+import '../../../../shared/widgets/glass_card.dart';
 import '../../../../shared/widgets/screen_header.dart';
 import '../../../../shared/widgets/staggered_list_fade_item.dart';
 import 'category_list_page.dart';
@@ -11,7 +12,9 @@ import 'global_search_page.dart';
 
 /// The Azkar Categories Screen of the Adhkar ("ذكر") application.
 class AzkarCategoriesPage extends StatefulWidget {
-  const AzkarCategoriesPage({super.key});
+  final bool showBottomNavBar;
+
+  const AzkarCategoriesPage({super.key, this.showBottomNavBar = true});
 
   @override
   State<AzkarCategoriesPage> createState() => _AzkarCategoriesPageState();
@@ -27,6 +30,7 @@ class _AzkarCategoriesPageState extends State<AzkarCategoriesPage> {
       textDirection: TextDirection.rtl,
       child: Scaffold(
         backgroundColor: bgColor,
+        extendBody: true,
         body: Stack(
           children: [
             // Fullscreen Fixed Viewport Background & Ornaments
@@ -70,12 +74,13 @@ class _AzkarCategoriesPageState extends State<AzkarCategoriesPage> {
             ),
 
             // 4. Floating Rounded Bottom Navigation Bar (Selected: الأذكار)
-            Positioned(
-              left: 16,
-              right: 16,
-              bottom: 16 + MediaQuery.of(context).padding.bottom,
-              child: const FloatingBottomNavBar(selectedIndex: 3),
-            ),
+            if (widget.showBottomNavBar)
+              Positioned(
+                left: 16,
+                right: 16,
+                bottom: 16 + MediaQuery.of(context).padding.bottom,
+                child: const FloatingBottomNavBar(selectedIndex: 3),
+              ),
           ],
         ),
       ),
@@ -84,45 +89,19 @@ class _AzkarCategoriesPageState extends State<AzkarCategoriesPage> {
 
   /// Header App Bar (Title & Subtitle + Search Icon)
   Widget _buildHeader() {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
     return ScreenHeader(
       title: 'الأذكار',
       subtitle: 'اختر القسم الذي ترغب بقراءته',
-      leading: InkWell(
-        onTap: () {
+      leading: GlassIconButton(
+        icon: Icons.search_rounded,
+        size: 42,
+        iconSize: 20,
+        borderRadius: BorderRadius.circular(16),
+        onPressed: () {
           Navigator.of(context).push(
             MaterialPageRoute(builder: (context) => const GlobalSearchPage()),
           );
         },
-        borderRadius: BorderRadius.circular(16),
-        child: Container(
-          width: 42,
-          height: 42,
-          decoration: BoxDecoration(
-            color: isDark ? const Color(0xFF262D24) : const Color(0xFFFFFDF9),
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: isDark
-                  ? const Color(0xFF353E32)
-                  : const Color(0xFFEADFCF),
-              width: 1.2,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: isDark
-                    ? const Color(0x20000000)
-                    : const Color(0x0A000000),
-                blurRadius: 10,
-                offset: const Offset(0, 3),
-              ),
-            ],
-          ),
-          child: Icon(
-            Icons.search_rounded,
-            size: 20,
-            color: isDark ? const Color(0xFFD8CEBE) : const Color(0xFF4E5B4E),
-          ),
-        ),
       ),
     );
   }
@@ -202,7 +181,9 @@ class _AzkarCategoriesPageState extends State<AzkarCategoriesPage> {
         final category = categories[index];
         return StaggeredListFadeItem(
           index: index,
-          child: AnimatedCardTap(
+          child: GlassCard(
+            radius: 22,
+            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
             onTap: () {
               Navigator.of(context).push(
                 AppPageRoute.create(
@@ -213,30 +194,7 @@ class _AzkarCategoriesPageState extends State<AzkarCategoriesPage> {
                 ),
               );
             },
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
-              decoration: BoxDecoration(
-                color: isDark
-                    ? const Color(0xFF262D24)
-                    : const Color(0xFFFFFDF9),
-                borderRadius: BorderRadius.circular(22),
-                border: Border.all(
-                  color: isDark
-                      ? const Color(0xFF353E32)
-                      : const Color(0xFFF3ECE0),
-                  width: 1.2,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: isDark
-                        ? const Color(0x20000000)
-                        : const Color(0x0C000000),
-                    blurRadius: 14,
-                    offset: const Offset(0, 5),
-                  ),
-                ],
-              ),
-              child: Stack(
+            child: Stack(
                 children: [
                   // Corner Watermark Olive Leaf Graphic
                   Positioned(
@@ -344,8 +302,7 @@ class _AzkarCategoriesPageState extends State<AzkarCategoriesPage> {
                 ],
               ),
             ),
-          ),
-        );
+          );
       },
     );
   }

@@ -5,32 +5,76 @@ import '../../../../config/theme/app_page_transitions.dart';
 import '../../../../core/utils/daily_content_helper.dart';
 import '../../../../core/utils/dhikr_copy_helper.dart';
 import '../../../../core/utils/dhikr_share_helper.dart';
-import '../../../../shared/widgets/animated_card_tap.dart';
 import '../../../../shared/widgets/app_background.dart';
-import '../../../../shared/widgets/floating_bottom_nav_bar.dart';
+import '../../../../shared/widgets/glass_button.dart';
+import '../../../../shared/widgets/glass_card.dart';
+import '../../../../shared/widgets/magnetic_dock_nav_bar.dart';
 import '../managers/favorites_manager.dart';
 import '../managers/settings_manager.dart';
 import 'package:intl/intl.dart' hide TextDirection;
 import 'package:hijri/hijri_calendar.dart';
+import 'azkar_categories_page.dart';
+import 'duas_page.dart';
 import 'favorites_page.dart';
 import 'global_search_page.dart';
+import 'settings_page.dart';
 import 'tasbeeh_page.dart';
 
-/// The Home Screen of the Adhkar ("ذكر") application.
-/// Preserving top header, greeting, daily quote cards, background, and bottom navigation.
-/// Only category grid replaced with a single centered 75% width Tasbeeh card.
+/// The Home Screen & Main Shell of the Adhkar ("ذكر") application.
+/// Hosts the magnetic dock bottom navigation bar and switches tabs seamlessly.
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final int initialIndex;
+
+  const HomePage({super.key, this.initialIndex = 2});
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
+  late int _currentIndex;
+
+  static const List<AthkarNavItem> _navItems = [
+    AthkarNavItem(
+      label: 'المفضلة',
+      icon: Icons.favorite_border_rounded,
+      activeIcon: Icons.favorite_rounded,
+    ),
+    AthkarNavItem(
+      label: 'الأدعية',
+      icon: Icons.back_hand_outlined,
+      activeIcon: Icons.back_hand_rounded,
+    ),
+    AthkarNavItem(
+      label: 'الرئيسية',
+      icon: Icons.home_outlined,
+      activeIcon: Icons.home_rounded,
+    ),
+    AthkarNavItem(
+      label: 'الأذكار',
+      icon: Icons.grid_view_outlined,
+      activeIcon: Icons.grid_view_rounded,
+    ),
+    AthkarNavItem(
+      label: 'الإعدادات',
+      icon: Icons.settings_outlined,
+      activeIcon: Icons.settings_rounded,
+    ),
+  ];
+
   @override
   void initState() {
     super.initState();
+    _currentIndex = widget.initialIndex;
     WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void didUpdateWidget(covariant HomePage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.initialIndex != widget.initialIndex) {
+      _currentIndex = widget.initialIndex;
+    }
   }
 
   @override
@@ -62,8 +106,53 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       textDirection: TextDirection.rtl,
       child: Scaffold(
         backgroundColor: bgColor,
-        body: Stack(
+        extendBody: true,
+        body: IndexedStack(
+          index: _currentIndex,
           children: [
+            const FavoritesPage(showBottomNavBar: false),
+            const DuasPage(showBottomNavBar: false),
+            _buildHomeContent(
+              context,
+              greetingText,
+              dhikrItem,
+              duaItem,
+              ayahItem,
+              quoteItem,
+            ),
+            const AzkarCategoriesPage(showBottomNavBar: false),
+            const SettingsPage(showBottomNavBar: false),
+          ],
+        ),
+        bottomNavigationBar: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+            child: MagneticDockNavBar(
+              items: _navItems,
+              currentIndex: _currentIndex,
+              onItemSelected: (index) {
+                setState(() {
+                  _currentIndex = index;
+                });
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// Scrollable home canvas for daily quote cards, greeting, and tasbeeh.
+  Widget _buildHomeContent(
+    BuildContext context,
+    String greetingText,
+    DailyContentItem dhikrItem,
+    DailyContentItem duaItem,
+    DailyContentItem ayahItem,
+    DailyContentItem quoteItem,
+  ) {
+    return Stack(
+      children: [
             // Fullscreen Fixed Viewport Background & Ornaments
             const AppBackground(),
 
@@ -296,16 +385,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
               ),
             ),
 
-            // 4. Floating Rounded Bottom Navigation Bar (SelectedIndex: 2 = الرئيسية)
-            Positioned(
-              left: 16,
-              right: 16,
-              bottom: 16 + MediaQuery.of(context).padding.bottom,
-              child: const FloatingBottomNavBar(selectedIndex: 2),
-            ),
-          ],
-        ),
-      ),
+      ],
     );
   }
 
@@ -421,25 +501,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         const SizedBox(width: 8),
 
         // Hijri & Gregorian Date Card
-        Container(
+        GlassCard(
+          radius: 22,
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          decoration: BoxDecoration(
-            color: isDark ? const Color(0xFF262D24) : const Color(0xFFFFFDF9),
-            borderRadius: BorderRadius.circular(22),
-            border: Border.all(
-              color: isDark ? const Color(0xFF353E32) : const Color(0xFFEADFCF),
-              width: 1.2,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: isDark
-                    ? const Color(0x20000000)
-                    : const Color(0x0D000000),
-                blurRadius: 12,
-                offset: const Offset(0, 4),
-              ),
-            ],
-          ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -477,8 +541,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                 height: 36,
                 decoration: BoxDecoration(
                   color: isDark
-                      ? const Color(0xFF1F241D)
-                      : const Color(0xFFF7F2E8),
+                      ? const Color(0xFF1F241D).withValues(alpha: 0.6)
+                      : const Color(0xFFF7F2E8).withValues(alpha: 0.7),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(
@@ -508,22 +572,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     required List<Widget> rightActions,
   }) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    return Container(
-      decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF262D24) : const Color(0xFFFFFDF9),
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(
-          color: isDark ? const Color(0xFF353E32) : const Color(0xFFF3ECE0),
-          width: 1.2,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: isDark ? const Color(0x20000000) : const Color(0x0E000000),
-            blurRadius: 16,
-            offset: const Offset(0, 6),
-          ),
-        ],
-      ),
+    return GlassCard(
+      radius: 24,
+      padding: EdgeInsets.zero,
       child: Stack(
         children: [
           // Corner Olive Leaf Watermark Graphic
@@ -712,29 +763,13 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     VoidCallback onTap, {
     Color? iconColor,
   }) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    return InkWell(
-      onTap: onTap,
+    return GlassIconButton(
+      icon: icon,
+      onPressed: onTap,
+      size: 42,
+      iconSize: 20,
       borderRadius: BorderRadius.circular(14),
-      child: Container(
-        width: 42,
-        height: 42,
-        decoration: BoxDecoration(
-          color: isDark ? const Color(0xFF1F241D) : const Color(0xFFF7F2E8),
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(
-            color: isDark ? const Color(0xFF353E32) : const Color(0xFFEADFCF),
-            width: 1,
-          ),
-        ),
-        child: Icon(
-          icon,
-          size: 20,
-          color:
-              iconColor ??
-              (isDark ? const Color(0xFFD8CEBE) : const Color(0xFF4E5B4E)),
-        ),
-      ),
+      color: iconColor,
     );
   }
 
@@ -743,56 +778,39 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Center(
-      child: AnimatedCardTap(
-        onTap: () {
+      child: GlassButton(
+        width: 120,
+        height: 120,
+        borderRadius: BorderRadius.circular(60),
+        borderColor: isDark
+            ? const Color(0xFFC9A15B).withValues(alpha: 0.6)
+            : const Color(0xFFC5A059).withValues(alpha: 0.6),
+        onPressed: () {
           Navigator.of(context).push(AppPageRoute.create(const TasbeehPage()));
         },
-        child: Container(
-          width: 120,
-          height: 120,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: isDark ? const Color(0xFF262D24) : const Color(0xFFFFFDF9),
-            border: Border.all(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.grain_outlined,
+              size: 34,
               color: isDark
-                  ? const Color(0xFFC9A15B).withValues(alpha: 0.6)
-                  : const Color(0xFFC5A059).withValues(alpha: 0.6),
-              width: 2.0,
+                  ? const Color(0xFFC9A15B)
+                  : const Color(0xFF4E5B4E),
             ),
-            boxShadow: [
-              BoxShadow(
+            const SizedBox(height: 6),
+            Text(
+              'المسبحة',
+              style: TextStyle(
+                fontFamily: 'Fustat',
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
                 color: isDark
-                    ? const Color(0x30000000)
-                    : const Color(0x12000000),
-                blurRadius: 16,
-                offset: const Offset(0, 6),
+                    ? const Color(0xFFF6F1E7)
+                    : const Color(0xFF1E281F),
               ),
-            ],
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.grain_outlined,
-                size: 34,
-                color: isDark
-                    ? const Color(0xFFC9A15B)
-                    : const Color(0xFF4E5B4E),
-              ),
-              const SizedBox(height: 6),
-              Text(
-                'المسبحة',
-                style: TextStyle(
-                  fontFamily: 'Fustat',
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                  color: isDark
-                      ? const Color(0xFFF6F1E7)
-                      : const Color(0xFF1E281F),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -907,35 +925,13 @@ class _HeaderLogoRow extends StatelessWidget {
     VoidCallback onTap, {
     Color? iconColor,
   }) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    return InkWell(
-      onTap: onTap,
+    return GlassIconButton(
+      icon: icon,
+      onPressed: onTap,
+      size: 42,
+      iconSize: 20,
       borderRadius: BorderRadius.circular(16),
-      child: Container(
-        width: 42,
-        height: 42,
-        decoration: BoxDecoration(
-          color: isDark ? const Color(0xFF262D24) : const Color(0xFFFFFDF9),
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: isDark ? const Color(0xFF353E32) : const Color(0xFFEADFCF),
-            width: 1.2,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: isDark ? const Color(0x20000000) : const Color(0x0A000000),
-              blurRadius: 10,
-              offset: const Offset(0, 3),
-            ),
-          ],
-        ),
-        child: Icon(
-          icon,
-          size: 20,
-          color: iconColor ??
-              (isDark ? const Color(0xFFD8CEBE) : const Color(0xFF4E5B4E)),
-        ),
-      ),
+      color: iconColor,
     );
   }
 }

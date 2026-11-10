@@ -5,8 +5,10 @@ import '../../../../config/theme/app_assets.dart';
 import '../../../../config/theme/app_colors.dart';
 import '../../../../config/theme/app_page_transitions.dart';
 import '../../../../core/utils/arabic_search_helper.dart';
-import '../../../../shared/widgets/animated_card_tap.dart';
+import '../../../../shared/widgets/glass_card.dart';
+import '../../../../shared/widgets/glass_input_field.dart';
 import '../../../../shared/widgets/app_background.dart';
+import '../../../../shared/widgets/glass_button.dart';
 import '../../../../shared/widgets/staggered_list_fade_item.dart';
 import '../managers/favorites_manager.dart';
 import 'single_dhikr_page.dart';
@@ -235,77 +237,20 @@ class _GlobalSearchPageState extends State<GlobalSearchPage> {
         children: [
           // Instant Search Input Field (Physical Right)
           Expanded(
-            child: Container(
-              height: 50,
-              decoration: BoxDecoration(
+            child: GlassInputField(
+              controller: _searchController,
+              focusNode: _searchFocusNode,
+              autofocus: true,
+              hintText: 'ابحث في الأذكار والأدعية...',
+              prefixIcon: Icon(
+                Icons.search_rounded,
                 color: isDark
-                    ? const Color(0xFF262D24)
-                    : const Color(0xFFFFFDF9),
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(
-                  color: _searchFocusNode.hasFocus
-                      ? (isDark
-                            ? const Color(0xFFC9A15B)
-                            : const Color(0xFFC5A059))
-                      : (isDark
-                            ? const Color(0xFF353E32)
-                            : const Color(0xFFEADFCF)),
-                  width: 1.4,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: isDark
-                        ? const Color(0x20000000)
-                        : const Color(0x0C000000),
-                    blurRadius: 12,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
+                    ? const Color(0xFFC9A15B)
+                    : const Color(0xFF4E5B4E),
+                size: 22,
               ),
-              child: Row(
-                children: [
-                  const SizedBox(width: 14),
-                  Icon(
-                    Icons.search_rounded,
-                    color: isDark
-                        ? const Color(0xFFC9A15B)
-                        : const Color(0xFF4E5B4E),
-                    size: 22,
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: TextField(
-                      controller: _searchController,
-                      focusNode: _searchFocusNode,
-                      autofocus: true,
-                      style: TextStyle(
-                        fontFamily: 'Fustat',
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        color: isDark
-                            ? const Color(0xFFF6F1E7)
-                            : const Color(0xFF1E281F),
-                      ),
-                      decoration: InputDecoration(
-                        hintText: 'ابحث في الأذكار والأدعية...',
-                        hintStyle: TextStyle(
-                          fontFamily: 'Fustat',
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                          color: isDark
-                              ? const Color(0xFFD8CEBE)
-                              : const Color(0xFF9EA69F),
-                        ),
-                        border: InputBorder.none,
-                        isDense: true,
-                        contentPadding: EdgeInsets.zero,
-                      ),
-                    ),
-                  ),
-
-                  // Clear Search Button
-                  if (_currentQuery.isNotEmpty)
-                    IconButton(
+              suffixIcon: _currentQuery.isNotEmpty
+                  ? IconButton(
                       icon: Icon(
                         Icons.close_rounded,
                         color: isDark
@@ -316,53 +261,22 @@ class _GlobalSearchPageState extends State<GlobalSearchPage> {
                       onPressed: () {
                         _searchController.clear();
                       },
-                    ),
-                  const SizedBox(width: 6),
-                ],
-              ),
+                    )
+                  : null,
             ),
           ),
 
           const SizedBox(width: 12),
 
           // Back Button (Physical Left)
-          InkWell(
-            onTap: () {
+          GlassIconButton(
+            icon: Icons.arrow_back_ios_new_rounded,
+            size: 44,
+            iconSize: 18,
+            borderRadius: BorderRadius.circular(16),
+            onPressed: () {
               Navigator.of(context).pop();
             },
-            borderRadius: BorderRadius.circular(16),
-            child: Container(
-              width: 44,
-              height: 44,
-              decoration: BoxDecoration(
-                color: isDark
-                    ? const Color(0xFF262D24)
-                    : const Color(0xFFFFFDF9),
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(
-                  color: isDark
-                      ? const Color(0xFF353E32)
-                      : const Color(0xFFEADFCF),
-                  width: 1.2,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: isDark
-                        ? const Color(0x20000000)
-                        : const Color(0x0A000000),
-                    blurRadius: 10,
-                    offset: const Offset(0, 3),
-                  ),
-                ],
-              ),
-              child: Icon(
-                Icons.arrow_back_ios_new_rounded,
-                size: 18,
-                color: isDark
-                    ? const Color(0xFFD8CEBE)
-                    : const Color(0xFF4E5B4E),
-              ),
-            ),
           ),
         ],
       ),
@@ -619,7 +533,9 @@ class _GlobalSearchPageState extends State<GlobalSearchPage> {
           : const Color(0xFFF0E3C4),
     );
 
-    return AnimatedCardTap(
+    return GlassCard(
+      radius: 22,
+      padding: const EdgeInsets.all(18),
       onTap: () {
         // Opens the Reading Screen (SingleDhikrPage)
         Navigator.of(context).push(
@@ -632,24 +548,7 @@ class _GlobalSearchPageState extends State<GlobalSearchPage> {
           ),
         );
       },
-      child: Container(
-        padding: const EdgeInsets.all(18),
-        decoration: BoxDecoration(
-          color: isDark ? const Color(0xFF262D24) : const Color(0xFFFFFDF9),
-          borderRadius: BorderRadius.circular(22),
-          border: Border.all(
-            color: isDark ? const Color(0xFF353E32) : const Color(0xFFF3ECE0),
-            width: 1.2,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: isDark ? const Color(0x20000000) : const Color(0x0C000000),
-              blurRadius: 14,
-              offset: const Offset(0, 5),
-            ),
-          ],
-        ),
-        child: Stack(
+      child: Stack(
           children: [
             // Corner Watermark Olive Leaf Graphic
             Positioned(
@@ -834,7 +733,6 @@ class _GlobalSearchPageState extends State<GlobalSearchPage> {
             ),
           ],
         ),
-      ),
-    );
+      );
   }
 }

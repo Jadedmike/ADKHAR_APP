@@ -3,6 +3,8 @@ import '../../../../config/theme/app_assets.dart';
 import '../../../../config/theme/app_colors.dart';
 import '../../../../shared/widgets/app_background.dart';
 import '../../../../shared/widgets/floating_bottom_nav_bar.dart';
+import '../../../../shared/widgets/glass_button.dart';
+import '../../../../shared/widgets/glass_card.dart';
 import '../../../../shared/widgets/screen_header.dart';
 
 /// The About App Screen for the "ذكر" application.
@@ -155,40 +157,14 @@ class AboutPage extends StatelessWidget {
 
   /// Header Bar with Back Button & Screen Title
   Widget _buildHeader(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
     return ScreenHeader(
       title: 'عن التطبيق',
-      trailing: InkWell(
-        onTap: () => Navigator.of(context).pop(),
+      trailing: GlassIconButton(
+        icon: Icons.arrow_back_ios_new_rounded,
+        size: 42,
+        iconSize: 18,
         borderRadius: BorderRadius.circular(16),
-        child: Container(
-          width: 42,
-          height: 42,
-          decoration: BoxDecoration(
-            color: isDark ? const Color(0xFF262D24) : const Color(0xFFFFFDF9),
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: isDark
-                  ? const Color(0xFF353E32)
-                  : const Color(0xFFEADFCF),
-              width: 1.2,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: isDark
-                    ? const Color(0x20000000)
-                    : const Color(0x0A000000),
-                blurRadius: 10,
-                offset: const Offset(0, 3),
-              ),
-            ],
-          ),
-          child: Icon(
-            Icons.arrow_back_ios_new_rounded,
-            size: 18,
-            color: isDark ? const Color(0xFFD8CEBE) : const Color(0xFF4E5B4E),
-          ),
-        ),
+        onPressed: () => Navigator.of(context).pop(),
       ),
     );
   }
@@ -196,24 +172,10 @@ class AboutPage extends StatelessWidget {
   /// Description Card Container
   Widget _buildDescriptionCard(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    return Container(
+    return GlassCard(
       width: double.infinity,
       padding: const EdgeInsets.all(22),
-      decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF262D24) : const Color(0xFFFFFDF9),
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(
-          color: isDark ? const Color(0xFF353E32) : const Color(0xFFEADFCF),
-          width: 1.4,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: isDark ? const Color(0x20000000) : const Color(0x10000000),
-            blurRadius: 16,
-            offset: const Offset(0, 6),
-          ),
-        ],
-      ),
+      radius: 24,
       child: Text(
         'تطبيق بسيط يهدف إلى تسهيل قراءة الأذكار والأدعية اليومية بتصميم هادئ وتجربة استخدام مريحة.',
         textAlign: TextAlign.center,
@@ -231,24 +193,10 @@ class AboutPage extends StatelessWidget {
   /// Metadata Info Card (Version, Build Number, Last Update)
   Widget _buildMetadataCard(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    return Container(
+    return GlassCard(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-      decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF262D24) : const Color(0xFFFFFDF9),
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(
-          color: isDark ? const Color(0xFF353E32) : const Color(0xFFEADFCF),
-          width: 1.4,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: isDark ? const Color(0x20000000) : const Color(0x10000000),
-            blurRadius: 16,
-            offset: const Offset(0, 6),
-          ),
-        ],
-      ),
+      radius: 24,
       child: Column(
         children: [
           _buildInfoRow(

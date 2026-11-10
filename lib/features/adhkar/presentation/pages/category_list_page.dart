@@ -4,9 +4,10 @@ import 'package:flutter/services.dart';
 import '../../../../config/theme/app_assets.dart';
 import '../../../../config/theme/app_colors.dart';
 import '../../../../config/theme/app_page_transitions.dart';
-import '../../../../shared/widgets/animated_card_tap.dart';
+import '../../../../shared/widgets/glass_card.dart';
 import '../../../../shared/widgets/app_background.dart';
 import '../../../../shared/widgets/floating_bottom_nav_bar.dart';
+import '../../../../shared/widgets/glass_button.dart';
 import '../../../../shared/widgets/screen_header.dart';
 import '../../../../shared/widgets/staggered_list_fade_item.dart';
 import '../managers/favorites_manager.dart';
@@ -153,12 +154,15 @@ class _CategoryListPageState extends State<CategoryListPage> {
 
   /// Header with Back button, Category title & subtitle
   Widget _buildHeader(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
     return ScreenHeader(
       title: widget.categoryTitle,
       subtitle: 'قائمة الأذكار (${_dhikrItems.length})',
-      trailing: InkWell(
-        onTap: () {
+      trailing: GlassIconButton(
+        icon: Icons.arrow_back_ios_new_rounded,
+        size: 42,
+        iconSize: 18,
+        borderRadius: BorderRadius.circular(16),
+        onPressed: () {
           if (Navigator.of(context).canPop()) {
             Navigator.of(context).pop();
           } else {
@@ -169,35 +173,6 @@ class _CategoryListPageState extends State<CategoryListPage> {
             );
           }
         },
-        borderRadius: BorderRadius.circular(16),
-        child: Container(
-          width: 42,
-          height: 42,
-          decoration: BoxDecoration(
-            color: isDark ? const Color(0xFF262D24) : const Color(0xFFFFFDF9),
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: isDark
-                  ? const Color(0xFF353E32)
-                  : const Color(0xFFEADFCF),
-              width: 1.2,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: isDark
-                    ? const Color(0x20000000)
-                    : const Color(0x0A000000),
-                blurRadius: 10,
-                offset: const Offset(0, 3),
-              ),
-            ],
-          ),
-          child: Icon(
-            Icons.arrow_back_ios_new_rounded,
-            size: 18,
-            color: isDark ? const Color(0xFFD8CEBE) : const Color(0xFF4E5B4E),
-          ),
-        ),
       ),
     );
   }
@@ -228,7 +203,9 @@ class _CategoryListPageState extends State<CategoryListPage> {
 
         return StaggeredListFadeItem(
           index: index,
-          child: AnimatedCardTap(
+          child: GlassCard(
+            radius: 22,
+            padding: const EdgeInsets.all(18),
             onTap: () {
               Navigator.of(context).push(
                 AppPageRoute.create(
@@ -240,30 +217,7 @@ class _CategoryListPageState extends State<CategoryListPage> {
                 ),
               );
             },
-            child: Container(
-              padding: const EdgeInsets.all(18),
-              decoration: BoxDecoration(
-                color: isDark
-                    ? const Color(0xFF262D24)
-                    : const Color(0xFFFFFDF9),
-                borderRadius: BorderRadius.circular(22),
-                border: Border.all(
-                  color: isDark
-                      ? const Color(0xFF353E32)
-                      : const Color(0xFFF3ECE0),
-                  width: 1.2,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: isDark
-                        ? const Color(0x20000000)
-                        : const Color(0x0C000000),
-                    blurRadius: 14,
-                    offset: const Offset(0, 5),
-                  ),
-                ],
-              ),
-              child: Stack(
+            child: Stack(
                 children: [
                   // Corner Watermark Olive Leaf Graphic
                   Positioned(
@@ -433,8 +387,7 @@ class _CategoryListPageState extends State<CategoryListPage> {
                 ],
               ),
             ),
-          ),
-        );
+          );
       },
     );
   }
@@ -442,25 +395,11 @@ class _CategoryListPageState extends State<CategoryListPage> {
   /// Displays a clear, elegant unavailable state when category content is not present
   Widget _buildEmptyState(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    return Container(
+    return GlassCard(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(vertical: 48, horizontal: 24),
       margin: const EdgeInsets.only(top: 10),
-      decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF262D24) : const Color(0xFFFFFDF9),
-        borderRadius: BorderRadius.circular(22),
-        border: Border.all(
-          color: isDark ? const Color(0xFF353E32) : const Color(0xFFEADFCF),
-          width: 1.2,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: isDark ? const Color(0x20000000) : const Color(0x0A000000),
-            blurRadius: 14,
-            offset: const Offset(0, 5),
-          ),
-        ],
-      ),
+      radius: 22,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,

@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import '../../../../config/theme/app_assets.dart';
 import '../../../../config/theme/app_colors.dart';
 import '../../../../config/theme/app_page_transitions.dart';
-import '../../../../shared/widgets/animated_card_tap.dart';
+import '../../../../shared/widgets/glass_card.dart';
 import '../../../../shared/widgets/app_background.dart';
 import '../../../../shared/widgets/floating_bottom_nav_bar.dart';
+import '../../../../shared/widgets/glass_button.dart';
 import '../../../../shared/widgets/screen_header.dart';
 import '../../../../shared/widgets/staggered_list_fade_item.dart';
 import '../managers/favorites_manager.dart';
@@ -12,7 +13,9 @@ import 'single_dhikr_page.dart';
 
 /// The Favorites Screen for the "ذكر" application.
 class FavoritesPage extends StatefulWidget {
-  const FavoritesPage({super.key});
+  final bool showBottomNavBar;
+
+  const FavoritesPage({super.key, this.showBottomNavBar = true});
 
   @override
   State<FavoritesPage> createState() => _FavoritesPageState();
@@ -28,6 +31,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
       textDirection: TextDirection.rtl,
       child: Scaffold(
         backgroundColor: bgColor,
+        extendBody: true,
         body: Stack(
           children: [
             // Fullscreen Fixed Viewport Background & Ornaments
@@ -84,12 +88,13 @@ class _FavoritesPageState extends State<FavoritesPage> {
             ),
 
             // 4. Floating Rounded Bottom Navigation Bar
-            Positioned(
-              left: 16,
-              right: 16,
-              bottom: 16 + MediaQuery.of(context).padding.bottom,
-              child: const FloatingBottomNavBar(selectedIndex: 0),
-            ),
+            if (widget.showBottomNavBar)
+              Positioned(
+                left: 16,
+                right: 16,
+                bottom: 16 + MediaQuery.of(context).padding.bottom,
+                child: const FloatingBottomNavBar(selectedIndex: 0),
+              ),
           ],
         ),
       ),
@@ -99,25 +104,11 @@ class _FavoritesPageState extends State<FavoritesPage> {
   /// Empty State Illustration & Message
   Widget _buildEmptyState(double maxHeight) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    return Container(
+    return GlassCard(
       width: double.infinity,
       constraints: BoxConstraints(minHeight: maxHeight - 220),
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
-      decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF262D24) : const Color(0xFFFFFDF9),
-        borderRadius: BorderRadius.circular(26),
-        border: Border.all(
-          color: isDark ? const Color(0xFF353E32) : const Color(0xFFF3ECE0),
-          width: 1.2,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: isDark ? const Color(0x20000000) : const Color(0x0A000000),
-            blurRadius: 14,
-            offset: const Offset(0, 5),
-          ),
-        ],
-      ),
+      radius: 26,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -193,7 +184,9 @@ class _FavoritesPageState extends State<FavoritesPage> {
 
         return StaggeredListFadeItem(
           index: index,
-          child: AnimatedCardTap(
+          child: GlassCard(
+            radius: 22,
+            padding: const EdgeInsets.all(18),
             onTap: () {
               Navigator.of(context).push(
                 AppPageRoute.create(
@@ -205,30 +198,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
                 ),
               );
             },
-            child: Container(
-              padding: const EdgeInsets.all(18),
-              decoration: BoxDecoration(
-                color: isDark
-                    ? const Color(0xFF262D24)
-                    : const Color(0xFFFFFDF9),
-                borderRadius: BorderRadius.circular(22),
-                border: Border.all(
-                  color: isDark
-                      ? const Color(0xFF353E32)
-                      : const Color(0xFFF3ECE0),
-                  width: 1.2,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: isDark
-                        ? const Color(0x20000000)
-                        : const Color(0x0C000000),
-                    blurRadius: 14,
-                    offset: const Offset(0, 5),
-                  ),
-                ],
-              ),
-              child: Stack(
+            child: Stack(
                 children: [
                   // Corner Watermark Olive Branch Graphic
                   Positioned(
@@ -289,18 +259,17 @@ class _FavoritesPageState extends State<FavoritesPage> {
                           ),
 
                           // Favorite Heart Button (Removes from favorites)
-                          InkWell(
-                            onTap: () {
+                          GlassIconButton(
+                            icon: Icons.favorite_rounded,
+                            size: 36,
+                            iconSize: 20,
+                            borderRadius: BorderRadius.circular(12),
+                            color: isDark
+                                ? const Color(0xFFC9A15B)
+                                : const Color(0xFFC5A059),
+                            onPressed: () {
                               FavoritesManager.removeFavorite(context, dhikr);
                             },
-                            borderRadius: BorderRadius.circular(14),
-                            child: Icon(
-                              Icons.favorite_rounded,
-                              size: 22,
-                              color: isDark
-                                  ? const Color(0xFFC9A15B)
-                                  : const Color(0xFFC5A059),
-                            ),
                           ),
                         ],
                       ),
@@ -380,8 +349,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
                 ],
               ),
             ),
-          ),
-        );
+          );
       },
     );
   }

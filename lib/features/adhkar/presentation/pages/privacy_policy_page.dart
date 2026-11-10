@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../../../shared/widgets/app_background.dart';
 import '../../../../shared/widgets/floating_bottom_nav_bar.dart';
+import '../../../../shared/widgets/glass_button.dart';
+import '../../../../shared/widgets/glass_card.dart';
 import '../../../../shared/widgets/screen_header.dart';
 
 /// The Privacy Policy Screen for the "ذكر" application.
@@ -148,40 +150,14 @@ class PrivacyPolicyPage extends StatelessWidget {
 
   /// Header Bar with Back Button & Screen Title
   Widget _buildHeader(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
     return ScreenHeader(
       title: 'سياسة الخصوصية',
-      trailing: InkWell(
-        onTap: () => Navigator.of(context).pop(),
+      trailing: GlassIconButton(
+        icon: Icons.arrow_back_ios_new_rounded,
+        size: 42,
+        iconSize: 18,
         borderRadius: BorderRadius.circular(16),
-        child: Container(
-          width: 42,
-          height: 42,
-          decoration: BoxDecoration(
-            color: isDark ? const Color(0xFF262D24) : const Color(0xFFFFFDF9),
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: isDark
-                  ? const Color(0xFF353E32)
-                  : const Color(0xFFEADFCF),
-              width: 1.2,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: isDark
-                    ? const Color(0x20000000)
-                    : const Color(0x0A000000),
-                blurRadius: 10,
-                offset: const Offset(0, 3),
-              ),
-            ],
-          ),
-          child: Icon(
-            Icons.arrow_back_ios_new_rounded,
-            size: 18,
-            color: isDark ? const Color(0xFFD8CEBE) : const Color(0xFF4E5B4E),
-          ),
-        ),
+        onPressed: () => Navigator.of(context).pop(),
       ),
     );
   }
@@ -194,24 +170,10 @@ class PrivacyPolicyPage extends StatelessWidget {
     required IconData icon,
   }) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    return Container(
+    return GlassCard(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF262D24) : const Color(0xFFFFFDF9),
-        borderRadius: BorderRadius.circular(22),
-        border: Border.all(
-          color: isDark ? const Color(0xFF353E32) : const Color(0xFFEADFCF),
-          width: 1.3,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: isDark ? const Color(0x20000000) : const Color(0x0C000000),
-            blurRadius: 14,
-            offset: const Offset(0, 5),
-          ),
-        ],
-      ),
+      radius: 22,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

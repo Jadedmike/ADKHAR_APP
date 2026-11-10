@@ -7,6 +7,10 @@ import '../../../../core/utils/dhikr_copy_helper.dart';
 import '../../../../core/utils/dhikr_share_helper.dart';
 import '../../../../shared/widgets/app_background.dart';
 import '../../../../shared/widgets/floating_bottom_nav_bar.dart';
+import '../../../../shared/widgets/glass_button.dart';
+import '../../../../shared/widgets/glass_card.dart';
+import '../../../../shared/widgets/glass_modal.dart';
+import '../../../../shared/widgets/glass_option_tile.dart';
 import '../managers/favorites_manager.dart';
 import '../managers/settings_manager.dart';
 import 'azkar_categories_page.dart';
@@ -220,209 +224,77 @@ class _SingleDhikrPageState extends State<SingleDhikrPage>
       {'label': 'كبير جداً', 'desc': 'أكبر حجم خط لتسهيل القراءة للجميع'},
     ];
 
-    showModalBottomSheet(
+    showGlassBottomSheet(
       context: context,
-      backgroundColor: Colors.transparent,
-      isScrollControlled: true,
       builder: (modalContext) {
         final isDark = Theme.of(modalContext).brightness == Brightness.dark;
-        return Directionality(
-          textDirection: TextDirection.rtl,
-          child: Container(
-            padding: const EdgeInsets.only(
-              left: 20,
-              right: 20,
-              top: 12,
-              bottom: 28,
-            ),
-            decoration: BoxDecoration(
-              color: isDark ? const Color(0xFF262D24) : const Color(0xFFFFFDF9),
-              borderRadius: const BorderRadius.vertical(
-                top: Radius.circular(28),
-              ),
-              border: Border(
-                top: BorderSide(
-                  color: isDark
-                      ? const Color(0xFF353E32)
-                      : const Color(0xFFEADFCF),
-                  width: 1.5,
-                ),
-              ),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Header Row
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // Top Indicator Handle
-                Container(
-                  width: 40,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: isDark
-                        ? const Color(0xFF3E483B)
-                        : const Color(0xFFD6C8B4),
-                    borderRadius: BorderRadius.circular(2),
-                  ),
-                ),
-
-                const SizedBox(height: 16),
-
-                // Header Row
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.format_size_rounded,
-                          color: isDark
-                              ? const Color(0xFFC9A15B)
-                              : const Color(0xFF4E5B4E),
-                          size: 22,
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          'حجم خط القراءة',
-                          style: TextStyle(
-                            fontFamily: 'Fustat',
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: isDark
-                                ? const Color(0xFFF6F1E7)
-                                : const Color(0xFF4E5B4E),
-                          ),
-                        ),
-                      ],
+                    Icon(
+                      Icons.format_size_rounded,
+                      color: isDark
+                          ? const Color(0xFFC9A15B)
+                          : const Color(0xFF4E5B4E),
+                      size: 22,
                     ),
-                    InkWell(
-                      onTap: () => Navigator.pop(modalContext),
-                      borderRadius: BorderRadius.circular(14),
-                      child: Container(
-                        padding: const EdgeInsets.all(6),
-                        decoration: BoxDecoration(
-                          color: isDark
-                              ? const Color(0xFF1F241D)
-                              : const Color(0xFFF7F2E8),
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: isDark
-                                ? const Color(0xFF353E32)
-                                : const Color(0xFFEADFCF),
-                            width: 1,
-                          ),
-                        ),
-                        child: Icon(
-                          Icons.close_rounded,
-                          size: 18,
-                          color: isDark
-                              ? const Color(0xFFD8CEBE)
-                              : const Color(0xFF707973),
-                        ),
+                    const SizedBox(width: 8),
+                    Text(
+                      'حجم خط القراءة',
+                      style: TextStyle(
+                        fontFamily: 'Fustat',
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: isDark
+                            ? const Color(0xFFF6F1E7)
+                            : const Color(0xFF4E5B4E),
                       ),
                     ),
                   ],
                 ),
-
-                const SizedBox(height: 16),
-
-                // Options List
-                ValueListenableBuilder<String>(
-                  valueListenable: SettingsManager.fontSizeOption,
-                  builder: (context, currentOption, child) {
-                    return Column(
-                      children: options.map((opt) {
-                        final String label = opt['label']!;
-                        final String desc = opt['desc']!;
-                        final bool isSelected = currentOption == label;
-
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 10),
-                          child: InkWell(
-                            onTap: () {
-                              SettingsManager.setFontSizeOption(label);
-                            },
-                            borderRadius: BorderRadius.circular(18),
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 16,
-                                vertical: 12,
-                              ),
-                              decoration: BoxDecoration(
-                                color: isSelected
-                                    ? (isDark
-                                          ? const Color(0xFF2E362C)
-                                          : const Color(0xFFF0E8DA))
-                                    : (isDark
-                                          ? const Color(0xFF1F241D)
-                                          : const Color(0xFFF7F2E8)),
-                                borderRadius: BorderRadius.circular(18),
-                                border: Border.all(
-                                  color: isSelected
-                                      ? (isDark
-                                            ? const Color(0xFFC9A15B)
-                                            : const Color(0xFFC5A059))
-                                      : (isDark
-                                            ? const Color(0xFF353E32)
-                                            : const Color(0xFFEADFCF)),
-                                  width: isSelected ? 1.5 : 1,
-                                ),
-                              ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        label,
-                                        style: TextStyle(
-                                          fontFamily: 'Fustat',
-                                          fontSize: 15.5,
-                                          fontWeight: FontWeight.bold,
-                                          color: isSelected
-                                              ? (isDark
-                                                    ? const Color(0xFFC9A15B)
-                                                    : const Color(0xFF4E5B4E))
-                                              : (isDark
-                                                    ? const Color(0xFFF6F1E7)
-                                                    : const Color(0xFF1E281F)),
-                                        ),
-                                      ),
-                                      const SizedBox(height: 2),
-                                      Text(
-                                        desc,
-                                        style: TextStyle(
-                                          fontFamily: 'Fustat',
-                                          fontSize: 11.5,
-                                          fontWeight: FontWeight.w500,
-                                          color: isDark
-                                              ? const Color(0xFFD8CEBE)
-                                              : const Color(0xFF707973),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  if (isSelected)
-                                    Icon(
-                                      Icons.check_circle_rounded,
-                                      color: isDark
-                                          ? const Color(0xFFC9A15B)
-                                          : const Color(0xFFC5A059),
-                                      size: 22,
-                                    ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        );
-                      }).toList(),
-                    );
-                  },
+                GlassIconButton(
+                  icon: Icons.close_rounded,
+                  size: 34,
+                  iconSize: 18,
+                  onPressed: () => Navigator.pop(modalContext),
                 ),
               ],
             ),
-          ),
+
+            const SizedBox(height: 18),
+
+            // Options List
+            ValueListenableBuilder<String>(
+              valueListenable: SettingsManager.fontSizeOption,
+              builder: (context, currentOption, child) {
+                return Column(
+                  children: options.map((opt) {
+                    final String label = opt['label']!;
+                    final String desc = opt['desc']!;
+                    final bool isSelected = currentOption == label;
+
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: GlassOptionTile(
+                        titleText: label,
+                        subtitleText: desc,
+                        isSelected: isSelected,
+                        onTap: () {
+                          SettingsManager.setFontSizeOption(label);
+                        },
+                      ),
+                    );
+                  }).toList(),
+                );
+              },
+            ),
+          ],
         );
       },
     );
@@ -537,165 +409,48 @@ class _SingleDhikrPageState extends State<SingleDhikrPage>
               builder: (context, favorites, child) {
                 final currentDhikr = _activeList[_currentIndex];
                 final isFav = FavoritesManager.isFavorite(currentDhikr);
-                return InkWell(
-                  onTap: () {
+                return GlassIconButton(
+                  icon: isFav
+                      ? Icons.bookmark_rounded
+                      : Icons.bookmark_border_rounded,
+                  color: isFav ? const Color(0xFFC9A15B) : null,
+                  size: 42,
+                  iconSize: 20,
+                  borderRadius: BorderRadius.circular(16),
+                  onPressed: () {
                     FavoritesManager.toggleFavorite(context, {
                       ...currentDhikr,
                       'categoryTitle': widget.categoryTitle,
                     });
                   },
-                  borderRadius: BorderRadius.circular(16),
-                  child: Container(
-                    width: 42,
-                    height: 42,
-                    decoration: BoxDecoration(
-                      color: isDark
-                          ? const Color(0xFF262D24)
-                          : const Color(0xFFFFFDF9),
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(
-                        color: isDark
-                            ? const Color(0xFF353E32)
-                            : const Color(0xFFEADFCF),
-                        width: 1.2,
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: isDark
-                              ? const Color(0x20000000)
-                              : const Color(0x0A000000),
-                          blurRadius: 10,
-                          offset: const Offset(0, 3),
-                        ),
-                      ],
-                    ),
-                    child: Icon(
-                      isFav
-                          ? Icons.bookmark_rounded
-                          : Icons.bookmark_border_rounded,
-                      size: 20,
-                      color: isFav
-                          ? const Color(0xFFC9A15B)
-                          : (isDark
-                                ? const Color(0xFFD8CEBE)
-                                : const Color(0xFF4E5B4E)),
-                    ),
-                  ),
                 );
               },
             ),
             const SizedBox(width: 8),
-            InkWell(
-              onTap: () =>
+            GlassIconButton(
+              icon: Icons.copy_rounded,
+              size: 42,
+              iconSize: 20,
+              borderRadius: BorderRadius.circular(16),
+              onPressed: () =>
                   _copyToClipboard(context, _activeList[_currentIndex]),
-              borderRadius: BorderRadius.circular(16),
-              child: Container(
-                width: 42,
-                height: 42,
-                decoration: BoxDecoration(
-                  color: isDark
-                      ? const Color(0xFF262D24)
-                      : const Color(0xFFFFFDF9),
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(
-                    color: isDark
-                        ? const Color(0xFF353E32)
-                        : const Color(0xFFEADFCF),
-                    width: 1.2,
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: isDark
-                          ? const Color(0x20000000)
-                          : const Color(0x0A000000),
-                      blurRadius: 10,
-                      offset: const Offset(0, 3),
-                    ),
-                  ],
-                ),
-                child: Icon(
-                  Icons.copy_rounded,
-                  size: 20,
-                  color: isDark
-                      ? const Color(0xFFD8CEBE)
-                      : const Color(0xFF4E5B4E),
-                ),
-              ),
             ),
             const SizedBox(width: 8),
-            InkWell(
-              onTap: () =>
+            GlassIconButton(
+              icon: Icons.share_outlined,
+              size: 42,
+              iconSize: 20,
+              borderRadius: BorderRadius.circular(16),
+              onPressed: () =>
                   DhikrShareHelper.shareDhikr(_activeList[_currentIndex]),
-              borderRadius: BorderRadius.circular(16),
-              child: Container(
-                width: 42,
-                height: 42,
-                decoration: BoxDecoration(
-                  color: isDark
-                      ? const Color(0xFF262D24)
-                      : const Color(0xFFFFFDF9),
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(
-                    color: isDark
-                        ? const Color(0xFF353E32)
-                        : const Color(0xFFEADFCF),
-                    width: 1.2,
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: isDark
-                          ? const Color(0x20000000)
-                          : const Color(0x0A000000),
-                      blurRadius: 10,
-                      offset: const Offset(0, 3),
-                    ),
-                  ],
-                ),
-                child: Icon(
-                  Icons.share_outlined,
-                  size: 20,
-                  color: isDark
-                      ? const Color(0xFFD8CEBE)
-                      : const Color(0xFF4E5B4E),
-                ),
-              ),
             ),
             const SizedBox(width: 8),
-            InkWell(
-              onTap: () => _showFontSizeBottomSheet(context),
+            GlassIconButton(
+              icon: Icons.format_size_rounded,
+              size: 42,
+              iconSize: 20,
               borderRadius: BorderRadius.circular(16),
-              child: Container(
-                width: 42,
-                height: 42,
-                decoration: BoxDecoration(
-                  color: isDark
-                      ? const Color(0xFF262D24)
-                      : const Color(0xFFFFFDF9),
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(
-                    color: isDark
-                        ? const Color(0xFF353E32)
-                        : const Color(0xFFEADFCF),
-                    width: 1.2,
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: isDark
-                          ? const Color(0x20000000)
-                          : const Color(0x0A000000),
-                      blurRadius: 10,
-                      offset: const Offset(0, 3),
-                    ),
-                  ],
-                ),
-                child: Icon(
-                  Icons.format_size_rounded,
-                  size: 20,
-                  color: isDark
-                      ? const Color(0xFFD8CEBE)
-                      : const Color(0xFF4E5B4E),
-                ),
-              ),
+              onPressed: () => _showFontSizeBottomSheet(context),
             ),
           ],
         ),
@@ -725,8 +480,12 @@ class _SingleDhikrPageState extends State<SingleDhikrPage>
         ),
 
         // Physical Left: Back Button
-        InkWell(
-          onTap: () {
+        GlassIconButton(
+          icon: Icons.arrow_back_ios_new_rounded,
+          size: 42,
+          iconSize: 18,
+          borderRadius: BorderRadius.circular(16),
+          onPressed: () {
             if (Navigator.of(context).canPop()) {
               Navigator.of(context).pop();
             } else {
@@ -737,35 +496,6 @@ class _SingleDhikrPageState extends State<SingleDhikrPage>
               );
             }
           },
-          borderRadius: BorderRadius.circular(16),
-          child: Container(
-            width: 42,
-            height: 42,
-            decoration: BoxDecoration(
-              color: isDark ? const Color(0xFF262D24) : const Color(0xFFFFFDF9),
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                color: isDark
-                    ? const Color(0xFF353E32)
-                    : const Color(0xFFEADFCF),
-                width: 1.2,
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: isDark
-                      ? const Color(0x20000000)
-                      : const Color(0x0A000000),
-                  blurRadius: 10,
-                  offset: const Offset(0, 3),
-                ),
-              ],
-            ),
-            child: Icon(
-              Icons.arrow_back_ios_new_rounded,
-              size: 18,
-              color: isDark ? const Color(0xFFD8CEBE) : const Color(0xFF4E5B4E),
-            ),
-          ),
         ),
       ],
     );
@@ -774,23 +504,10 @@ class _SingleDhikrPageState extends State<SingleDhikrPage>
   /// MAIN DHIKR CARD - Full Height & Balanced Layout
   Widget _buildMainDhikrCard(Map<String, dynamic> currentDhikr) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    return Container(
+    return GlassCard(
       width: double.infinity,
-      decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF262D24) : const Color(0xFFFFFDF9),
-        borderRadius: BorderRadius.circular(26),
-        border: Border.all(
-          color: isDark ? const Color(0xFF353E32) : const Color(0xFFF3ECE0),
-          width: 1.2,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: isDark ? const Color(0x20000000) : const Color(0x0F000000),
-            blurRadius: 20,
-            offset: const Offset(0, 8),
-          ),
-        ],
-      ),
+      radius: 26,
+      padding: EdgeInsets.zero,
       child: Stack(
         children: [
           // Corner Olive Branch Watermark
@@ -916,32 +633,12 @@ class _SingleDhikrPageState extends State<SingleDhikrPage>
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           // Minus Button (-)
-                          InkWell(
-                            onTap: _decrementCounter,
-                            borderRadius: BorderRadius.circular(22),
-                            child: Container(
-                              width: 50,
-                              height: 50,
-                              decoration: BoxDecoration(
-                                color: isDark
-                                    ? const Color(0xFF1F241D)
-                                    : const Color(0xFFF7F2E8),
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                  color: isDark
-                                      ? const Color(0xFF353E32)
-                                      : const Color(0xFFEADFCF),
-                                  width: 1.2,
-                                ),
-                              ),
-                              child: Icon(
-                                Icons.remove_rounded,
-                                size: 22,
-                                color: isDark
-                                    ? const Color(0xFFD8CEBE)
-                                    : const Color(0xFF4E5B4E),
-                              ),
-                            ),
+                          GlassIconButton(
+                            icon: Icons.remove_rounded,
+                            onPressed: _decrementCounter,
+                            size: 50,
+                            iconSize: 22,
+                            isCircle: true,
                           ),
 
                           const SizedBox(width: 32),
@@ -971,33 +668,15 @@ class _SingleDhikrPageState extends State<SingleDhikrPage>
                           const SizedBox(width: 32),
 
                           // Plus Button (+)
-                          InkWell(
-                            onTap: _incrementCounter,
-                            borderRadius: BorderRadius.circular(22),
-                            child: Container(
-                              width: 50,
-                              height: 50,
-                              decoration: BoxDecoration(
-                                color: isDark
-                                    ? const Color(0xFF2E362C)
-                                    : const Color(0xFF4E5B4E),
-                                shape: BoxShape.circle,
-                                boxShadow: const [
-                                  BoxShadow(
-                                    color: Color(0x224E5B4E),
-                                    blurRadius: 10,
-                                    offset: Offset(0, 4),
-                                  ),
-                                ],
-                              ),
-                              child: Icon(
-                                Icons.add_rounded,
-                                size: 24,
-                                color: isDark
-                                    ? const Color(0xFFC9A15B)
-                                    : Colors.white,
-                              ),
-                            ),
+                          GlassIconButton(
+                            icon: Icons.add_rounded,
+                            onPressed: _incrementCounter,
+                            size: 50,
+                            iconSize: 24,
+                            isCircle: true,
+                            color: isDark
+                                ? const Color(0xFFC9A15B)
+                                : AppColors.primaryLight,
                           ),
                         ],
                       ),
@@ -1011,68 +690,28 @@ class _SingleDhikrPageState extends State<SingleDhikrPage>
                         if (_currentIndex > 0) ...[
                           Expanded(
                             flex: 1,
-                            child: SizedBox(
+                            child: GlassButton(
                               height: 52,
-                              child: OutlinedButton(
-                                onPressed: _previousDhikr,
-                                style: OutlinedButton.styleFrom(
-                                  side: BorderSide(
-                                    color: isDark
-                                        ? const Color(0xFF353E32)
-                                        : const Color(0xFFEADFCF),
-                                    width: 1.4,
-                                  ),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(26),
-                                  ),
-                                ),
-                                child: Text(
-                                  'السابق',
-                                  style: TextStyle(
-                                    fontFamily: 'Fustat',
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
-                                    color: isDark
-                                        ? const Color(0xFFD8CEBE)
-                                        : const Color(0xFF4E5B4E),
-                                  ),
-                                ),
-                              ),
+                              label: 'السابق',
+                              borderRadius: BorderRadius.circular(26),
+                              onPressed: _previousDhikr,
                             ),
                           ),
                           const SizedBox(width: 12),
                         ],
                         Expanded(
                           flex: 2,
-                          child: SizedBox(
+                          child: GlassButton(
                             height: 52,
-                            child: ElevatedButton(
-                              onPressed: _nextDhikr,
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: isDark
-                                    ? const Color(0xFF2E362C)
-                                    : const Color(0xFF4E5B4E),
-                                foregroundColor: isDark
-                                    ? const Color(0xFFC9A15B)
-                                    : Colors.white,
-                                elevation: 4,
-                                shadowColor: const Color(0x334E5B4E),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(26),
-                                ),
-                              ),
-                              child: Text(
-                                'التالي',
-                                style: TextStyle(
-                                  fontFamily: 'Fustat',
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: isDark
-                                      ? const Color(0xFFC9A15B)
-                                      : Colors.white,
-                                ),
-                              ),
-                            ),
+                            label: 'التالي',
+                            borderRadius: BorderRadius.circular(26),
+                            borderColor: isDark
+                                ? const Color(0xFFC9A15B).withValues(alpha: 0.5)
+                                : const Color(0xFFC5A059).withValues(alpha: 0.5),
+                            textColor: isDark
+                                ? const Color(0xFFC9A15B)
+                                : AppColors.primaryLight,
+                            onPressed: _nextDhikr,
                           ),
                         ),
                       ],
@@ -1141,24 +780,10 @@ class _SingleDhikrPageState extends State<SingleDhikrPage>
   /// COMPLETION CARD - Full Height & Centered Message
   Widget _buildCompletionCard(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    return Container(
+    return GlassCard(
       width: double.infinity,
       padding: const EdgeInsets.all(28),
-      decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF262D24) : const Color(0xFFFFFDF9),
-        borderRadius: BorderRadius.circular(26),
-        border: Border.all(
-          color: isDark ? const Color(0xFF353E32) : const Color(0xFFF3ECE0),
-          width: 1.2,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: isDark ? const Color(0x20000000) : const Color(0x0F000000),
-            blurRadius: 20,
-            offset: const Offset(0, 8),
-          ),
-        ],
-      ),
+      radius: 26,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -1211,43 +836,28 @@ class _SingleDhikrPageState extends State<SingleDhikrPage>
 
           const SizedBox(height: 32),
 
-          Row(
-            children: [
-              Expanded(
-                child: SizedBox(
-                  height: 48,
-                  child: OutlinedButton(
+            Row(
+              children: [
+                Expanded(
+                  child: GlassButton(
+                    height: 48,
+                    label: 'إعادة القراءة',
+                    borderRadius: BorderRadius.circular(24),
                     onPressed: _restartSection,
-                    style: OutlinedButton.styleFrom(
-                      side: BorderSide(
-                        color: isDark
-                            ? const Color(0xFF353E32)
-                            : const Color(0xFF4E5B4E),
-                        width: 1.2,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(24),
-                      ),
-                    ),
-                    child: Text(
-                      'إعادة القراءة',
-                      style: TextStyle(
-                        fontFamily: 'Fustat',
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: isDark
-                            ? const Color(0xFFD8CEBE)
-                            : const Color(0xFF4E5B4E),
-                      ),
-                    ),
                   ),
                 ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: SizedBox(
-                  height: 48,
-                  child: ElevatedButton(
+                const SizedBox(width: 12),
+                Expanded(
+                  child: GlassButton(
+                    height: 48,
+                    label: 'العودة للأذكار',
+                    borderRadius: BorderRadius.circular(24),
+                    borderColor: isDark
+                        ? const Color(0xFFC9A15B).withValues(alpha: 0.5)
+                        : const Color(0xFFC5A059).withValues(alpha: 0.5),
+                    textColor: isDark
+                        ? const Color(0xFFC9A15B)
+                        : AppColors.primaryLight,
                     onPressed: () {
                       if (Navigator.of(context).canPop()) {
                         Navigator.of(context).pop();
@@ -1259,28 +869,10 @@ class _SingleDhikrPageState extends State<SingleDhikrPage>
                         );
                       }
                     },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF4E5B4E),
-                      foregroundColor: Colors.white,
-                      elevation: 2,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(24),
-                      ),
-                    ),
-                    child: const Text(
-                      'العودة للأذكار',
-                      style: TextStyle(
-                        fontFamily: 'Fustat',
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
+              ],
+            ),
         ],
       ),
     );

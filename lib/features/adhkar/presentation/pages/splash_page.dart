@@ -7,8 +7,8 @@ import '../../../../config/theme/app_assets.dart';
 import '../../../../config/theme/app_colors.dart';
 import '../../../../config/theme/app_spacing.dart';
 import '../../../../config/theme/app_radius.dart';
-import '../../../../shared/widgets/app_button.dart';
 import '../../../../shared/widgets/app_scaffold.dart';
+import '../../../../shared/widgets/glass_button.dart';
 
 /// The Splash Screen of the Adhkar application.
 /// Refined to match the reference design with high visual precision.
@@ -195,65 +195,57 @@ class SplashPage extends StatelessWidget {
 
                               // CTA Button ("ابدأ")
                               Container(
+                                width: double.infinity,
                                 margin: const EdgeInsets.only(
                                   bottom: AppSpacing.md,
                                 ),
-                                decoration: BoxDecoration(
-                                  borderRadius: AppRadius.borderRound,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: calligraphicColor.withValues(
-                                        alpha: 0.28,
-                                      ),
-                                      blurRadius: 20,
-                                      offset: const Offset(0, 8),
-                                    ),
-                                  ],
-                                ),
-                                child: SizedBox(
+                                child: GlassButton(
+                                  label: 'ابدأ',
                                   height: 52,
-                                  child: AppButton(
-                                    text: 'ابدأ',
-                                    isFullWidth: true,
-                                    borderRadius: AppRadius.borderRound,
-                                    onPressed: () {
-                                      final lastPosition =
-                                          SettingsManager.getLastReadingPosition();
-                                      if (lastPosition != null &&
-                                          SettingsManager
-                                              .rememberLastPosition
-                                              .value) {
-                                        Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                SingleDhikrPage(
-                                                  categoryTitle: lastPosition
-                                                      .categoryTitle,
-                                                  jsonAssetPath: lastPosition
-                                                      .jsonAssetPath,
-                                                  initialIndex:
-                                                      lastPosition.index,
-                                                  initialScrollOffset:
-                                                      lastPosition.scrollOffset,
-                                                ),
-                                          ),
-                                        );
-                                      } else {
-                                        Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                const HomePage(),
-                                          ),
-                                        );
-                                      }
-                                    },
-                                    icon: CustomPaint(
-                                      size: const Size(18, 18),
-                                      painter: const OliveLeafButtonIconPainter(
-                                        color: Colors.white,
-                                      ),
+                                  isFullWidth: true,
+                                  borderRadius: AppRadius.borderRound,
+                                  textColor: isDark
+                                      ? const Color(0xFFC9A15B)
+                                      : AppColors.primaryLight,
+                                  icon: CustomPaint(
+                                    size: const Size(18, 18),
+                                    painter: OliveLeafButtonIconPainter(
+                                      color: isDark
+                                          ? const Color(0xFFC9A15B)
+                                          : AppColors.primaryLight,
                                     ),
                                   ),
+                                  onPressed: () {
+                                    final lastPosition =
+                                        SettingsManager.getLastReadingPosition();
+                                    if (lastPosition != null &&
+                                        SettingsManager
+                                            .rememberLastPosition
+                                            .value) {
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              SingleDhikrPage(
+                                                categoryTitle: lastPosition
+                                                    .categoryTitle,
+                                                jsonAssetPath: lastPosition
+                                                    .jsonAssetPath,
+                                                initialIndex:
+                                                    lastPosition.index,
+                                                initialScrollOffset:
+                                                    lastPosition.scrollOffset,
+                                              ),
+                                        ),
+                                      );
+                                    } else {
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              const HomePage(),
+                                        ),
+                                      );
+                                    }
+                                  },
                                 ),
                               ),
 

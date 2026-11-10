@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../../shared/widgets/app_background.dart';
 import '../../../../shared/widgets/floating_bottom_nav_bar.dart';
+import '../../../../shared/widgets/glass_button.dart';
+import '../../../../shared/widgets/glass_card.dart';
 import '../../../../shared/widgets/screen_header.dart';
 
 /// The Contact Us Screen for the "ذكر" application.
@@ -83,40 +85,14 @@ class ContactUsPage extends StatelessWidget {
 
   /// Header Bar with Back Button & Screen Title
   Widget _buildHeader(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
     return ScreenHeader(
       title: 'تواصل معنا',
-      trailing: InkWell(
-        onTap: () => Navigator.of(context).pop(),
+      trailing: GlassIconButton(
+        icon: Icons.arrow_back_ios_new_rounded,
+        size: 42,
+        iconSize: 18,
         borderRadius: BorderRadius.circular(16),
-        child: Container(
-          width: 42,
-          height: 42,
-          decoration: BoxDecoration(
-            color: isDark ? const Color(0xFF262D24) : const Color(0xFFFFFDF9),
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: isDark
-                  ? const Color(0xFF353E32)
-                  : const Color(0xFFEADFCF),
-              width: 1.2,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: isDark
-                    ? const Color(0x20000000)
-                    : const Color(0x0A000000),
-                blurRadius: 10,
-                offset: const Offset(0, 3),
-              ),
-            ],
-          ),
-          child: Icon(
-            Icons.arrow_back_ios_new_rounded,
-            size: 18,
-            color: isDark ? const Color(0xFFD8CEBE) : const Color(0xFF4E5B4E),
-          ),
-        ),
+        onPressed: () => Navigator.of(context).pop(),
       ),
     );
   }
@@ -124,24 +100,10 @@ class ContactUsPage extends StatelessWidget {
   /// Main Contact Card
   Widget _buildContactCard(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    return Container(
+    return GlassCard(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 28),
-      decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF262D24) : const Color(0xFFFFFDF9),
-        borderRadius: BorderRadius.circular(26),
-        border: Border.all(
-          color: isDark ? const Color(0xFF353E32) : const Color(0xFFEADFCF),
-          width: 1.4,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: isDark ? const Color(0x20000000) : const Color(0x10000000),
-            blurRadius: 18,
-            offset: const Offset(0, 6),
-          ),
-        ],
-      ),
+      radius: 26,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -230,34 +192,22 @@ class ContactUsPage extends StatelessWidget {
           const SizedBox(height: 30),
 
           // Single Send Email Button
-          SizedBox(
-            width: double.infinity,
+          GlassButton(
             height: 52,
-            child: ElevatedButton.icon(
-              onPressed: _launchEmail,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: isDark
-                    ? const Color(0xFFC9A15B)
-                    : const Color(0xFF4E5B4E),
-                foregroundColor: isDark
-                    ? const Color(0xFF161A15)
-                    : Colors.white,
-                elevation: 3,
-                shadowColor: const Color(0x22000000),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(26),
-                ),
-              ),
-              icon: const Icon(Icons.send_rounded, size: 20),
-              label: const Text(
-                'إرسال بريد إلكتروني',
-                style: TextStyle(
-                  fontFamily: 'Fustat',
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
+            isFullWidth: true,
+            borderRadius: BorderRadius.circular(26),
+            label: 'إرسال بريد إلكتروني',
+            icon: const Icon(Icons.send_rounded, size: 20),
+            borderColor: isDark
+                ? const Color(0xFFC9A15B).withValues(alpha: 0.5)
+                : const Color(0xFFC5A059).withValues(alpha: 0.5),
+            textColor: isDark
+                ? const Color(0xFFC9A15B)
+                : const Color(0xFF333E32),
+            iconColor: isDark
+                ? const Color(0xFFC9A15B)
+                : const Color(0xFF333E32),
+            onPressed: _launchEmail,
           ),
         ],
       ),

@@ -8,6 +8,8 @@ import '../../../../config/theme/app_assets.dart';
 import '../../../../config/theme/app_colors.dart';
 import '../../../../config/theme/app_page_transitions.dart';
 import '../../../../shared/widgets/app_background.dart';
+import '../../../../shared/widgets/glass_card.dart';
+import '../../../../shared/widgets/glass_button.dart';
 import '../../../../core/services/notification_service.dart';
 import '../../../../shared/widgets/floating_bottom_nav_bar.dart';
 import '../../../../shared/widgets/screen_header.dart';
@@ -15,7 +17,9 @@ import '../managers/settings_manager.dart';
 
 /// The Settings Screen for the "ذكر" application.
 class SettingsPage extends StatefulWidget {
-  const SettingsPage({super.key});
+  final bool showBottomNavBar;
+
+  const SettingsPage({super.key, this.showBottomNavBar = true});
 
   @override
   State<SettingsPage> createState() => _SettingsPageState();
@@ -55,6 +59,7 @@ class _SettingsPageState extends State<SettingsPage>
       textDirection: TextDirection.rtl,
       child: Scaffold(
         backgroundColor: bgColor,
+        extendBody: true,
         body: Stack(
           children: [
             // Fullscreen Fixed Viewport Background & Ornaments
@@ -707,12 +712,13 @@ class _SettingsPageState extends State<SettingsPage>
             ),
 
             // 4. Floating Rounded Bottom Navigation Bar
-            Positioned(
-              left: 16,
-              right: 16,
-              bottom: 16 + MediaQuery.of(context).padding.bottom,
-              child: const FloatingBottomNavBar(selectedIndex: 4),
-            ),
+            if (widget.showBottomNavBar)
+              Positioned(
+                left: 16,
+                right: 16,
+                bottom: 16 + MediaQuery.of(context).padding.bottom,
+                child: const FloatingBottomNavBar(selectedIndex: 4),
+              ),
           ],
         ),
       ),
@@ -740,25 +746,9 @@ class _SettingsPageState extends State<SettingsPage>
             ),
           ),
         ),
-        Container(
+        GlassCard(
+          radius: 22,
           padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
-          decoration: BoxDecoration(
-            color: isDark ? const Color(0xFF262D24) : const Color(0xFFFFFDF9),
-            borderRadius: BorderRadius.circular(22),
-            border: Border.all(
-              color: isDark ? const Color(0xFF353E32) : const Color(0xFFF3ECE0),
-              width: 1.2,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: isDark
-                    ? const Color(0x20000000)
-                    : const Color(0x0A000000),
-                blurRadius: 12,
-                offset: const Offset(0, 4),
-              ),
-            ],
-          ),
           child: Column(children: children),
         ),
       ],
@@ -1109,24 +1099,9 @@ class _SettingsPageState extends State<SettingsPage>
   /// Read-only Informational Card (صدقة جارية)
   Widget _buildInformationalDuaCard() {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    return Container(
-      width: double.infinity,
+    return GlassCard(
+      radius: 24,
       padding: const EdgeInsets.all(22),
-      decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF262D24) : const Color(0xFFFFFDF9),
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(
-          color: isDark ? const Color(0xFF353E32) : const Color(0xFFEADFCF),
-          width: 1.4,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: isDark ? const Color(0x20000000) : const Color(0x10000000),
-            blurRadius: 16,
-            offset: const Offset(0, 6),
-          ),
-        ],
-      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -1160,24 +1135,9 @@ class _SettingsPageState extends State<SettingsPage>
   /// Premium Charity Card (صدقة جارية)
   Widget _buildCharityCard() {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    return Container(
-      width: double.infinity,
+    return GlassCard(
+      radius: 24,
       padding: const EdgeInsets.all(22),
-      decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF262D24) : const Color(0xFFFFFDF9),
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(
-          color: isDark ? const Color(0xFF353E32) : const Color(0xFFEADFCF),
-          width: 1.4,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: isDark ? const Color(0x20000000) : const Color(0x10000000),
-            blurRadius: 16,
-            offset: const Offset(0, 6),
-          ),
-        ],
-      ),
       child: Stack(
         children: [
           // Corner Gold Arch Graphic Overlay
@@ -1242,32 +1202,43 @@ class _SettingsPageState extends State<SettingsPage>
               const SizedBox(height: 16),
 
               // Share Button Inside Card
-              SizedBox(
-                width: double.infinity,
+              GlassButton(
+                isFullWidth: true,
                 height: 48,
-                child: ElevatedButton.icon(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: isDark
-                        ? const Color(0xFFC9A15B)
-                        : const Color(0xFF4E5B4E),
-                    foregroundColor: isDark
-                        ? const Color(0xFF161A15)
-                        : Colors.white,
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(24),
+                radius: 24,
+                accentColor: isDark
+                    ? const Color(0xFFC9A15B)
+                    : const Color(0xFF4E5B4E),
+                onPressed: () async {
+                  const String appLink =
+                      'سيتم إضافة رابط التطبيق بعد نشره.';
+                  final String shareText =
+                      'جرّب تطبيق "مع الرسول ﷺ من الصباح إلى المساء"\n\n'
+                      'تطبيق مجاني للأذكار والأدعية اليومية بتصميم بسيط وأنيق.\n\n'
+                      '$appLink';
+                  try {
+                    await Share.share(shareText);
+                  } catch (_) {}
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.share_outlined,
+                      size: 18,
+                      color: isDark ? const Color(0xFF161A15) : Colors.white,
                     ),
-                  ),
-                  icon: const Icon(Icons.share_outlined, size: 18),
-                  label: const Text(
-                    'مشاركة التطبيق',
-                    style: TextStyle(
-                      fontFamily: 'Fustat',
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
+                    const SizedBox(width: 8),
+                    Text(
+                      'مشاركة التطبيق',
+                      style: TextStyle(
+                        fontFamily: 'Fustat',
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: isDark ? const Color(0xFF161A15) : Colors.white,
+                      ),
                     ),
-                  ),
+                  ],
                 ),
               ),
             ],

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import '../../../../config/theme/app_assets.dart';
 import '../../../../config/theme/app_page_transitions.dart';
-import '../../../../shared/widgets/animated_card_tap.dart';
+import '../../../../shared/widgets/glass_card.dart';
 import '../../../../shared/widgets/app_background.dart';
 import '../../../../shared/widgets/floating_bottom_nav_bar.dart';
+import '../../../../shared/widgets/glass_button.dart';
 import '../../../../shared/widgets/screen_header.dart';
 import '../../../../shared/widgets/staggered_list_fade_item.dart';
 import 'category_list_page.dart';
@@ -11,7 +12,9 @@ import 'global_search_page.dart';
 
 /// The Duas Screen for the "ذكر" application.
 class DuasPage extends StatefulWidget {
-  const DuasPage({super.key});
+  final bool showBottomNavBar;
+
+  const DuasPage({super.key, this.showBottomNavBar = true});
 
   @override
   State<DuasPage> createState() => _DuasPageState();
@@ -72,6 +75,7 @@ class _DuasPageState extends State<DuasPage> {
       textDirection: TextDirection.rtl,
       child: Scaffold(
         backgroundColor: bgColor,
+        extendBody: true,
         body: Stack(
           children: [
             // Fullscreen Fixed Viewport Background & Ornaments
@@ -102,47 +106,18 @@ class _DuasPageState extends State<DuasPage> {
                             ScreenHeader(
                               title: 'الأدعية',
                               subtitle: 'أدعية خاشعة ومستجابة من الكتاب والسنة',
-                              leading: InkWell(
-                                onTap: () {
+                              leading: GlassIconButton(
+                                icon: Icons.search_rounded,
+                                size: 42,
+                                iconSize: 20,
+                                borderRadius: BorderRadius.circular(16),
+                                onPressed: () {
                                   Navigator.of(context).push(
                                     AppPageRoute.create(
                                       const GlobalSearchPage(),
                                     ),
                                   );
                                 },
-                                borderRadius: BorderRadius.circular(16),
-                                child: Container(
-                                  width: 42,
-                                  height: 42,
-                                  decoration: BoxDecoration(
-                                    color: isDark
-                                        ? const Color(0xFF262D24)
-                                        : const Color(0xFFFFFDF9),
-                                    borderRadius: BorderRadius.circular(16),
-                                    border: Border.all(
-                                      color: isDark
-                                          ? const Color(0xFF353E32)
-                                          : const Color(0xFFEADFCF),
-                                      width: 1.2,
-                                    ),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: isDark
-                                            ? const Color(0x20000000)
-                                            : const Color(0x0A000000),
-                                        blurRadius: 10,
-                                        offset: const Offset(0, 3),
-                                      ),
-                                    ],
-                                  ),
-                                  child: Icon(
-                                    Icons.search_rounded,
-                                    size: 20,
-                                    color: isDark
-                                        ? const Color(0xFFD8CEBE)
-                                        : const Color(0xFF4E5B4E),
-                                  ),
-                                ),
                               ),
                             ),
 
@@ -159,7 +134,9 @@ class _DuasPageState extends State<DuasPage> {
                                 final item = _duaCategories[index];
                                 return StaggeredListFadeItem(
                                   index: index,
-                                  child: AnimatedCardTap(
+                                  child: GlassCard(
+                                    radius: 22,
+                                    padding: const EdgeInsets.all(18),
                                     onTap: () {
                                       Navigator.of(context).push(
                                         AppPageRoute.create(
@@ -172,103 +149,79 @@ class _DuasPageState extends State<DuasPage> {
                                         ),
                                       );
                                     },
-                                    child: Container(
-                                      padding: const EdgeInsets.all(18),
-                                      decoration: BoxDecoration(
-                                        color: isDark
-                                            ? const Color(0xFF262D24)
-                                            : const Color(0xFFFFFDF9),
-                                        borderRadius: BorderRadius.circular(22),
-                                        border: Border.all(
-                                          color: isDark
-                                              ? const Color(0xFF353E32)
-                                              : const Color(0xFFF3ECE0),
-                                          width: 1.2,
-                                        ),
-                                        boxShadow: [
-                                          BoxShadow(
+                                    child: Row(
+                                      children: [
+                                        Container(
+                                          width: 48,
+                                          height: 48,
+                                          decoration: BoxDecoration(
                                             color: isDark
-                                                ? const Color(0x20000000)
-                                                : const Color(0x0C000000),
-                                            blurRadius: 14,
-                                            offset: const Offset(0, 5),
-                                          ),
-                                        ],
-                                      ),
-                                      child: Row(
-                                        children: [
-                                          Container(
-                                            width: 48,
-                                            height: 48,
-                                            decoration: BoxDecoration(
+                                                ? const Color(0xFF1F241D)
+                                                : const Color(0xFFF7F2E8),
+                                            shape: BoxShape.circle,
+                                            border: Border.all(
                                               color: isDark
-                                                  ? const Color(0xFF1F241D)
-                                                  : const Color(0xFFF7F2E8),
-                                              shape: BoxShape.circle,
-                                              border: Border.all(
-                                                color: isDark
-                                                    ? const Color(0xFF353E32)
-                                                    : const Color(0xFFEADFCF),
-                                                width: 1,
-                                              ),
-                                            ),
-                                            child: Icon(
-                                              item['icon'] as IconData,
-                                              size: 24,
-                                              color: isDark
-                                                  ? const Color(0xFFC9A15B)
-                                                  : const Color(0xFF4E5B4E),
+                                                  ? const Color(0xFF353E32)
+                                                  : const Color(0xFFEADFCF),
+                                              width: 1,
                                             ),
                                           ),
-                                          const SizedBox(width: 14),
-                                          Expanded(
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  item['title'] as String,
-                                                  style: TextStyle(
-                                                    fontFamily: 'Fustat',
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: isDark
-                                                        ? const Color(
-                                                            0xFFF6F1E7,
-                                                          )
-                                                        : const Color(
-                                                            0xFF1E281F,
-                                                          ),
-                                                  ),
-                                                ),
-                                                const SizedBox(height: 3),
-                                                Text(
-                                                  item['desc'] as String,
-                                                  style: TextStyle(
-                                                    fontFamily: 'Fustat',
-                                                    fontSize: 12,
-                                                    fontWeight: FontWeight.w500,
-                                                    color: isDark
-                                                        ? const Color(
-                                                            0xFFD8CEBE,
-                                                          )
-                                                        : const Color(
-                                                            0xFF707973,
-                                                          ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Icon(
-                                            Icons.chevron_left_rounded,
-                                            size: 20,
+                                          child: Icon(
+                                            item['icon'] as IconData,
+                                            size: 24,
                                             color: isDark
-                                                ? const Color(0xFFD8CEBE)
+                                                ? const Color(0xFFC9A15B)
                                                 : const Color(0xFF4E5B4E),
                                           ),
-                                        ],
-                                      ),
+                                        ),
+                                        const SizedBox(width: 14),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                item['title'] as String,
+                                                style: TextStyle(
+                                                  fontFamily: 'Fustat',
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: isDark
+                                                      ? const Color(
+                                                          0xFFF6F1E7,
+                                                        )
+                                                      : const Color(
+                                                          0xFF1E281F,
+                                                        ),
+                                                ),
+                                              ),
+                                              const SizedBox(height: 3),
+                                              Text(
+                                                item['desc'] as String,
+                                                style: TextStyle(
+                                                  fontFamily: 'Fustat',
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w500,
+                                                  color: isDark
+                                                      ? const Color(
+                                                          0xFFD8CEBE,
+                                                        )
+                                                      : const Color(
+                                                          0xFF707973,
+                                                        ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Icon(
+                                          Icons.chevron_left_rounded,
+                                          size: 20,
+                                          color: isDark
+                                              ? const Color(0xFFD8CEBE)
+                                              : const Color(0xFF4E5B4E),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 );
@@ -284,12 +237,13 @@ class _DuasPageState extends State<DuasPage> {
             ),
 
             // 4. Floating Bottom Navigation Bar
-            Positioned(
-              left: 16,
-              right: 16,
-              bottom: 16 + MediaQuery.of(context).padding.bottom,
-              child: const FloatingBottomNavBar(selectedIndex: 1),
-            ),
+            if (widget.showBottomNavBar)
+              Positioned(
+                left: 16,
+                right: 16,
+                bottom: 16 + MediaQuery.of(context).padding.bottom,
+                child: const FloatingBottomNavBar(selectedIndex: 1),
+              ),
           ],
         ),
       ),

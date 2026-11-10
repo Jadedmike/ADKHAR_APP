@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../config/theme/app_colors.dart';
 import '../../../../shared/widgets/app_background.dart';
 import '../../../../shared/widgets/floating_bottom_nav_bar.dart';
+import '../../../../shared/widgets/glass_button.dart';
 import '../../../../shared/widgets/screen_header.dart';
 import '../managers/settings_manager.dart';
 
@@ -164,87 +165,25 @@ class _TasbeehPageState extends State<TasbeehPage> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return ScreenHeader(
       title: 'المسبحة',
-      leading: InkWell(
-        onTap: _resetCounter,
+      leading: GlassButton(
+        height: 42,
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
         borderRadius: BorderRadius.circular(16),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
-          decoration: BoxDecoration(
-            color: isDark ? const Color(0xFF262D24) : const Color(0xFFFFFDF9),
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: isDark
-                  ? const Color(0xFF353E32)
-                  : const Color(0xFFEADFCF),
-              width: 1.2,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: isDark
-                    ? const Color(0x20000000)
-                    : const Color(0x0A000000),
-                blurRadius: 10,
-                offset: const Offset(0, 3),
-              ),
-            ],
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                Icons.refresh_rounded,
-                size: 18,
-                color: isDark
-                    ? const Color(0xFFC9A15B)
-                    : const Color(0xFFC5A059),
-              ),
-              const SizedBox(width: 6),
-              Text(
-                'تصفير',
-                style: TextStyle(
-                  fontFamily: 'Fustat',
-                  fontSize: 13,
-                  fontWeight: FontWeight.bold,
-                  color: isDark
-                      ? const Color(0xFFD8CEBE)
-                      : const Color(0xFF4E5B4E),
-                ),
-              ),
-            ],
-          ),
+        onPressed: _resetCounter,
+        icon: Icon(
+          Icons.refresh_rounded,
+          size: 18,
+          color: isDark ? const Color(0xFFC9A15B) : const Color(0xFFC5A059),
         ),
+        label: 'تصفير',
+        textColor: isDark ? const Color(0xFFD8CEBE) : const Color(0xFF4E5B4E),
       ),
-      trailing: InkWell(
-        onTap: () => Navigator.of(context).pop(),
+      trailing: GlassIconButton(
+        icon: Icons.arrow_back_ios_new_rounded,
+        onPressed: () => Navigator.of(context).pop(),
+        size: 42,
+        iconSize: 18,
         borderRadius: BorderRadius.circular(16),
-        child: Container(
-          width: 42,
-          height: 42,
-          decoration: BoxDecoration(
-            color: isDark ? const Color(0xFF262D24) : const Color(0xFFFFFDF9),
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: isDark
-                  ? const Color(0xFF353E32)
-                  : const Color(0xFFEADFCF),
-              width: 1.2,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: isDark
-                    ? const Color(0x20000000)
-                    : const Color(0x0A000000),
-                blurRadius: 10,
-                offset: const Offset(0, 3),
-              ),
-            ],
-          ),
-          child: Icon(
-            Icons.arrow_back_ios_new_rounded,
-            size: 18,
-            color: isDark ? const Color(0xFFD8CEBE) : const Color(0xFF4E5B4E),
-          ),
-        ),
       ),
     );
   }
@@ -358,58 +297,42 @@ class _TasbeehPageState extends State<TasbeehPage> {
   /// Large Circular Tap Button
   Widget _buildTapButton(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    return Material(
-      color: Colors.transparent,
-      shape: const CircleBorder(),
-      child: InkWell(
-        onTap: _incrementCounter,
-        customBorder: const CircleBorder(),
-        splashColor: isDark ? const Color(0x33C9A15B) : const Color(0x33C5A059),
-        child: Container(
-          width: 170,
-          height: 170,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: isDark ? const Color(0xFF262D24) : const Color(0xFFFFFDF9),
-            border: Border.all(
-              color: isDark ? const Color(0xFFC9A15B) : const Color(0xFFC5A059),
-              width: 3,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: isDark
-                    ? const Color(0x35000000)
-                    : const Color(0x18000000),
-                blurRadius: 24,
-                offset: const Offset(0, 10),
-              ),
-            ],
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.touch_app_rounded,
-                size: 42,
-                color: isDark
-                    ? const Color(0xFFC9A15B)
-                    : const Color(0xFF4E5B4E),
-              ),
-              const SizedBox(height: 6),
-              Text(
-                'اضغط للتسبيح',
-                style: TextStyle(
-                  fontFamily: 'Fustat',
-                  fontSize: 13.5,
-                  fontWeight: FontWeight.bold,
-                  color: isDark
-                      ? const Color(0xFFF6F1E7)
-                      : const Color(0xFF4E5B4E),
-                ),
-              ),
-            ],
-          ),
+    return GlassButton(
+      onPressed: _incrementCounter,
+      width: 170,
+      height: 170,
+      borderRadius: BorderRadius.circular(85),
+      borderColor: isDark ? const Color(0xFFC9A15B) : const Color(0xFFC5A059),
+      boxShadow: [
+        BoxShadow(
+          color: isDark ? const Color(0x35000000) : const Color(0x18000000),
+          blurRadius: 24,
+          offset: const Offset(0, 10),
         ),
+      ],
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.touch_app_rounded,
+            size: 42,
+            color: isDark
+                ? const Color(0xFFC9A15B)
+                : const Color(0xFF4E5B4E),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            'اضغط للتسبيح',
+            style: TextStyle(
+              fontFamily: 'Fustat',
+              fontSize: 13.5,
+              fontWeight: FontWeight.bold,
+              color: isDark
+                  ? const Color(0xFFF6F1E7)
+                  : const Color(0xFF4E5B4E),
+            ),
+          ),
+        ],
       ),
     );
   }
