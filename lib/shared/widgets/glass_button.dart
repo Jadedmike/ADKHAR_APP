@@ -117,32 +117,35 @@ class _GlassButtonState extends State<GlassButton> {
     ];
 
     Widget content = widget.child ??
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if (widget.icon != null) ...[
-              IconTheme(
-                data: IconThemeData(
-                  color: widget.iconColor ?? effectiveFgColor,
-                  size: 20,
+        FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (widget.icon != null) ...[
+                IconTheme(
+                  data: IconThemeData(
+                    color: widget.iconColor ?? effectiveFgColor,
+                    size: 20,
+                  ),
+                  child: widget.icon!,
                 ),
-                child: widget.icon!,
-              ),
-              if (widget.label != null) const SizedBox(width: 8),
+                if (widget.label != null) const SizedBox(width: 8),
+              ],
+              if (widget.label != null)
+                Text(
+                  widget.label!,
+                  style: TextStyle(
+                    fontFamily: 'Fustat',
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                    color: effectiveFgColor,
+                    letterSpacing: 0.2,
+                  ),
+                ),
             ],
-            if (widget.label != null)
-              Text(
-                widget.label!,
-                style: TextStyle(
-                  fontFamily: 'Fustat',
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                  color: effectiveFgColor,
-                  letterSpacing: 0.2,
-                ),
-              ),
-          ],
+          ),
         );
 
     Widget button = Container(

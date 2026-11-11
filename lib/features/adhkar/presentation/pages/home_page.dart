@@ -13,6 +13,8 @@ import '../managers/favorites_manager.dart';
 import '../managers/settings_manager.dart';
 import 'package:intl/intl.dart' hide TextDirection;
 import 'package:hijri/hijri_calendar.dart';
+import '../../../prayer/presentation/pages/prayer_times_page.dart';
+import '../../../qibla/presentation/pages/qibla_page.dart';
 import 'azkar_categories_page.dart';
 import 'duas_page.dart';
 import 'favorites_page.dart';
@@ -184,6 +186,11 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
                             // Greeting Title & Date Pill Container Row
                             _buildGreetingAndDateRow(context, greetingText),
+
+                            const SizedBox(height: 14),
+
+                            // Additive Prayer Times & Qibla Entry Row
+                            _buildPrayerAndQiblaEntryRow(context),
 
                             const SizedBox(height: 16),
 
@@ -770,6 +777,52 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       iconSize: 20,
       borderRadius: BorderRadius.circular(14),
       color: iconColor,
+    );
+  }
+
+  /// Minimal additive entry points for Prayer Times and Qibla Compass.
+  Widget _buildPrayerAndQiblaEntryRow(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final iconColor =
+        isDark ? const Color(0xFFC9A15B) : const Color(0xFF4E5B4E);
+    final borderColor = isDark
+        ? const Color(0xFFC9A15B).withValues(alpha: 0.35)
+        : const Color(0xFFC5A059).withValues(alpha: 0.45);
+
+    return Row(
+      children: [
+        Expanded(
+          child: GlassButton(
+            label: 'مواقيت الصلاة',
+            height: 48,
+            radius: 20,
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            borderColor: borderColor,
+            icon: Icon(Icons.access_time_rounded, size: 19, color: iconColor),
+            onPressed: () {
+              Navigator.of(context).push(
+                AppPageRoute.create(const PrayerTimesPage()),
+              );
+            },
+          ),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: GlassButton(
+            label: 'اتجاه القبلة',
+            height: 48,
+            radius: 20,
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            borderColor: borderColor,
+            icon: Icon(Icons.explore_outlined, size: 19, color: iconColor),
+            onPressed: () {
+              Navigator.of(context).push(
+                AppPageRoute.create(const QiblaPage()),
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 

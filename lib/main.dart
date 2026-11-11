@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:adhkar/config/theme/app_theme.dart';
@@ -5,6 +6,7 @@ import 'package:adhkar/core/services/notification_service.dart';
 import 'package:adhkar/features/adhkar/presentation/managers/favorites_manager.dart';
 import 'package:adhkar/features/adhkar/presentation/managers/settings_manager.dart';
 import 'package:adhkar/features/adhkar/presentation/pages/splash_page.dart';
+import 'package:adhkar/features/prayer/presentation/managers/prayer_notification_manager.dart';
 
 import 'package:intl/date_symbol_data_local.dart';
 
@@ -14,6 +16,7 @@ void main() async {
   await SettingsManager.init();
   await FavoritesManager.init();
   await NotificationService.init();
+  unawaited(PrayerNotificationManager.instance.syncOnStartup());
   runApp(const AdhkarApp());
 }
 

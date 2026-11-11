@@ -21,11 +21,23 @@ class NotificationService {
 
   static bool _isInitialized = false;
 
-  // Notification IDs
+  // Notification IDs (Adhkar-owned only; prayer notifications reserve 5000-5069)
   static const int _idMorning = 1001;
   static const int _idEvening = 1002;
   static const int _idTestImmediate = 9999;
   static const List<int> _idRandomDhikrs = [2001, 2002, 2003];
+  static const List<int> adhkarOwnedIds = [
+    _idMorning,
+    _idEvening,
+    ..._idRandomDhikrs,
+    _idTestImmediate,
+  ];
+
+  /// Shared initialized plugin instance for isolated feature schedulers.
+  static FlutterLocalNotificationsPlugin get plugin => _notificationsPlugin;
+
+  /// Whether [init] has completed.
+  static bool get isInitialized => _isInitialized;
 
   // Channel IDs & Configurations
   static const String _channelIdReminders = 'athkar_reminders_channel';
@@ -471,11 +483,56 @@ class NotificationService {
     } catch (_) {}
   }
 
-  /// Cancel All App Scheduled Notifications
+  /// Cancel all Adhkar-owned scheduled notifications without affecting
+  /// isolated feature notifications (such as prayer notifications 5000-5069).
   static Future<void> cancelAll() async {
     try {
-      await _notificationsPlugin.cancelAll();
+      for (final id in adhkarOwnedIds) {
+        await _notificationsPlugin.cancel(id);
+      }
     } catch (_) {}
+  }
+
+  /// Checks whether OS notification permission is granted without prompting the user.
+  static Future<bool> hasPermissionWithoutPrompt() async {
+    try {
+      final androidImpl = _notificationsPlugin
+          .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin
+          >();
+      if (androidImpl != null) {
+        final bool? granted = await androidImpl.areNotificationsEnabled();
+        return granted ?? false;
+      }
+
+      final iosImpl = _notificationsPlugin
+          .resolvePlatformSpecificImplementation<
+            IOSFlutterLocalNotificationsPlugin
+          >();
+      if (iosImpl != null) {
+        final options = await iosImpl.checkPermissions();
+        if (options == null) return false;
+        return options.isEnabled ||
+            options.isAlertEnabled ||
+            options.isProvisionalEnabled;
+      }
+    } catch (_) {}
+    return false;
+  }
+
+  /// Checks whether Android exact alarms are currently permitted without prompting.
+  static Future<bool> canScheduleExactAlarmsWithoutPrompt() async {
+    try {
+      final androidImpl = _notificationsPlugin
+          .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin
+          >();
+      if (androidImpl != null) {
+        final bool? canExact = await androidImpl.canScheduleExactNotifications();
+        return canExact ?? false;
+      }
+    } catch (_) {}
+    return false;
   }
 
   /// Load valid Dhikr texts from existing JSON assets only.

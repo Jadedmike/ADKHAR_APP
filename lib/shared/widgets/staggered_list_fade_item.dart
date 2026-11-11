@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 
 /// Reusable List Staggered Fade & 8px Upward Entrance Animation Widget.
@@ -25,6 +26,7 @@ class _StaggeredListFadeItemState extends State<StaggeredListFadeItem>
   late final AnimationController _controller;
   late final Animation<double> _fadeAnimation;
   late final Animation<Offset> _slideAnimation;
+  Timer? _delayTimer;
 
   @override
   void initState() {
@@ -42,15 +44,20 @@ class _StaggeredListFadeItemState extends State<StaggeredListFadeItem>
     ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic));
 
     final delay = widget.delayStep * widget.index;
-    Future.delayed(delay, () {
-      if (mounted) {
-        _controller.forward();
-      }
-    });
+    if (delay <= Duration.zero) {
+      _controller.forward();
+    } else {
+      _delayTimer = Timer(delay, () {
+        if (mounted) {
+          _controller.forward();
+        }
+      });
+    }
   }
 
   @override
   void dispose() {
+    _delayTimer?.cancel();
     _controller.dispose();
     super.dispose();
   }
