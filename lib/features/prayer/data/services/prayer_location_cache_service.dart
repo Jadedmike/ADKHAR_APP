@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import '../../domain/entities/saved_prayer_location.dart';
 import 'prayer_settings_storage.dart';
 
@@ -10,6 +11,9 @@ class PrayerLocationCacheService {
   static const String storageKey = 'prayer_saved_location_v1_json';
 
   final KeyValueStore _store;
+
+  /// Increments whenever the saved location is updated or cleared.
+  final ValueNotifier<int> revision = ValueNotifier<int>(0);
 
   PrayerLocationCacheService({KeyValueStore? store})
     : _store = store ?? SharedPreferencesKeyValueStore();
@@ -35,7 +39,11 @@ class PrayerLocationCacheService {
   /// Saves [location] to persistent storage.
   Future<bool> save(SavedPrayerLocation location) async {
     try {
-      return await _store.setString(storageKey, location.toEncodedJson());
+      final saved = await _store.setString(storageKey, location.toEncodedJson());
+      if (saved) {
+        revision.value++;
+      }
+      return saved;
     } catch (_) {
       return false;
     }
@@ -44,7 +52,11 @@ class PrayerLocationCacheService {
   /// Clears the saved location cache.
   Future<bool> clear() async {
     try {
-      return await _store.remove(storageKey);
+      final removed = await _store.remove(storageKey);
+      if (removed) {
+        revision.value++;
+      }
+      return removed;
     } catch (_) {
       return false;
     }

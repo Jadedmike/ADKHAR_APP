@@ -32,8 +32,9 @@ class RtlFadeSlidePageTransitionsBuilder extends PageTransitionsBuilder {
 
 /// Helper to createPageRoute for direct Navigator calls.
 class AppPageRoute {
-  static PageRouteBuilder<T> create<T>(Widget page) {
+  static PageRouteBuilder<T> create<T>(Widget page, {RouteSettings? settings}) {
     return PageRouteBuilder<T>(
+      settings: settings,
       transitionDuration: const Duration(milliseconds: 280),
       reverseTransitionDuration: const Duration(milliseconds: 280),
       pageBuilder: (context, animation, secondaryAnimation) => page,

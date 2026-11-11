@@ -2,6 +2,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:adhkar/config/theme/app_theme.dart';
+import 'package:adhkar/core/navigation/widget_deep_link_handler.dart';
+import 'package:adhkar/core/services/home_widget_sync_service.dart';
 import 'package:adhkar/core/services/notification_service.dart';
 import 'package:adhkar/features/adhkar/presentation/managers/favorites_manager.dart';
 import 'package:adhkar/features/adhkar/presentation/managers/settings_manager.dart';
@@ -17,11 +19,50 @@ void main() async {
   await FavoritesManager.init();
   await NotificationService.init();
   unawaited(PrayerNotificationManager.instance.syncOnStartup());
+  unawaited(HomeWidgetSyncService.instance.initializeAndSync());
   runApp(const AdhkarApp());
 }
 
-class AdhkarApp extends StatelessWidget {
+class AdhkarApp extends StatefulWidget {
   const AdhkarApp({super.key});
+
+  @override
+  State<AdhkarApp> createState() => _AdhkarAppState();
+}
+
+class _AdhkarAppState extends State<AdhkarApp> with WidgetsBindingObserver {
+  final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
+  final WidgetRouteObserver _routeObserver = WidgetRouteObserver();
+  late final WidgetDeepLinkCoordinator _deepLinkCoordinator;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _deepLinkCoordinator = WidgetDeepLinkCoordinator(
+      navigatorKey: _navigatorKey,
+      routeObserver: _routeObserver,
+    );
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        unawaited(_deepLinkCoordinator.initialize());
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    unawaited(_deepLinkCoordinator.dispose());
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      unawaited(HomeWidgetSyncService.instance.sync());
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +71,8 @@ class AdhkarApp extends StatelessWidget {
       builder: (context, themeOpt, child) {
         return MaterialApp(
           title: 'Adhkar',
+          navigatorKey: _navigatorKey,
+          navigatorObservers: [_routeObserver],
           debugShowCheckedModeBanner: false,
 
           // Material 3 Themes & Dynamic Theme Mode

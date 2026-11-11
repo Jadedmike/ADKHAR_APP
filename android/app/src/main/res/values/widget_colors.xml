@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="widget_surface_light">#F8F4EC</color>
+    <color name="widget_surface_dark">#161A15</color>
+    <color name="widget_pill_light">#EFE9DC</color>
+    <color name="widget_pill_dark">#242B22</color>
+
+    <color name="widget_text_primary_light">#1E281F</color>
+    <color name="widget_text_secondary_light">#4E5B4E</color>
+    <color name="widget_text_muted_light">#6D776E</color>
+
+    <color name="widget_text_primary_dark">#F6F1E7</color>
+    <color name="widget_text_secondary_dark">#C9A15B</color>
+    <color name="widget_text_muted_dark">#D8CEBE</color>
+
+    <color name="widget_accent_gold_light">#C5A059</color>
+    <color name="widget_accent_gold_dark">#C9A15B</color>
+    <color name="widget_accent_olive">#4E5B4E</color>
+</resources>
+

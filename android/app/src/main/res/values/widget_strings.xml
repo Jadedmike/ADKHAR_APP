@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="widget_adhkar_label">الأذكار اليومية</string>
+    <string name="widget_adhkar_desc">يعرض ذكر اليوم وأذكار الصباح والمساء</string>
+    <string name="widget_prayer_label">مواقيت الصلاة</string>
+    <string name="widget_prayer_desc">يعرض الصلاة القادمة والعد التنازلي ومواقيت اليوم</string>
+    <string name="widget_combined_label">ذكر ومواقيت الصلاة</string>
+    <string name="widget_combined_desc">يعرض ذكراً قصيراً مع الصلاة القادمة</string>
+</resources>
+
